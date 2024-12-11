@@ -1,0 +1,20 @@
+// _abstracts: Variables, mixins, functions, etc.
+@use "abstracts/variables" as *;
+@use "abstracts/mixins" as *;
+
+// _base: Global styles like reset, typography, etc.
+@use "base/reset" as *;
+@use "base/typography" as *;
+
+// _components: Styles for specific UI components
+@use "components/buttons" as *;
+@use "components/forms" as *;
+
+// _layout: Layout styles like header, footer, etc.
+@use "layout/header" as *;
+@use "layout/footer" as *;
+
+// _pages: Page-specific styles
+@use "pages/home" as *;
+
+// You can add more imports depending on your project structure
