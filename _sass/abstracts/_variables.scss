@@ -1,0 +1,117 @@
+//_variables.scss
+@use 'sass:color';   // For color functions
+@use 'sass:math';     // For math functions
+@use 'sass:map';      // For map functions
+
+// --- Color Variables ---
+$primary-color: #274472;       // Royal blue for a bold, strong primary color
+$secondary-color: #91b0dd;     // Soft, lighter blue for secondary accents
+$accent-color: #BCC6D9;        // Subtle muted blue for additional accents
+
+// Backgrounds with a clean, white-forward feel
+$background-color: #FFFFFF;    // Pure white for a bright, airy background
+$light-background: #F8F9FA;    // Very light gray for subtle contrast
+$text-color: #4A4A4A;          // Off-dark gray for softer readability
+$footer-color: #2B2B2B;        // Darker gray for footer sections
+
+// Gradient Variations
+$primary-gradient: linear-gradient(135deg, #274472, #6C8EBF);   // Royal-to-lighter blue gradient
+$secondary-gradient: linear-gradient(135deg, #6C8EBF, #BCC6D9); // Lighter blue gradient
+$accent-gradient: linear-gradient(135deg, #BCC6D9, #F0F4F8);    // Muted blue-to-light gradient
+
+// --- Colors Map ---
+$colors: (
+  primary: $primary-color,
+  secondary: $secondary-color,
+  accent: $accent-color,
+  background: $background-color,
+  footer: $footer-color,                                        // Footer-specific color
+  text: $text-color,
+  primary-hover: color.adjust($primary-color, $lightness: 10%),         // Lighten primary color for hover
+  active: color.adjust($primary-color, $lightness: -10%),       // Darken primary color for active state
+  disabled: color.scale(#B0B0B0, $lightness: -10%),             // Slightly darken for disabled state
+  background-light: $light-background,                          // Very light gray for backgrounds
+  background-dark: color.scale($background-color, $lightness: -5%), // Slightly darker background color
+  text-light: color.scale($text-color, $lightness: 30%),        // Lightened text for subtle elements
+  text-dark: color.scale($text-color, $lightness: -10%),       // Darkened version of the base text color
+  border: color.scale(#D0D0D0, $lightness: -5%),                // Soft, neutral border color
+  primary-gradient: $primary-gradient,
+  secondary-gradient: $secondary-gradient,
+  accent-gradient: $accent-gradient
+);
+
+// --- Typography ---
+$typography: (
+  font-family-base: "'Helvetica Neue', 'Arial', sans-serif",  // Base font family
+  font-family-logo: 'New Amsterdam, cursive',  // New Amsterdam font for the logo
+  font-family-headings: "'Georgia', serif",                   // Font family for headings
+  font-size-base: 16px,                                       // Default font size
+  font-size-lg: 1.25rem,                                      // Large font size
+  font-size-xl: 1.5rem,                                       // Extra large font size
+  font-weight-normal: 400,
+  font-weight-bold: 700,
+  line-height-normal: 1.5,
+  line-height-heading: 1.3,
+  h1-font-size: 2.5rem,
+  h2-font-size: 2rem,
+  h3-font-size: 1.75rem,
+  h4-font-size: 1.5rem,
+  h5-font-size: 1.25rem,
+  h6-font-size: 1.125rem
+);
+
+// --- Spacing ---
+$spacing: (
+  small: 0.5rem,
+  medium: 1rem,
+  large: 2rem,
+  xlarge: 4rem,
+  base: 1rem
+);
+
+$spacer: map.get($spacing, 'base'); // Default spacer
+
+// --- Breakpoints ---
+$breakpoints: (
+  small: 480px,
+  medium: 768px,
+  large: 1024px,
+  xlarge: 1200px
+);
+
+// --- Z-Index ---
+$z-index: (
+  modal: 1050,
+  dropdown: 1000,
+  navbar: 999,
+  default: 1
+);
+
+// --- Border Radius ---
+$border-radius: (
+  small: 4px,
+  medium: 8px,
+  large: 16px,
+  circle: 50%
+);
+
+$shadows: (
+  small: 0 1px 3px rgba(0, 0, 0, 0.1),
+  medium: 0 3px 6px rgba(0, 0, 0, 0.15),
+  large: 0 5px 15px rgba(0, 0, 0, 0.2)
+);
+
+// --- Box Shadows ---
+$box-shadows: (
+  small: (0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)),
+  medium: (0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)),
+  large: (0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.08))
+);
+
+// --- Usage Examples ---
+$primary-color: map.get($colors, 'primary');
+$background-color: map.get($colors, 'background');
+$small-breakpoint: map.get($breakpoints, 'small');
+$modal-z-index: map.get($z-index, 'modal');
+$circle-radius: map.get($border-radius, 'circle');
+$small-box-shadow: map.get($box-shadows, 'small');

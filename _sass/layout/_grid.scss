@@ -1,0 +1,75 @@
+// _grid.scss
+
+@use 'sass:math';                  // For math functions (e.g., division, multiplication)
+@use 'sass:map';                   // For map functions
+@use '../abstracts/variables.scss' as vars;   // For all variables like colors, spacing, breakpoints
+@use '../abstracts/mixins' as *;      // For reusable mixins like media queries, spacing
+
+$columns: 12;  // Default number of columns for the grid system
+$gutter: map.get(vars.$spacing, 'small');  // Gutter space between columns
+
+// 1. **Grid Container**
+// This will contain all the grid items and set the max-width
+.container {
+  width: 100%;
+  max-width: 1200px; // Max width for the container
+  margin: 0 auto;
+  padding-left: $gutter;
+  padding-right: $gutter;
+  
+  // Add a subtle background pattern or gradient for a modern look
+  background: linear-gradient(135deg, #f7f7f7, #e2e2e2);
+  border-radius: map.get(vars.$border-radius, 'medium');
+}
+
+// 2. **Grid Columns**
+// These are the individual columns in the grid system
+.grid {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr); // Create columns based on $columns
+  gap: $gutter;
+  width: 100%;
+  
+  // Add a subtle box shadow to the grid items
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: map.get(vars.$border-radius, 'small');
+
+  // Create a modern hover effect for grid items
+  .grid-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .grid-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// 3. **Column Width Calculation**
+// Using math to dynamically calculate column widths
+@function column-width($cols) {
+  @return math.div(100%, $columns) * $cols;
+}
+
+// Example usage for a 6-column layout:
+.example {
+  width: column-width(6); // Will take up 6 columns in a 12-column grid
+}
+
+// 4. **Responsive Grid Layout**
+@media (max-width: map.get(vars.$breakpoints, 'medium')) {
+  .container {
+    padding-left: map.get(vars.$spacing, 'small');
+    padding-right: map.get(vars.$spacing, 'small');
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr); // Two columns on medium screens
+  }
+}
+
+@media (max-width: map.get(vars.$breakpoints, 'small')) {
+  .grid {
+    grid-template-columns: 1fr; // Single column on small screens
+  }
+}

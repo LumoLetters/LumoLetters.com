@@ -1,0 +1,35 @@
+---
+layout: home
+---
+
+@use 'sass:color';
+@use 'sass:math';     // For math functions
+@use 'sass:map';      // For map functions
+
+// Core utilities and settings
+@use '../../_sass/abstracts/variables' as *;
+@use '../../_sass/abstracts/mixins' as *;
+@use '../../_sass/abstracts/functions' as *;
+
+// Global base styles
+@use '../../_sass/base/reset' as *;
+@use '../../_sass/base/typography' as *;
+@use '../../_sass/base/global' as *;
+
+// Components (more specific to the structure of the site)
+@use '../../_sass/components/buttons' as *; // Import buttons once
+@use '../../_sass/components/cards' as *;
+@use '../../_sass/components/forms' as *;
+
+// Layout styles (structure and layout-specific styles)
+@use '../../_sass/layout/grid' as *;
+@use '../../_sass/layout/navigation' as *;
+@use '../../_sass/layout/header' as *;
+@use '../../_sass/layout/footer' as *;
+@use '../../_sass/layout/hero' as *;
+@use '../../_sass/layout/page' as *;
+
+// Page-specific styles
+@use '../../_sass/pages/account' as *;
+@use '../../_sass/pages/home' as *;
+@use '../../_sass/pages/login' as *;

@@ -1,0 +1,53 @@
+# Site settings
+title: LumoLetters
+email: your-email@example.com
+description: >
+  A personalized letter service for seniors. Bringing connection and joy with
+  regular handwritten letters delivered monthly. Perfect for nursing homes, caregivers, and families.
+baseurl: "" # Empty for root
+url: "http://yourdomain.com" # Update with your site’s URL, leave empty for local testing
+twitter_username: lumoletters
+github_username: lumoletters
+
+# Build settings
+theme: null # No theme used
+
+# Exclude from processing.
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
+
+# Custom variables
+social_links:
+  twitter: https://twitter.com/lumoletters
+  facebook: https://facebook.com/lumoletters
+  instagram: https://instagram.com/lumoletters
+
+# Permalinks
+permalink: /:title/ # Clean URLs
+
+# Collections
+collections:
+  testimonials:
+    output: true
+
+# Sitemap settings
+sitemap:
+  enabled: true
+
+# Google Analytics
+# google_analytics: "UA-XXXXX-X"
+
+# Sass configuration
+sass:
+  style: compressed
+  sass_dir: _sass
+  output_style: compressed
+
+# Include folders
+include:
+  - _pages
+  - assets

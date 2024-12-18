@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+</head>
+
+<body>
+  {% include header.html %}  <!-- Includes the header with navigation -->
+
+  <main>
+    {{ content }}  <!-- This is where the page-specific content like the hero and sections will go -->
+  </main>
+
+  {% include footer.html %}  <!-- Includes the footer -->
+</body>
+
+</html>

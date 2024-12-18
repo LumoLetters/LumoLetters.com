@@ -1,0 +1,58 @@
+//_page.scss
+@use 'sass:map';                   // For map functions (like retrieving values from maps)
+@use 'sass:color';                 // For color manipulation (using color.adjust() instead of darken/lighten)
+@use '../abstracts/variables.scss' as vars; // Import all your variables (colors, spacing, etc.)
+@use '../abstracts/mixins' as *;   // Import any mixins like media queries or reusable functions
+
+// Page Container: overall wrapper for the content
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: map.get(vars.$spacing, 'large');  // Using large spacing for generous padding
+  background-color: map.get(vars.$colors, 'background-color');
+  color: map.get(vars.$colors, 'text-color');
+  border-radius: map.get(vars.$border-radius, 'medium');
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  // Use color.adjust to give subtle contrast to background
+  border: 1px solid color.adjust(map.get(vars.$colors, 'primary'), $lightness: -5%);
+}
+
+// Page Content: main body content section
+.page-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: map.get(vars.$spacing, 'medium');
+  padding-top: map.get(vars.$spacing, 'large');
+
+  .content-item {
+    background-color: map.get(vars.$colors, 'background-color');
+    border-radius: map.get(vars.$border-radius, 'medium');
+    padding: map.get(vars.$spacing, 'medium');
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    // Hover effect for items
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      font-size: map.get(vars.$typography, 'h2-font-size');
+      font-weight: map.get(vars.$typography, 'font-weight-bold');
+      color: map.get(vars.$colors, 'primary');
+    }
+
+    p {
+      font-size: map.get(vars.$typography, 'font-size-base');
+      line-height: map.get(vars.$typography, 'line-height-normal');
+      color: map.get(vars.$colors, 'text-color');
+    }
+  }
+
+  // Responsive grid for small screens
+  @media (max-width: map.get(vars.$breakpoints, 'medium')) {
+    grid-template-columns: 1fr;
+  }
+}

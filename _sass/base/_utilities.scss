@@ -1,0 +1,78 @@
+// _utilities.scss
+
+@use 'sass:map';    // For working with maps
+@use 'sass:math';   // For math operations if needed
+@use '../abstracts/variables.scss' as vars;
+@use '../abstracts/mixins.scss' as mixins;
+
+// 1. **Spacing Utilities**
+// Margin and Padding utilities with dynamic map access
+@mixin spacing($property, $size-key) {
+  $value: map.get(vars.$spacing, $size-key); // Access spacing values dynamically
+  @if $value {
+    @if $property == 'm' {
+      margin: #{$value};
+    } @else if $property == 'p' {
+      padding: #{$value};
+    } @else {
+      @error "Unsupported property `#{$property}`. Use 'm' for margin or 'p' for padding.";
+    }
+  } @else {
+    @error "The size key `#{$size-key}` is not defined in the spacing map.";
+  }
+}
+
+// Generate spacing classes dynamically
+.m-1 { @include spacing('m', 'small'); }
+.m-2 { @include spacing('m', 'medium'); }
+.m-3 { @include spacing('m', 'large'); }
+.p-1 { @include spacing('p', 'small'); }
+.p-2 { @include spacing('p', 'medium'); }
+.p-3 { @include spacing('p', 'large'); }
+
+// 2. **Text Alignment Utilities**
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+// 3. **Display Utilities**
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-inline-block { display: inline-block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+// 4. **Flex Utilities**
+// Align items along the cross axis (perpendicular to the main axis)
+.align-items-center { align-items: center; }
+.align-items-start { align-items: flex-start; }
+.align-items-end { align-items: flex-end; }
+
+// Justify items along the main axis
+.justify-center { justify-content: center; }
+.justify-start { justify-content: flex-start; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+// 5. **Visibility Utilities**
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+
+// 6. **Responsive Utilities**
+// Generate responsive display utilities for each breakpoint
+@each $breakpoint, $value in vars.$breakpoints {
+  .d-#{$breakpoint}-none {
+    @media (max-width: #{$value}) {
+      display: none !important;
+    }
+  }
+
+  .d-#{$breakpoint}-block {
+    @media (max-width: #{$value}) {
+      display: block !important;
+    }
+  }
+}
+

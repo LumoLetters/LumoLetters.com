@@ -1,0 +1,155 @@
+//_forms.scss
+@use 'sass:color';        // For color functions
+@use 'sass:math';         // For math functions
+@use 'sass:map';          // For map functions
+@use '../abstracts/variables' as vars;
+@use '../abstracts/mixins.scss' as *;
+@use '../abstracts/functions.scss' as *;
+
+// General Reset
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// Container for the form
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: map.get(vars.$spacing, 'medium');
+  padding: map.get(vars.$spacing, 'medium');
+  background-color: map.get(vars.$colors, 'background-light');
+  border-radius: map.get(vars.$border-radius, 'medium');
+  box-shadow: map.get(vars.$shadows, 'small');
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: map.get(vars.$spacing, 'medium');
+  margin-bottom: map.get(vars.$spacing, 'large'); // Ensure spacing below the form
+
+  @media (max-width: 768px) {
+    padding: map.get(vars.$spacing, 'small');
+    margin-bottom: map.get(vars.$spacing, 'medium'); // Adjust spacing for smaller screens
+  }
+}
+
+// Label styling
+label {
+  font-size: map.get(vars.$typography, 'font-size-base');
+  color: map.get(vars.$colors, 'text');
+  margin-bottom: map.get(vars.$spacing, 'small');
+  display: block;
+}
+
+// Input Fields (input, textarea, select)
+// Input Fields (input, textarea, select)
+input,
+textarea,
+select {
+  width: 100%; // Ensures full width of container
+  padding: map.get(vars.$spacing, 'small');
+  font-size: map.get(vars.$typography, 'font-size-base');
+  border: 1px solid map.get(vars.$colors, 'border');
+  border-radius: map.get(vars.$border-radius, 'small');
+  background-color: map.get(vars.$colors, 'background');
+  color: map.get(vars.$colors, 'text');
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: map.get(vars.$colors, 'primary');
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+  }
+
+  &.error {
+    border-color: map.get(vars.$colors, 'accent');
+    background-color: color.scale(map.get(vars.$colors, 'accent'), $lightness: 20%);
+  }
+}
+
+// Target only text inputs for stretching across the container
+input[type="text"] {
+  width: 100%; // Ensure the text input stretches across the container
+}
+
+// Textarea for longer text inputs
+textarea {
+  min-height: 120px;
+  resize: vertical;
+  width: 100%; // Ensure the textarea also stretches across the container
+}
+
+
+
+// Textarea for longer text inputs
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+// Select Dropdown
+select {
+  padding: map.get(vars.$spacing, 'small');
+  border-radius: map.get(vars.$border-radius, 'small');
+  background-color: map.get(vars.$colors, 'background');
+  font-size: map.get(vars.$typography, 'font-size-base');
+}
+
+
+// Checkbox Group Styling for better grouping and layout
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap; // Allow checkboxes to wrap if space is tight
+  gap: map.get(vars.$spacing, 'small');
+  margin-top: map.get(vars.$spacing, 'small');
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: map.get(vars.$spacing, 'small');
+    width: 100%;
+
+    input[type="checkbox"] {
+      width: 18px; // Slightly smaller checkbox for better alignment
+      height: 18px;
+      border: 2px solid map.get(vars.$colors, 'border');
+      border-radius: 4px;
+      background-color: #fff;
+      appearance: none;
+      position: relative;
+      cursor: pointer;
+
+      &:checked {
+        background-color: map.get(vars.$colors, 'primary');
+        border-color: map.get(vars.$colors, 'primary');
+      }
+
+      &:checked::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 8px;
+        height: 8px;
+        background-color: #fff;
+        border-radius: 2px;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+      }
+    }
+
+    label {
+      font-size: map.get(vars.$typography, 'font-size-base');
+      color: map.get(vars.$colors, 'text');
+      margin: 0;
+    }
+
+    input[type="text"] {
+      margin-top: 0.5rem; // Adjust space for "Other" input fields
+    }
+  }
+}
+

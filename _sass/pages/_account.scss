@@ -1,0 +1,197 @@
+@use 'sass:color';                // For color manipulation functions
+@use 'sass:map';                  // For map functions
+@use '../abstracts/variables.scss' as vars; // Import all your variables (colors, spacing, etc.)
+@use '../abstracts/mixins' as *;   // Import any mixins like media queries or reusable functions
+
+// 1. **Account Container**
+.account-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: map.get(vars.$spacing, 'large');
+  background-color: map.get(vars.$colors, 'background-color');
+  color: map.get(vars.$colors, 'text-color');
+  min-height: 100vh;
+
+  @media (max-width: map.get(vars.$breakpoints, 'medium')) {
+    padding: map.get(vars.$spacing, 'medium');
+  }
+}
+
+// 2. **Account Header**
+.account-header {
+  text-align: center;
+  margin-bottom: map.get(vars.$spacing, 'large');
+
+  h1 {
+    font-size: map.get(vars.$typography, 'font-size-xl');
+    font-weight: map.get(vars.$typography, 'font-weight-bold');
+    color: map.get(vars.$colors, 'primary');
+  }
+
+  p {
+    font-size: map.get(vars.$typography, 'font-size-lg');
+    color: map.get(vars.$colors, 'text-color');
+  }
+}
+
+// 3. **Account Information**
+.account-info {
+  width: 100%;
+  max-width: 800px;
+  background-color: map.get(vars.$colors, 'background-light');
+  padding: map.get(vars.$spacing, 'medium');
+  border-radius: map.get(vars.$border-radius, 'small');
+  box-shadow: map.get(vars.$box-shadows, 'small');  // Correct reference
+
+  h2 {
+    font-size: map.get(vars.$typography, 'font-size-lg');
+    margin-bottom: map.get(vars.$spacing, 'small');
+    color: map.get(vars.$colors, 'primary');
+  }
+
+  .account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: map.get(vars.$spacing, 'small');
+
+    label {
+      font-weight: bold;
+      color: map.get(vars.$colors, 'text-dark');
+    }
+
+    .value {
+      font-size: map.get(vars.$typography, 'font-size-base');
+      color: map.get(vars.$colors, 'text-color');
+    }
+  }
+
+  .edit-btn {
+    display: inline-block;
+    background-color: map.get(vars.$colors, 'primary');
+    color: map.get(vars.$colors, 'background-color');
+    padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
+    border-radius: map.get(vars.$border-radius, 'small');
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+
+    &:hover {
+      background-color: map.get(vars.$colors, 'accent');
+    }
+  }
+}
+
+// 4. **Password Change Section**
+.password-change {
+  width: 100%;
+  max-width: 800px;
+  margin-top: map.get(vars.$spacing, 'large');
+  background-color: map.get(vars.$colors, 'background-light');
+  padding: map.get(vars.$spacing, 'medium');
+  border-radius: map.get(vars.$border-radius, 'small');
+  box-shadow: map.get(vars.$box-shadows, 'small');
+
+  h3 {
+    font-size: map.get(vars.$typography, 'font-size-lg');
+    color: map.get(vars.$colors, 'primary');
+  }
+
+  .password-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: map.get(vars.$spacing, 'medium');
+
+    label {
+      font-weight: bold;
+      color: map.get(vars.$colors, 'text-dark');
+    }
+
+    input {
+      padding: map.get(vars.$spacing, 'small');
+      border: 1px solid map.get(vars.$colors, 'border-color');
+      border-radius: map.get(vars.$border-radius, 'small');
+      margin-top: map.get(vars.$spacing, 'small');
+      font-size: map.get(vars.$typography, 'font-size-base');
+      color: map.get(vars.$colors, 'text-color');
+
+      &:focus {
+        border-color: map.get(vars.$colors, 'primary');
+      }
+    }
+  }
+
+  .change-btn {
+    background-color: map.get(vars.$colors, 'primary');
+    color: map.get(vars.$colors, 'background-color');
+    padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
+    border-radius: map.get(vars.$border-radius, 'small');
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+
+    &:hover {
+      background-color: map.get(vars.$colors, 'accent');
+    }
+  }
+}
+
+// 5. **Delete Account Section**
+.delete-account {
+  width: 100%;
+  max-width: 800px;
+  margin-top: map.get(vars.$spacing, 'large');
+  padding: map.get(vars.$spacing, 'medium');
+  background-color: map.get(vars.$colors, 'background-dark');
+  color: map.get(vars.$colors, 'background-color');
+  border-radius: map.get(vars.$border-radius, 'small');
+  box-shadow: map.get(vars.$box-shadows, 'medium');
+
+  h3 {
+    font-size: map.get(vars.$typography, 'font-size-lg');
+    margin-bottom: map.get(vars.$spacing, 'small');
+    color: map.get(vars.$colors, 'text-color');
+  }
+
+  p {
+    font-size: map.get(vars.$typography, 'font-size-base');
+    margin-bottom: map.get(vars.$spacing, 'medium');
+    color: map.get(vars.$colors, 'text-light');
+  }
+
+  .delete-btn {
+    background-color: red;
+    color: map.get(vars.$colors, 'background-color');
+    padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
+    border-radius: map.get(vars.$border-radius, 'small');
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+
+    &:hover {
+      background-color: darkred;
+    }
+  }
+}
+
+// 6. **Responsive Design Adjustments**
+@media (max-width: map.get(vars.$breakpoints, 'medium')) {
+  .account-page {
+    padding: map.get(vars.$spacing, 'medium');
+  }
+
+  .account-info,
+  .password-change,
+  .delete-account {
+    padding: map.get(vars.$spacing, 'small');
+  }
+
+  .edit-btn,
+  .change-btn,
+  .delete-btn {
+    padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
+  }
+}

@@ -1,0 +1,145 @@
+// _login.scss
+
+@use 'sass:color';
+@use 'sass:math';
+@use 'sass:map';
+@use '../abstracts/variables' as vars;
+@use '../abstracts/mixins' as *;
+
+// 1. **Login Page Container**
+.login-page {
+  background-color: map.get(vars.$colors, 'background');
+  color: map.get(vars.$colors, 'text');
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: map.get(vars.$spacing, 'xlarge');
+
+  background-image: linear-gradient(135deg, map.get(vars.$colors, 'primary'), map.get(vars.$colors, 'secondary'));
+  background-size: cover;
+  background-position: center;
+
+  // Moved animation outside of the @media query to avoid depreciation warning
+  animation: fadeIn 2s ease-out;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: map.get(vars.$breakpoints, 'medium')) {
+    padding: map.get(vars.$spacing, 'large');
+  }
+}
+
+// 2. **Login Form Container**
+.login-form-container {
+  background-color: map.get(vars.$colors, 'background-light');
+  border-radius: map.get(vars.$border-radius, 'medium');
+  padding: map.get(vars.$spacing, 'xlarge');
+  box-shadow: map.get(vars.$box-shadows, 'medium');
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+
+  h2 {
+    font-size: map.get(vars.$typography, 'font-size-xl');
+    color: map.get(vars.$colors, 'primary');
+    margin-bottom: map.get(vars.$spacing, 'large');
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+
+    input[type='text'],
+    input[type='password'] {
+      background-color: map.get(vars.$colors, 'background-light');
+      border: 1px solid map.get(vars.$colors, 'border');
+      padding: map.get(vars.$spacing, 'medium');
+      border-radius: map.get(vars.$border-radius, 'small');
+      margin-bottom: map.get(vars.$spacing, 'medium');
+      font-size: map.get(vars.$typography, 'font-size-base');
+      color: map.get(vars.$colors, 'text');
+
+      &:focus {
+        outline: none;
+        border-color: map.get(vars.$colors, 'primary-dark');
+        box-shadow: 0 0 5px map.get(vars.$colors, 'primary-dark');
+      }
+
+      @media (max-width: map.get(vars.$breakpoints, 'medium')) {
+        padding: map.get(vars.$spacing, 'small');
+      }
+    }
+
+    .submit-btn {
+      background-color: map.get(vars.$colors, 'primary');
+      color: map.get(vars.$colors, 'background-light');
+      padding: map.get(vars.$spacing, 'medium');
+      font-size: map.get(vars.$typography, 'font-size-lg');
+      border-radius: map.get(vars.$border-radius, 'medium');
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: map.get(vars.$colors, 'primary-dark');
+      }
+
+      &:disabled {
+        background-color: map.get(vars.$colors, 'disabled');
+        cursor: not-allowed;
+      }
+    }
+
+    .forgot-password {
+      font-size: map.get(vars.$typography, 'font-size-base');
+      color: map.get(vars.$colors, 'primary');
+      text-decoration: none;
+      margin-top: map.get(vars.$spacing, 'medium');
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: map.get(vars.$colors, 'primary-light');
+      }
+    }
+  }
+}
+
+// 3. **Sign-up / Alternate options**
+.alternate-options {
+  display: flex;
+  justify-content: space-between;
+  margin-top: map.get(vars.$spacing, 'large');
+
+  a {
+    font-size: map.get(vars.$typography, 'font-size-base');
+    color: map.get(vars.$colors, 'primary');
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: map.get(vars.$colors, 'primary-light');
+    }
+  }
+}
+
+// 4. **Responsive Design**
+@media (max-width: map.get(vars.$breakpoints, 'medium')) {
+  .login-form-container {
+    padding: map.get(vars.$spacing, 'large');
+    width: 90%;
+  }
+
+  .login-page {
+    padding: map.get(vars.$spacing, 'medium');
+  }
+}
