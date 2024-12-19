@@ -1,0 +1,94 @@
+// _footer.scss
+
+@use 'sass:color';   // For color functions
+@use 'sass:map';      // For map functions
+@use '../abstracts/variables.scss' as vars;   // Import custom variables (colors, spacing, etc.)
+
+// Footer Container
+.footer {
+  background-color: map.get(vars.$colors, 'background-dark'); // Use map.get() for color
+  color: map.get(vars.$colors, 'text-light');                  // Use map.get() for text-light
+  padding: map.get(vars.$spacing, 'medium');
+  text-align: center;
+  font-size: map.get(vars.$typography, 'font-size-base');       // Use map.get() for font-size from $typography map
+  position: relative;
+}
+
+// Footer Content
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: map.get(vars.$spacing, 'small');
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Social Media Links
+.social-links {
+  display: flex;
+  gap: map.get(vars.$spacing, 'small');
+  
+  a {
+    color: map.get(vars.$colors, 'text-light');               // Use map.get() for text-light
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: map.get(vars.$colors, 'primary');                // Use map.get() for primary color
+    }
+  }
+}
+
+// Footer Navigation (Quick Links)
+.footer-nav {
+  display: flex;
+  gap: map.get(vars.$spacing, 'medium');
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: map.get(vars.$spacing, 'large');
+
+  a {
+    color: map.get(vars.$colors, 'text-light');               // Use map.get() for text-light
+    font-size: 1rem;
+    text-decoration: none;
+    padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: map.get(vars.$colors, 'primary');                // Use map.get() for primary color
+    }
+  }
+}
+
+// Footer Bottom (Copyright & Legal Info)
+.footer-bottom {
+  font-size: 0.875rem;  // Smaller text
+  margin-top: map.get(vars.$spacing, 'large');
+  color: map.get(vars.$colors, 'text-light');                 // Use map.get() for text-light
+  
+  a {
+    color: map.get(vars.$colors, 'text-light');               // Use map.get() for text-light
+    text-decoration: underline;
+    &:hover {
+      color: map.get(vars.$colors, 'primary');                // Use map.get() for primary color
+    }
+  }
+}
+
+// Responsive Styles (Mobile)
+@media (max-width: map.get(vars.$breakpoints, 'small')) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .footer-nav {
+    justify-content: center;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+}

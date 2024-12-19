@@ -1,0 +1,123 @@
+---
+layout: default
+title: Get Started
+permalink: /get-started/
+---
+
+<form name="get-started" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="get-started">
+  <input type="hidden" name="redirect" value="/thank-you">
+  <!-- Form fields go here -->
+  <button type="submit" class="button primary">Submit</button>
+</form>
+
+<section class="get-started">
+    <div class="container">
+      <h1>Welcome to LumoLetters</h1>
+      <p>LumoLetters: Personalized Letters for Seniors, providing a unique blend of emotional support and cognitive stimulation.</p>
+      <p>Join our 2-month free pilot program (5 spots only) and discover how LumoLetters can bring joy and connection to your loved one's life.</p>
+  
+      <h2>Senior's Information (Recipient of LumoLetters)</h2>
+      <form name="get-started-form" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="get-started-form">
+  
+        <label for="senior-name">Senior's Name:</label>
+        <input type="text" id="senior-name" name="senior-name" required>
+  
+        <label for="dob">Date of Birth (optional):</label>
+        <input type="text" id="dob" name="dob">
+  
+        <label for="email">Email (optional):</label>
+        <input type="email" id="email" name="email">
+  
+        <h3>Interests & Preferences</h3>
+        <label><strong>Senior's Interests (check all that apply):</strong></label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-reading" name="interests" value="Reading">
+            <label for="interest-reading">Reading</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-travel" name="interests" value="Travel">
+            <label for="interest-travel">Travel</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-music" name="interests" value="Music/Film/Theater">
+            <label for="interest-music">Music/Film/Theater</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-arts" name="interests" value="Arts/Crafts">
+            <label for="interest-arts">Arts/Crafts</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-sports" name="interests" value="Sports">
+            <label for="interest-sports">Sports</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-history" name="interests" value="History">
+            <label for="interest-history">History</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-food" name="interests" value="Food/Cooking">
+            <label for="interest-food">Food/Cooking</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-nature" name="interests" value="Nature/Outdoors">
+            <label for="interest-nature">Nature/Outdoors</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="interest-other" name="interests" value="Other">
+            <label for="interest-other">Other:</label>
+            <input type="text" name="other-interests" id="other-interests">
+          </div>
+        </div>
+  
+        <h3>Preferred Letter Topics (check all that apply):</h3>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="topic-conversation" name="topics" value="General Conversation">
+            <label for="topic-conversation">General Conversation</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="topic-memories" name="topics" value="Memories and Reminiscing on the Past">
+            <label for="topic-memories">Memories and Reminiscing on the Past</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="topic-current-events" name="topics" value="Current Events">
+            <label for="topic-current-events">Current Events</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="topic-hobbies" name="topics" value="Hobbies/Interests">
+            <label for="topic-hobbies">Hobbies/Interests</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="topic-inspirational" name="topics" value="Inspirational/Motivational">
+            <label for="topic-inspirational">Inspirational/Motivational</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="topic-humor" name="topics" value="Humor/Lighthearted">
+            <label for="topic-humor">Humor/Lighthearted</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="topic-specific" name="topics" value="Specific Theme/Topic">
+            <label for="topic-specific">Specific Theme/Topic (optional):</label>
+            <input type="text" name="specific-topic" id="specific-topic">
+          </div>
+        </div>
+  
+        <h3>Authorization</h3>
+        <p>I authorize LumoLetters to create and send personalized letters to the senior listed above. I understand that my information will be kept confidential.</p>
+        
+        <label for="signature">Signature:</label>
+        <input type="text" id="signature" name="signature" required>
+  
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <div class="form-container">
+        <button type="submit" class="button primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  

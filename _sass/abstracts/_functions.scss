@@ -1,0 +1,88 @@
+@use 'sass:color';   // For color functions
+@use 'sass:math';     // For math functions
+@use 'sass:map';      // For map functions
+@use 'sass:string';   // For string manipulation
+@use 'variables';     // Import variables from _variables.scss
+
+// 1. **Color Adjustment Function**
+// This function darkens or lightens a color based on a percentage value.
+@function adjust-color($color, $amount) {
+  @return color.adjust($color, $lightness: $amount);
+}
+
+// 2. **Hex to RGB Conversion Function**
+// Converts a hex color to RGB format (useful for dynamic color manipulation).
+@function hex-to-rgb($hex) {
+  @if (str-length($hex) == 7) {
+    $r: red($hex);
+    $g: green($hex);
+    $b: blue($hex);
+    @return rgb($r, $g, $b);
+  } @else {
+    @warn "Invalid hex color format. Please provide a 7-character hex color.";
+    @return $hex; // Return original value if invalid
+  }
+}
+
+// 3. **Rem to Px Conversion Function**
+// Converts rem to pixels based on the root font size (default is 16px).
+@function rem-to-px($rem, $base: 16) {
+  @return math.div($rem * $base, 1);
+}
+
+// 4. **Viewport Height (vh) to Percentage Conversion Function**
+// Convert vh to percentage based on the viewport's height.
+@function vh-to-percentage($vh) {
+  $viewport-height: 100vh; // Assuming 100vh is the full viewport height
+  @return math.div($vh, $viewport-height) * 100%;
+}
+
+// 5. **Get Color from Palette by Key**
+// Retrieve a color from the global palette map, returns the color associated with the key.
+@function get-color($key) {
+  @return map.get($colors, $key);
+}
+
+// 6. **Calculate Column Width for Grid Layout**
+// This function calculates the column width based on a grid system.
+@function calculate-column-width($columns, $total-width: 100%) {
+  @return math.div($total-width, $columns);
+}
+
+// 7. **String to CamelCase Function**
+// Converts a string with spaces or dashes into camelCase format.
+@function string-to-camelcase($string) {
+  $string: string.replace($string, '-', ' '); // Convert dashes to spaces
+  $string: string.replace($string, ' ', ''); // Remove spaces
+  $string: string.lowercase($string); // Make all letters lowercase
+  @return $string;
+}
+
+// 8. **Generate a Gradient Function**
+// Generate a linear gradient with multiple color stops.
+@function gradient($colors...) {
+    $gradient: "linear-gradient("; // Initialize the gradient string
+    $color-count: length($colors); // Get the number of colors passed
+    @for $i from 1 through $color-count {
+      $color: nth($colors, $i);
+      // Append the color with a comma if it's not the last color
+      $gradient: $gradient + #{$color} + if($i != $color-count, ',', '');
+    }
+    // Close the gradient string and return it
+    $gradient: $gradient + ")";
+    @return $gradient;
+  }
+
+// Example usage:
+
+// .card {
+//   background-color: adjust-color($primary-color, 10%); // Lighten primary color
+// }
+
+// .container {
+//   padding: rem-to-px(2rem); // Convert rem to px
+// }
+
+// .section {
+//   background: gradient(#ff7f50, #ff6347, #ff4500); // Generate a gradient background
+// }
