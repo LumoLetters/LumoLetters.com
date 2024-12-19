@@ -1,34 +1,31 @@
-@use 'sass:color';                // For color manipulation functions
-@use 'sass:math';                 // For math functions (e.g., for responsive grids)
-@use 'sass:map';                  // For map functions
-@use '../abstracts/variables.scss' as vars; // Import all your variables (colors, spacing, etc.)
-@use '../abstracts/mixins' as *;   // Import any mixins like media queries or reusable functions
+//_pages/home.scss
+
+@use 'sass:color';
+@use 'sass:math';
+@use 'sass:map';
+@use '../abstracts/variables.scss' as vars;
+@use '../abstracts/mixins' as *;
 @use '../layout/hero' as *;
 
 html {
-  scroll-padding-top: 70px; // Adjust this value based on your top nav height
+  scroll-padding-top: 70px;
 }
 
-// 1. **Main Container for the Home Page**
+// Main Container for the Home Page
 .home-page {
-  background-color: map.get(vars.$colors, 'background-color');
-  color: map.get(vars.$colors, 'text-dark'); // Changed to darker text color
+  background-color: map.get(vars.$colors, 'background');
+  color: map.get(vars.$color-variations, 'text-dark');
   padding: map.get(vars.$spacing, 'xlarge') map.get(vars.$spacing, 'medium');
-  min-height: 100vh; // This ensures at least one full viewport height, adding scroll space
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; // Adjusted to allow more space at the bottom
-
-  // Add a subtle gradient background
+  justify-content: flex-start;
   background-image: linear-gradient(135deg, map.get(vars.$colors, 'primary'), map.get(vars.$colors, 'accent'));
   background-size: cover;
   background-position: center;
-
-  // Animation to make the page appear more dynamic
   animation: fadeIn 2s ease-out;
 
-  // Keyframe for the fade-in effect
   @keyframes fadeIn {
     0% {
       opacity: 0;
@@ -40,202 +37,145 @@ html {
     }
   }
 
-  // Responsive padding adjustments
   @media (max-width: map.get(vars.$breakpoints, 'medium')) {
     padding: map.get(vars.$spacing, 'large');
   }
 }
 
-// 3. **About Section**
+// About Section
 .about {
-  padding: map.get(vars.$spacing, 'xlarge') 0;
+  padding: map.get(vars.$spacing, 'small') 0;
   text-align: center;
-  background-color: map.get(vars.$colors, 'background-light');
+  background-color: map.get(vars.$color-variations, 'background-light');
 
   h2 {
-    font-size: map.get(vars.$typography, 'font-size-xl');
-    color: map.get(vars.$colors, 'text-dark'); // Ensuring dark text color for h2
+    font-size: map.get(vars.$font-sizes, 'xl');
+    color: map.get(vars.$color-variations, 'text-dark');
     margin-bottom: map.get(vars.$spacing, 'medium');
   }
 
   p {
-    color: map.get(vars.$colors, 'text-color');
-    font-size: 1.125rem;
+      font-size: 1.125rem;
+    color: map.get(vars.$colors, 'text');
     max-width: 800px;
     margin: 0 auto;
 
     @media (max-width: map.get(vars.$breakpoints, 'medium')) {
-      font-size: 1rem;
+     font-size: 1rem;
     }
   }
 }
 
-// 4. **Testimonial Section**
+// Testimonial Section
 .testimonials {
-  background-color: map.get(vars.$colors, 'background-light');
-  padding: map.get(vars.$spacing, 'xlarge');
-  margin-top: map.get(vars.$spacing, 'xlarge');
-  text-align: center;
-  border-radius: map.get(vars.$border-radius, 'medium');
-  box-shadow: map.get(vars.$box-shadows, 'medium');
+    background-color: map.get(vars.$color-variations, 'background-light');
+    padding: map.get(vars.$spacing, 'xlarge');
+    margin-top: map.get(vars.$spacing, 'xlarge');
+    text-align: center;
+    border-radius: map.get(vars.$border-radius, 'medium');
+    box-shadow: map.get(vars.$box-shadows, 'medium');
 
   h2 {
-    font-size: map.get(vars.$typography, 'font-size-xl');
-    color: map.get(vars.$colors, 'text-dark'); // Dark text color for h2 in testimonials
+    font-size: map.get(vars.$font-sizes, 'xl');
+       color: map.get(vars.$color-variations, 'text-dark');
     margin-bottom: map.get(vars.$spacing, 'medium');
   }
 
-  // Testimonial box
   .testimonial-box {
     max-width: 800px;
     margin: 0 auto;
-    background-color: map.get(vars.$colors, 'background-color');
+    background-color: map.get(vars.$colors, 'background');
     padding: map.get(vars.$spacing, 'medium');
     border-radius: map.get(vars.$border-radius, 'small');
     box-shadow: map.get(vars.$box-shadows, 'small');
 
     p {
-      font-size: map.get(vars.$typography, 'font-size-lg');
-      color: map.get(vars.$colors, 'text-color');
+      font-size: map.get(vars.$font-sizes, 'lg');
+      color: map.get(vars.$colors, 'text');
       margin-bottom: map.get(vars.$spacing, 'small');
       font-style: italic;
     }
 
     .author {
-      font-size: map.get(vars.$typography, 'font-size-base');
-      color: map.get(vars.$colors, 'text-dark');
-      font-weight: bold;
+      font-size: map.get(vars.$font-sizes, 'base');
+        color: map.get(vars.$color-variations, 'text-dark');
+      font-weight: map.get(vars.$font-weights, 'bold');
     }
   }
 
-  // Button styles in testimonials section
-  .button.primary {
+   .button.primary {
     margin-top: map.get(vars.$spacing, 'large');
   }
 }
 
 
-// 5. **Services Section**
-.services {
-  padding: map.get(vars.$spacing, 'xlarge');
-  background-color: map.get(vars.$colors, 'background-light');
-  text-align: center;
+// Services Section
 
-  h2 {
-    font-size: map.get(vars.$typography, 'h3');
-    color: map.get(vars.$colors, 'primary');
-    margin-bottom: map.get(vars.$spacing, 'medium');
-  }
-
-  .services-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: map.get(vars.$spacing, 'large');
-    
-    .service-item {
-      background-color: map.get(vars.$colors, 'background-color');
-      padding: map.get(vars.$spacing, 'medium');
-      border-radius: map.get(vars.$border-radius, 'small');
-      box-shadow: map.get(vars.$box-shadows, 'small');
-      text-align: center;
-
-      h3 {
-        font-size: map.get(vars.$typography, 'font-size-lg');
-        color: map.get(vars.$colors, 'text-dark');
-        margin-bottom: map.get(vars.$spacing, 'small');
-      }
-
-      p {
-        font-size: map.get(vars.$typography, 'font-size-base');
-        color: map.get(vars.$colors, 'text-color');
-      }
-    }
-  }
+.services-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-// 6. **Contact Section**
+// Contact Section
 .contact {
-  background-color: map.get(vars.$colors, 'background-light');
+  background-color: map.get(vars.$color-variations, 'background-light');
   padding: map.get(vars.$spacing, 'xlarge');
   text-align: center;
 
   h2 {
-    font-size: map.get(vars.$typography, 'font-size-xl');
-    color: map.get(vars.$colors, 'text-dark');
+      font-size: map.get(vars.$font-sizes, 'xl');
+       color: map.get(vars.$color-variations, 'text-dark');
     margin-bottom: map.get(vars.$spacing, 'medium');
   }
 
   p {
-    font-size: 1.125rem;
-    color: map.get(vars.$colors, 'text-light');
+      font-size: 1.125rem;
+      color: map.get(vars.$color-variations, 'text-light');
     margin-bottom: map.get(vars.$spacing, 'medium');
     max-width: 800px;
     margin: 0 auto;
   }
 }
 
-// 7. **Call to Action Section**
+// Call to Action Section
 .call-to-action {
   background-color: map.get(vars.$colors, 'primary');
   padding: map.get(vars.$spacing, 'xlarge');
   text-align: center;
-  color: map.get(vars.$colors, 'background-color');
+  color: map.get(vars.$colors, 'background');
 
   h2 {
-    font-size: map.get(vars.$typography, 'font-size-xl');
+    font-size: map.get(vars.$font-sizes, 'xl');
     margin-bottom: map.get(vars.$spacing, 'medium');
   }
 
   p {
     font-size: 1.25rem;
-    color: map.get(vars.$colors, 'background-color');
+    color: map.get(vars.$colors, 'background');
     margin-bottom: map.get(vars.$spacing, 'medium');
   }
 
   a {
-    background-color: map.get(vars.$colors, 'accent');
-    color: map.get(vars.$colors, 'background-color');
+        background-color: map.get(vars.$colors, 'accent');
+         color: map.get(vars.$colors, 'background');
     padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
     border-radius: map.get(vars.$border-radius, 'small');
     text-decoration: none;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: map.get(vars.$colors, 'primary');
+          background-color: map.get(vars.$colors, 'primary');
     }
   }
 }
 
-// 8. **Footer Section**
-.footer-section {
-  background-color: map.get(vars.$colors, 'primary');
-  color: map.get(vars.$colors, 'background-color');
-  padding: map.get(vars.$spacing, 'large') 0;
-  text-align: center;
-
-  // Links in the footer
-  a {
-    color: map.get(vars.$colors, 'background-color');
-    text-decoration: none;
-    margin: 0 map.get(vars.$spacing, 'small');
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: map.get(vars.$colors, 'accent');
-    }
-  }
-
-  p {
-    font-size: map.get(vars.$typography, 'font-size-base');
-    color: map.get(vars.$colors, 'background-color');
-  }
-}
-
-// 9. **Responsive Design for Mobile**
+// Responsive Design for Mobile
 @media (max-width: map.get(vars.$breakpoints, 'medium')) {
-  .hero {
-    padding: map.get(vars.$spacing, 'large');
-  }
+    .hero {
+        padding: map.get(vars.$spacing, 'large');
+    }
 
   .features-section {
     grid-template-columns: 1fr;

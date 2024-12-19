@@ -1,47 +1,42 @@
-@use 'sass:color';                 // For color manipulation functions
-@use 'sass:map';                   // For map functions
-@use '../abstracts/variables.scss' as vars;   // For all variables like colors, spacing, breakpoints
-@use '../abstracts/mixins' as *;      // For reusable mixins like media queries, spacing
+//_layout/_navigation.scss
 
-// 1. **Navigation Container**
-// Style the navigation container to control overall layout and positioning
+@use 'sass:color';
+@use 'sass:map';
+@use '../abstracts/variables.scss' as vars;
+@use '../abstracts/mixins' as *;
+
+// Navigation Container
 .navigation {
   display: flex;
-  justify-content: space-between;  // Spread out the logo and nav links
+  justify-content: space-between;
   align-items: center;
-  background-color: map.get(vars.$colors, 'primary'); // Primary color background
+  background-color: map.get(vars.$colors, 'primary');
   padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
   position: relative;
   z-index: map.get(vars.$z-index, 'navbar');
-
-  // Box shadow for a modern touch
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-  // On smaller screens, reduce padding
   @media (max-width: map.get(vars.$breakpoints, 'medium')) {
     padding: map.get(vars.$spacing, 'small');
   }
 }
 
-// 2. **Navigation Links**
-// Style the links within the navigation (for desktop view)
+// Navigation Links
 .nav-links {
   display: flex;
   align-items: center;
   gap: map.get(vars.$spacing, 'medium');
 
-  // Individual Link Styling
   .nav-link {
     text-decoration: none;
-    color: map.get(vars.$colors, 'background-color'); // White text on primary background
-    font-size: map.get(vars.$typography, 'font-size-lg'); // Using the typography map
-    font-weight: map.get(vars.$typography, 'font-weight-bold');
+    color: map.get(vars.$colors, 'background');
+    font-size: map.get(vars.$font-sizes, 'lg');
+    font-weight: map.get(vars.$font-weights, 'bold');
     padding: map.get(vars.$spacing, 'small');
-    border-radius: map.get(vars.$border-radius, 'small');  // Rounded corners for links
+    border-radius: map.get(vars.$border-radius, 'small');
     position: relative;
     transition: color 0.3s ease, background-color 0.3s ease;
 
-    // Line effect (center animation)
     &::after {
       content: '';
       position: absolute;
@@ -51,31 +46,29 @@
       height: 2px;
       background-color: map.get(vars.$colors, 'accent');
       transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
-      transform: translateX(-50%); // Center the line initially
+      transform: translateX(-50%);
     }
 
-    // Hover effect
     &:hover {
-      color: map.get(vars.$colors, 'accent'); // Accent color on hover
-      background-color: color.scale(map.get(vars.$colors, 'primary'), $lightness: 15%); // Darken background on hover
+      color: map.get(vars.$colors, 'accent');
+      background-color: color.scale(map.get(vars.$colors, 'primary'), $lightness: 15%);
     
       &::after {
         width: 100%;
-        left: 0;  // The line should expand from the center
-        transform: translateX(0);  // Remove shift to center on hover
+        left: 0;
+        transform: translateX(0);
       }
     }
     
-    // Active link
     &.active {
-      color: map.get(vars.$colors, 'accent');  // Accent color for active link
-      font-weight: map.get(vars.$typography, 'font-weight-bold');
+      color: map.get(vars.$colors, 'accent');
+      font-weight: map.get(vars.$font-weights, 'bold');
+       background-color: color.scale(map.get(vars.$colors, 'primary'), $lightness: 15%);
     }
   }
 }
 
-// 3. **Mobile Navigation Menu** (same as before)
-// The mobile nav menu (when the hamburger menu is activated)
+// Mobile Navigation Menu
 .nav-mobile {
   display: none;
   flex-direction: column;
@@ -89,50 +82,43 @@
   padding: map.get(vars.$spacing, 'large');
   gap: map.get(vars.$spacing, 'medium');
 
-  // Links inside the mobile navigation
   .nav-link {
-    padding: map.get(vars.$spacing, 'medium') 0;
-    font-size: map.get(vars.$typography, 'font-size-lg');
-    color: map.get(vars.$colors, 'background-color');
-    text-transform: uppercase;
+     padding: map.get(vars.$spacing, 'medium') 0;
+      font-size: map.get(vars.$font-sizes, 'lg');
+        color: map.get(vars.$colors, 'background');
+         text-transform: uppercase;
 
-    // Hover effect for mobile links
     &:hover {
       color: map.get(vars.$colors, 'accent');
     }
   }
 
-  // Display the mobile menu when it's active
   &.active {
     display: flex;
   }
 }
 
-// 4. **Hamburger Menu** (same as before)
-// The hamburger icon shown on small screens (max-width: $medium-breakpoint)
+// Hamburger Menu
 .hamburger {
   display: none;
   flex-direction: column;
   gap: 4px;
   cursor: pointer;
 
-  // Hamburger icon bars
   span {
     display: block;
     width: 25px;
     height: 3px;
-    background-color: map.get(vars.$colors, 'background-color');
+    background-color: map.get(vars.$colors, 'background');
     transition: all 0.3s ease;
   }
 
-  // Show the hamburger on mobile screens
   @media (max-width: map.get(vars.$breakpoints, 'medium')) {
     display: flex;
   }
 }
 
-// 5. **Sticky Navigation (optional)** (same as before)
-// Add the sticky effect to keep the navigation at the top when scrolling
+// Sticky Navigation (optional)
 .sticky-nav {
   position: sticky;
   top: 0;
@@ -144,8 +130,7 @@
   padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
 }
 
-// 6. **Navigation Links Alignment** (same as before)
-// On small screens, align the links in a column (mobile view)
+// Navigation Links Alignment
 @media (max-width: map.get(vars.$breakpoints, 'medium')) {
   .navigation {
     flex-direction: column;
@@ -163,6 +148,6 @@
   }
 
   .hamburger {
-    display: flex; // Show hamburger menu on mobile
+    display: flex;
   }
 }

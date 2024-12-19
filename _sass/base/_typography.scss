@@ -1,69 +1,39 @@
-@use 'sass:map';   // For map functions like map.get
-@use 'sass:color';  // For color functions like color.adjust and color.scale
-@use 'sass:math';
+//_base_typography.scss
+@use 'sass:map';
 @use '../abstracts/variables.scss' as vars;
-@use '../abstracts/mixins.scss' as *; // Assuming mixins are still imported correctly
 
-// Base font styling
 body {
-  font-family: map.get(vars.$typography, 'font-family-base');
-  font-size: map.get(vars.$typography, 'font-size-base');
-  font-weight: map.get(vars.$typography, 'font-weight-normal');
-  line-height: map.get(vars.$typography, 'line-height-normal');
-  color: map.get(vars.$colors, 'text');
-  background-color: map.get(vars.$colors, 'background');
-  margin: 0;
-  padding: 0;
+    font-size: map.get(vars.$font-sizes, 'base');
+}
+
+// Headings (H1-H6)
+h1 {
+    font-size: map.get(vars.$heading-sizes, 'h1');
+}
+
+h2 {
+    font-size: map.get(vars.$heading-sizes, 'h2');
+}
+
+h3 {
+    font-size: map.get(vars.$heading-sizes, 'h3');
+}
+
+h4 {
+    font-size: map.get(vars.$heading-sizes, 'h4');
+}
+
+h5 {
+    font-size: map.get(vars.$heading-sizes, 'h5');
+}
+
+h6 {
+    font-size: map.get(vars.$heading-sizes, 'h6');
 }
 
 // Paragraphs
 p {
-  margin-bottom: map.get(vars.$spacing, 'medium');  // Adjusts spacing below paragraphs
-}
-
-// Headings (H1-H6)
-h1, h2, h3, h4, h5, h6 {
-  font-family: map.get(vars.$typography, 'font-family-headings');
-  font-weight: map.get(vars.$typography, 'font-weight-bold');
-  line-height: map.get(vars.$typography, 'line-height-heading');
-  margin-bottom: map.get(vars.$spacing, 'medium'); // Spacing below headings
-  
-  // Scaling heading sizes based on the hierarchy
-  h1 {
-    font-size: map.get(vars.$typography, 'h1-font-size');
-  }
-
-  h2 {
-    font-size: map.get(vars.$typography, 'h2-font-size');
-  }
-
-  h3 {
-    font-size: map.get(vars.$typography, 'h3-font-size');
-  }
-
-  h4 {
-    font-size: map.get(vars.$typography, 'h4-font-size');
-  }
-
-  h5 {
-    font-size: map.get(vars.$typography, 'h5-font-size');
-  }
-
-  h6 {
-    font-size: map.get(vars.$typography, 'h6-font-size');
-  }
-}
-
-// Links
-a {
-  color: map.get(vars.$colors, 'primary');
-  text-decoration: none;
-  font-weight: map.get(vars.$typography, 'font-weight-normal');
-  
-  &:hover, &:focus {
-    color: map.get(vars.$colors, 'hover');  // Hover effect with color change
-    text-decoration: underline;  // Add underline on hover
-  }
+  margin-bottom: map.get(vars.$spacing, 'medium');
 }
 
 // Lists
@@ -82,5 +52,5 @@ blockquote {
   padding-left: map.get(vars.$spacing, 'medium');
   border-left: 4px solid map.get(vars.$colors, 'primary');
   margin: map.get(vars.$spacing, 'medium') 0;
-  color: map.get(vars.$colors, 'text-dark');
+  color: map.get(vars.$color-variations, 'text-dark');
 }

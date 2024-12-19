@@ -1,34 +1,31 @@
 ---
 layout: default
-title: Get Started
-permalink: /get-started/
+title: Sign Up
+permalink: /sign-up/
 ---
 
-<form name="get-started" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-  <input type="hidden" name="form-name" value="get-started">
+<form name="sign-up" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="sign-up">
   <input type="hidden" name="redirect" value="/thank-you">
   <!-- Form fields go here -->
-  <button type="submit" class="button primary">Submit</button>
 </form>
 
-<section class="get-started">
+<section class="sign-up">
     <div class="container">
       <h1>Welcome to LumoLetters</h1>
-      <p>LumoLetters: Personalized Letters for Seniors, providing a unique blend of emotional support and cognitive stimulation.</p>
-      <p>Join our 2-month free pilot program (5 spots only) and discover how LumoLetters can bring joy and connection to your loved one's life.</p>
+      <p>LumoLetters: Personalized Letters for Seniors, providing a unique blend of emotional support and cognitive stimulation.</p> 
+      <h2>Recipient's Information</h2>
+      <form name="sign-up-form" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="sign-up-form">
   
-      <h2>Senior's Information (Recipient of LumoLetters)</h2>
-      <form name="get-started-form" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="get-started-form">
-  
-        <label for="senior-name">Senior's Name:</label>
-        <input type="text" id="senior-name" name="senior-name" required>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
   
         <label for="dob">Date of Birth (optional):</label>
         <input type="text" id="dob" name="dob">
   
-        <label for="email">Email (optional):</label>
-        <input type="email" id="email" name="email">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
   
         <h3>Interests & Preferences</h3>
         <label><strong>Senior's Interests (check all that apply):</strong></label>
@@ -120,4 +117,3 @@ permalink: /get-started/
       </form>
     </div>
   </section>
-  

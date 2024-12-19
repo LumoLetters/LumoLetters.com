@@ -1,15 +1,12 @@
-// _mixins.scss
-
-@use 'sass:color';  // For color functions
-@use 'sass:math';   // For math functions
-@use 'sass:map';    // For map functions
-@use 'variables' as *; // Imports all variables from _variables.scss
+//_abstracts/_mixins.scss
+@use 'sass:color';
+@use 'sass:math';
+@use 'sass:map';
+@use 'variables' as *;
 
 // 1. **Responsive Media Query Mixin**
-// Makes writing responsive media queries easy.
 @mixin respond($breakpoint) {
   $breakpoint-value: map.get($breakpoints, $breakpoint);
-  
   @if $breakpoint-value {
     @media (min-width: $breakpoint-value) {
       @content;
@@ -20,32 +17,33 @@
 }
 
 // 2. **Flexbox Centering Mixin**
-// Centers content using flexbox with customizable direction and alignment.
-@mixin flex-center($direction: row, $justify: center, $align: center) {
+@mixin flex-center($direction: row, $justify: center, $align: center, $gap: 0) {
   display: flex;
   flex-direction: $direction;
   justify-content: $justify;
   align-items: $align;
+  gap: $gap;
 }
 
 // 3. **Typography Mixin**
-// Sets font size, weight, and line height.
-@mixin typography($font-size, $font-weight: $font-weight-normal, $line-height: $line-height-normal) {
+@mixin typography($font-size, $font-weight: map.get($font-weights, 'normal'), $line-height: map.get($line-heights, 'normal')) {
   font-size: $font-size;
   font-weight: $font-weight;
   line-height: $line-height;
 }
 
-// 4. **Dynamic Hover Color Mixin**
-// Adjusts the hover color dynamically.
-@mixin hover-color($color) {
-  &:hover {
-    background-color: color.adjust($color, $lightness: 10%);
+// 4. **Dynamic Color Adjust Mixin**
+@mixin color-adjust($property, $color, $amount) {
+    @if $property == 'background' {
+      background-color: color.adjust($color, $lightness: $amount);
+    } @else if $property == 'color' {
+      color: color.adjust($color, $lightness: $amount);
+    } @else {
+        @warn "Invalid property. Use 'background' or 'color'";
+    }
   }
-}
 
 // 5. **Button Mixin**
-// Generic button styles with customizable background and hover effects.
 @mixin button(
   $background: map.get($colors, 'primary'),
   $padding: map.get($spacing, 'medium'),
@@ -60,17 +58,16 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: color.adjust($background, $lightness: 10%);
+    @include color-adjust('background', $background, 10%);
   }
 
   &:disabled {
-    background-color: map.get($colors, 'disabled');
+    background-color: map.get($color-variations, 'disabled');
     cursor: not-allowed;
   }
 }
 
 // 6. **Box Shadow Mixin**
-// Applies box shadows based on predefined levels.
 @mixin box-shadow($level: small) {
   $shadow: map.get($box-shadows, $level);
   
@@ -82,13 +79,11 @@
 }
 
 // 7. **Border Radius Mixin**
-// Applies a border radius from the radius map.
 @mixin border-radius($radius: map.get($border-radius, 'small')) {
   border-radius: $radius;
 }
 
 // 8. **Grid Layout Mixin**
-// Creates a grid layout with customizable columns and gaps.
 @mixin grid($columns: 3, $gap: map.get($spacing, 'medium')) {
   display: grid;
   grid-template-columns: repeat($columns, 1fr);
@@ -96,7 +91,6 @@
 }
 
 // 9. **Full-Width Container Mixin**
-// Makes an element span the full width.
 @mixin full-width {
   width: 100%;
   max-width: 100%;
@@ -104,7 +98,6 @@
 }
 
 // 10. **Box-Sizing Mixin**
-// Applies box-sizing property.
 @mixin box-sizing($value: border-box) {
   -webkit-box-sizing: $value;
   -moz-box-sizing: $value;
@@ -112,7 +105,6 @@
 }
 
 // 11. **Media Query Offset Mixin**
-// Adds column offsets in a grid layout.
 @mixin offset($size: 1, $columns: 12) {
   margin-left: math.div($size, $columns) * 100%;
 }
@@ -129,18 +121,3 @@
     clear: both;
   }
 }
-
-
-// Example Usage:
-// .container {
-//   @include grid(4, map.get($spacing, 'small'));
-// }
-// .button {
-//   @include button(map.get($colors, 'secondary'));
-// }
-// .header {
-//   @include flex-center();
-// }
-// .box {
-//   @include box-sizing();
-// }

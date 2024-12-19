@@ -1,40 +1,39 @@
-// _header.scss
-@use 'sass:color';                 // For color manipulation functions
-@use 'sass:map';                   // For map functions
-@use '../abstracts/variables.scss' as vars;   // For all variables like colors, spacing, breakpoints
-@use '../abstracts/mixins' as *;   // For reusable mixins like media queries, spacing
-@use 'navigation' as *;           // Navigation styles now imported
+//_layout/_header.scss
+@use 'sass:color';
+@use 'sass:map';
+@use '../abstracts/variables.scss' as vars;
+@use '../abstracts/mixins' as *;
+@use 'navigation' as *;
 
-// 2. **Top Navigation Bar**
+// Top Navigation Bar
 nav.top-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: map.get(vars.$colors, 'accent');
-  padding: map.get(vars.$spacing, 'xsmall') map.get(vars.$spacing, 'small'); 
-  width: 100%; 
+  padding: map.get(vars.$spacing, 'xsmall') map.get(vars.$spacing, 'small');
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: map.get(vars.$z-index, 'navbar');
-  height: 50px; 
+  height: 50px;
 
   .left-side {
     display: flex;
     align-items: center;
 
     .top-nav-icon {
-      width: 24px;  // Adjust icon size as per requirement
-      height: 24px; // Adjust icon size as per requirement
-      margin-right: map.get(vars.$spacing, 'small'); // Space between icon and text
-      vertical-align: middle;
+      width: 24px;
+      height: 24px;
+      margin-right: map.get(vars.$spacing, 'small');
     }
 
     .logo {
-      font-size: 2rem;  // Adjust for larger text if necessary
-      font-weight: map.get(vars.$typography, 'font-weight-bold');
+      font-size: 2rem;
+      font-weight: map.get(vars.$font-weights, 'bold');
       display: flex;
-      align-items: center; // This ensures the logo and icon are vertically aligned
+      align-items: center;
     }
   }
 
@@ -45,12 +44,12 @@ nav.top-nav {
 
     .top-nav-link {
       text-decoration: none;
-      color: color.adjust(map.get(vars.$colors, 'accent'), $lightness: -30%); // Darker than the accent background
-      font-size: map.get(vars.$typography, 'font-size-md');
-      font-weight: map.get(vars.$typography, 'font-weight-normal');
+      color: map.get(vars.$color-variations, 'primary');
+      font-size: map.get(vars.$font-sizes, 'base');
+      font-weight: map.get(vars.$font-weights, 'normal');
       padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
       position: relative;
-    
+
       &::after {
         content: '';
         position: absolute;
@@ -58,25 +57,24 @@ nav.top-nav {
         left: 0%;
         width: 0;
         height: 1px;
-        background-color: map.get(vars.$colors, 'primary');
+        background-color: map.get(vars.$colors, 'secondary');
         transition: width 0.2s ease-in-out, left 0.2s ease-in-out;
       }
-    
+
       &:hover {
-        color: map.get(vars.$colors, 'primary'); // Use a more contrasting color for hover, like 'primary'
-    
+        color: map.get(vars.$colors, 'secondary');
+
         &::after {
           width: 100%;
-          left: 0; // The line should expand from the center
-          transform: translateX(0); // No shift to center on hover
+          left: 0;
+          transform: translateX(0);
         }
       }
     }
   }
 }
 
-// **Main Content** (to ensure it clears the top navigation)
 .main-content {
-  margin-top: 70px; // Adjust based on the height of the top navigation
+  margin-top: 70px;
   padding: map.get(vars.$spacing, 'medium');
 }

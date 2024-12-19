@@ -3,8 +3,8 @@ layout: home
 ---
 
 @use 'sass:color';
-@use 'sass:math';     // For math functions
-@use 'sass:map';      // For map functions
+@use 'sass:math';     
+@use 'sass:map';     
 
 // Core utilities and settings
 @use '../../_sass/abstracts/variables' as *;
@@ -15,13 +15,14 @@ layout: home
 @use '../../_sass/base/reset' as *;
 @use '../../_sass/base/typography' as *;
 @use '../../_sass/base/global' as *;
+@use '../../_sass/base/utilities' as *;
 
-// Components (more specific to the structure of the site)
-@use '../../_sass/components/buttons' as *; // Import buttons once
+// Components 
+@use '../../_sass/components/buttons' as *; 
 @use '../../_sass/components/cards' as *;
 @use '../../_sass/components/forms' as *;
 
-// Layout styles (structure and layout-specific styles)
+// Layout styles 
 @use '../../_sass/layout/grid' as *;
 @use '../../_sass/layout/navigation' as *;
 @use '../../_sass/layout/header' as *;
@@ -33,3 +34,6 @@ layout: home
 @use '../../_sass/pages/account' as *;
 @use '../../_sass/pages/home' as *;
 @use '../../_sass/pages/login' as *;
+@use '../../_sass/pages/services' as *;
+
+

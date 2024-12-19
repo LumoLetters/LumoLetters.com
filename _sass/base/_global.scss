@@ -1,48 +1,29 @@
-// _global.scss
-
+//_base_global.scss
 @use '../abstracts/variables' as *;
 @use '../abstracts/mixins.scss' as *;
 @use '../abstracts/functions.scss' as *;
-@use 'sass:color';        // For color functions
-@use 'sass:math';         // For math functions
-@use 'sass:map';          // For map functions
-
-// Reset and Base Styles
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@use 'sass:color';
+@use 'sass:math';
+@use 'sass:map';
 
 // Body styles
 body {
-  font-family: map.get($typography, 'font-family-base');
-  background-color: map.get($colors, 'background');  // Corrected to 'background'
-  color: map.get($colors, 'text');  // Corrected to 'text'
-  line-height: 1.5;
-  font-size: 16px;
-
   @include box-sizing(border-box);
 }
 
 // Typography
 h1, h2, h3, h4, h5, h6 {
-  font-weight: bold;
-  color: map.get($colors, 'primary');  // Corrected to 'primary'
+  color: map.get($colors, 'primary');
 }
 
 p {
-  margin-bottom: map.get($spacing, 'default');
+  margin-bottom: map.get($spacing, 'base');
 }
 
 // Links
 a {
-  text-decoration: none;
-  color: map.get($colors, 'primary');  // Corrected to 'primary'
   &:hover {
-    color: color.adjust(map.get($colors, 'primary'), $lightness: 10%);
+    @include color-adjust('color', map.get($colors, 'primary'), 10%);
   }
 }
 
@@ -52,26 +33,18 @@ a {
   margin: 0 auto;
 }
 
-.m-1 {
-  margin: $spacer; // Using a base spacer
-}
-
-.mt-1 {
-  margin-top: $spacer;
-}
-
-.mb-1 {
-  margin-bottom: $spacer;
-}
-
 .max-width-container {
   max-width: 1200px;
-  margin: 0 auto; // Center the content
+  margin: 0 auto;
 }
 
 // Media Queries
 @include respond('small') {
   body {
-    font-size: math.div(map.get($typography, 'font-size-base'), 1.2);  // Adjust font size for smaller screens
+    font-size: math.div(map.get($font-sizes, 'base'), 1.2);
   }
+}
+
+.main-content {
+  margin-top: 50px;
 }

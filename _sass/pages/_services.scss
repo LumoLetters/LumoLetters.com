@@ -1,0 +1,72 @@
+ // pages/_services.scss
+
+ @use 'sass:color';
+ @use 'sass:math';
+ @use 'sass:map';
+ @use '../abstracts/variables.scss' as vars;
+ @use '../abstracts/mixins' as *;
+
+ .services-section {
+     padding: 2rem 0;
+
+    .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 0 1.5rem;
+     }
+ }
+
+ .main-services {
+      > h2 {
+           text-align: center;
+     }
+       > .service-intro {
+           text-align: center;
+         }
+ }
+ .section-title {
+   font-size: 2rem;
+   text-align: center;
+   margin-bottom: 1.5rem;
+}
+
+.section-intro {
+   text-align: center;
+   font-size: 1.125rem;
+    margin-bottom: 2rem;
+     color: map.get(vars.$color-variations, 'text-dark');
+}
+
+ .section-subheading {
+      font-size: 1.5rem;
+     margin-bottom: 1rem;
+       color: map.get(vars.$colors, 'primary');
+}
+
+ p {
+     font-size: 1rem;
+     color: map.get(vars.$colors, 'text');
+    margin-bottom: 1.5rem;
+  }
+
+
+.how-it-works {
+    padding-left: 2rem;
+   margin-bottom: 2rem;
+    li {
+      margin-bottom: 0.75rem;
+      font-size: 1.125rem;
+       color: map.get(vars.$colors, 'text');
+    }
+}
+
+.why-choose {
+    margin-bottom: 2rem;
+   padding-left: 2rem;
+
+  li {
+      margin-bottom: 0.75rem;
+     font-size: 1.125rem;
+      color: map.get(vars.$colors, 'text');
+   }
+}

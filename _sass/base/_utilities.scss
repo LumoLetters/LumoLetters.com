@@ -1,34 +1,42 @@
-// _utilities.scss
-
-@use 'sass:map';    // For working with maps
-@use 'sass:math';   // For math operations if needed
+//_base/utilities.scss
+@use 'sass:map';
 @use '../abstracts/variables.scss' as vars;
 @use '../abstracts/mixins.scss' as mixins;
 
 // 1. **Spacing Utilities**
-// Margin and Padding utilities with dynamic map access
-@mixin spacing($property, $size-key) {
-  $value: map.get(vars.$spacing, $size-key); // Access spacing values dynamically
-  @if $value {
-    @if $property == 'm' {
+@each $key, $value in vars.$spacing {
+    .m-#{$key} {
       margin: #{$value};
-    } @else if $property == 'p' {
-      padding: #{$value};
-    } @else {
-      @error "Unsupported property `#{$property}`. Use 'm' for margin or 'p' for padding.";
     }
-  } @else {
-    @error "The size key `#{$size-key}` is not defined in the spacing map.";
-  }
+    .p-#{$key} {
+      padding: #{$value};
+    }
+    .mt-#{$key} {
+      margin-top: #{$value};
+    }
+    .mb-#{$key} {
+      margin-bottom: #{$value};
+    }
+    .mr-#{$key} {
+      margin-right: #{$value};
+    }
+     .ml-#{$key} {
+      margin-left: #{$value};
+    }
+      .pt-#{$key} {
+      padding-top: #{$value};
+    }
+    .pb-#{$key} {
+      padding-bottom: #{$value};
+    }
+     .pr-#{$key} {
+      padding-right: #{$value};
+    }
+    .pl-#{$key} {
+      padding-left: #{$value};
+    }
 }
 
-// Generate spacing classes dynamically
-.m-1 { @include spacing('m', 'small'); }
-.m-2 { @include spacing('m', 'medium'); }
-.m-3 { @include spacing('m', 'large'); }
-.p-1 { @include spacing('p', 'small'); }
-.p-2 { @include spacing('p', 'medium'); }
-.p-3 { @include spacing('p', 'large'); }
 
 // 2. **Text Alignment Utilities**
 .text-center { text-align: center; }
@@ -75,4 +83,3 @@
     }
   }
 }
-

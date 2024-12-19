@@ -1,16 +1,16 @@
-// _footer.scss
+//_layout/_footer.scss
 
-@use 'sass:color';   // For color functions
-@use 'sass:map';      // For map functions
-@use '../abstracts/variables.scss' as vars;   // Import custom variables (colors, spacing, etc.)
+@use 'sass:color';
+@use 'sass:map';
+@use '../abstracts/variables.scss' as vars;
 
 // Footer Container
 .footer {
-  background-color: map.get(vars.$colors, 'background-dark'); // Use map.get() for color
-  color: map.get(vars.$colors, 'text-light');                  // Use map.get() for text-light
+  background-color: map.get(vars.$color-variations, 'background-dark');
+  color: map.get(vars.$color-variations, 'text-light');
   padding: map.get(vars.$spacing, 'medium');
   text-align: center;
-  font-size: map.get(vars.$typography, 'font-size-base');       // Use map.get() for font-size from $typography map
+  font-size: map.get(vars.$font-sizes, 'base');
   position: relative;
 }
 
@@ -30,13 +30,13 @@
   gap: map.get(vars.$spacing, 'small');
   
   a {
-    color: map.get(vars.$colors, 'text-light');               // Use map.get() for text-light
+    color: map.get(vars.$color-variations, 'text-light');
     font-size: 1.5rem;
     text-decoration: none;
     transition: color 0.3s ease;
 
     &:hover {
-      color: map.get(vars.$colors, 'primary');                // Use map.get() for primary color
+      color: map.get(vars.$colors, 'primary');
     }
   }
 }
@@ -50,29 +50,29 @@
   margin-top: map.get(vars.$spacing, 'large');
 
   a {
-    color: map.get(vars.$colors, 'text-light');               // Use map.get() for text-light
+    color: map.get(vars.$color-variations, 'text-light');
     font-size: 1rem;
     text-decoration: none;
     padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
     transition: color 0.3s ease;
 
     &:hover {
-      color: map.get(vars.$colors, 'primary');                // Use map.get() for primary color
+      color: map.get(vars.$colors, 'primary');
     }
   }
 }
 
 // Footer Bottom (Copyright & Legal Info)
 .footer-bottom {
-  font-size: 0.875rem;  // Smaller text
+  font-size: 0.875rem;
   margin-top: map.get(vars.$spacing, 'large');
-  color: map.get(vars.$colors, 'text-light');                 // Use map.get() for text-light
+  color: map.get(vars.$color-variations, 'text-light');
   
   a {
-    color: map.get(vars.$colors, 'text-light');               // Use map.get() for text-light
+    color: map.get(vars.$color-variations, 'text-light');
     text-decoration: underline;
     &:hover {
-      color: map.get(vars.$colors, 'primary');                // Use map.get() for primary color
+      color: map.get(vars.$colors, 'primary');
     }
   }
 }

@@ -1,17 +1,11 @@
-@use 'sass:color';   // For color functions
-@use 'sass:math';     // For math functions
-@use 'sass:map';      // For map functions
-@use 'sass:string';   // For string manipulation
-@use 'variables';     // Import variables from _variables.scss
+//_abstracts/functions.scss
+@use 'sass:color';
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:string';
+@use 'variables';
 
-// 1. **Color Adjustment Function**
-// This function darkens or lightens a color based on a percentage value.
-@function adjust-color($color, $amount) {
-  @return color.adjust($color, $lightness: $amount);
-}
-
-// 2. **Hex to RGB Conversion Function**
-// Converts a hex color to RGB format (useful for dynamic color manipulation).
+// 1. **Hex to RGB Conversion Function**
 @function hex-to-rgb($hex) {
   @if (str-length($hex) == 7) {
     $r: red($hex);
@@ -24,42 +18,24 @@
   }
 }
 
-// 3. **Rem to Px Conversion Function**
-// Converts rem to pixels based on the root font size (default is 16px).
+// 2. **Rem to Px Conversion Function**
 @function rem-to-px($rem, $base: 16) {
   @return math.div($rem * $base, 1);
 }
 
-// 4. **Viewport Height (vh) to Percentage Conversion Function**
-// Convert vh to percentage based on the viewport's height.
+// 3. **Viewport Height (vh) to Percentage Conversion Function**
 @function vh-to-percentage($vh) {
-  $viewport-height: 100vh; // Assuming 100vh is the full viewport height
+  $viewport-height: 100vh;
   @return math.div($vh, $viewport-height) * 100%;
 }
 
-// 5. **Get Color from Palette by Key**
-// Retrieve a color from the global palette map, returns the color associated with the key.
-@function get-color($key) {
-  @return map.get($colors, $key);
-}
-
-// 6. **Calculate Column Width for Grid Layout**
-// This function calculates the column width based on a grid system.
+// 4. **Calculate Column Width for Grid Layout**
 @function calculate-column-width($columns, $total-width: 100%) {
   @return math.div($total-width, $columns);
 }
 
-// 7. **String to CamelCase Function**
-// Converts a string with spaces or dashes into camelCase format.
-@function string-to-camelcase($string) {
-  $string: string.replace($string, '-', ' '); // Convert dashes to spaces
-  $string: string.replace($string, ' ', ''); // Remove spaces
-  $string: string.lowercase($string); // Make all letters lowercase
-  @return $string;
-}
 
-// 8. **Generate a Gradient Function**
-// Generate a linear gradient with multiple color stops.
+// 5. **Generate a Gradient Function**
 @function gradient($colors...) {
     $gradient: "linear-gradient("; // Initialize the gradient string
     $color-count: length($colors); // Get the number of colors passed
@@ -71,18 +47,4 @@
     // Close the gradient string and return it
     $gradient: $gradient + ")";
     @return $gradient;
-  }
-
-// Example usage:
-
-// .card {
-//   background-color: adjust-color($primary-color, 10%); // Lighten primary color
-// }
-
-// .container {
-//   padding: rem-to-px(2rem); // Convert rem to px
-// }
-
-// .section {
-//   background: gradient(#ff7f50, #ff6347, #ff4500); // Generate a gradient background
-// }
+}

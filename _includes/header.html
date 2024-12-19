@@ -10,16 +10,18 @@
       <div class="right-side">
         {% if page.url == "/" %}
           <!-- On home page, scroll to sections -->
-          <a href="#about" class="top-nav-link">About</a>
+          <a href="{{ '/about/' | relative_url }}" class="top-nav-link">About</a>
           <a href="#services" class="top-nav-link">Services</a>
           <a href="#testimonials" class="top-nav-link">Testimonials</a>
           <a href="#contact" class="top-nav-link">Contact</a>
+          <a href="{{ '/sign-up/' | relative_url }}" class="top-nav-link">Sign Up</a>
         {% else %}
           <!-- On other pages, navigate to separate pages -->
           <a href="{{ '/about/' | relative_url }}" class="top-nav-link">About</a>
           <a href="{{ '/services/' | relative_url }}" class="top-nav-link">Services</a>
           <a href="{{ '/testimonials/' | relative_url }}" class="top-nav-link">Testimonials</a>
           <a href="{{ '/contact/' | relative_url }}" class="top-nav-link">Contact</a>
+          <a href="{{ '/sign-up/' | relative_url }}" class="top-nav-link">Sign Up</a>
         {% endif %}
       </div>
     </nav>

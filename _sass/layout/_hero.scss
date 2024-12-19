@@ -1,8 +1,8 @@
-//_hero.scss
+//_layout/_hero.scss
 @use 'sass:color';
 @use 'sass:map';
-@use '../abstracts/variables' as vars; // For variables like colors, spacing, etc.
-@use '../abstracts/mixins' as *; // For mixins like media queries
+@use '../abstracts/variables' as vars;
+@use '../abstracts/mixins' as *;
 
 .hero {
   background-image: url('../../assets/img/hero-image.jpg'); // Adjust the path accordingly
@@ -17,10 +17,10 @@
   text-align: center;
   padding: map.get(vars.$spacing, 'large') 0;
   padding-top: 100px; // Ensure the content clears the fixed header height
-  margin-top: 50px;
+  margin-top: -40px;
   
   .hero-content {
-    max-width: 800px;
+    max-width: 100%;
     margin: 0 auto;
   }
 

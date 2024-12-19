@@ -1,22 +1,22 @@
+//_components/_buttons.scss
+
 @use 'sass:map';
 @use 'sass:color';
 @use '../abstracts/variables.scss' as vars;
-@use '../abstracts/mixins.scss' as *; // Assuming mixins are required
+@use '../abstracts/mixins.scss' as *;
 
 // General Button Styling
 button,
 a.button {
   display: inline-block;
-  font-family: map.get(vars.$typography, 'font-family-base');
-  font-weight: map.get(vars.$typography, 'font-weight-bold');
   text-align: center;
   cursor: pointer;
   text-decoration: none;
   padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
   border: 2px solid transparent;
   border-radius: map.get(vars.$border-radius, 'medium');
-  line-height: map.get(vars.$typography, 'line-height-normal');
-  transition: all 0.3s ease; // Smooth transition for hover/focus states
+  line-height: map.get(vars.$line-heights, 'normal');
+  transition: all 0.3s ease;
 }
 
 // Primary Button Style
@@ -27,16 +27,16 @@ a.button.primary {
 
   &:hover,
   &:focus {
-    background-color: map.get(vars.$colors, 'primary-hover');
+    @include color-adjust('background', map.get(vars.$colors, 'primary'), 10%);
     color: white;
   }
 
   &:active {
-    background-color: map.get(vars.$colors, 'primary-active');
+      @include color-adjust('background', map.get(vars.$colors, 'primary'), -10%);
   }
 
   &:disabled {
-    background-color: color.scale(map.get(vars.$colors, 'primary'), $lightness: -20%);
+    background-color: map.get(vars.$color-variations, 'disabled');
     cursor: not-allowed;
   }
 }
@@ -55,63 +55,31 @@ a.button.secondary {
   }
 
   &:active {
-    background-color: map.get(vars.$colors, 'primary-active');
-    color: white;
+       @include color-adjust('background', map.get(vars.$colors, 'primary'), -10%);
+      color: white;
   }
 
   &:disabled {
-    color: color.scale(map.get(vars.$colors, 'primary'), $lightness: -20%);
-    border-color: color.scale(map.get(vars.$colors, 'primary'), $lightness: -20%);
+    color: map.get(vars.$color-variations, 'disabled');
+    border-color: map.get(vars.$color-variations, 'disabled');
     cursor: not-allowed;
   }
 }
 
-// Submit Button in Form
-.form-container button,
-.form-container input[type="submit"] {
-  margin-top: map.get(vars.$spacing, 'small'); // Add spacing to align with form layout
-  width: 100%; // Make the button take full width of the form container
-  padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'small');
-  font-size: map.get(vars.$typography, 'font-size-base');
-  font-weight: map.get(vars.$typography, 'font-weight-bold');
-  color: white;
-  background-color: map.get(vars.$colors, 'primary');
-  border: 2px solid transparent;
-  border-radius: map.get(vars.$border-radius, 'medium');
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover,
-  &:focus {
-    background-color: map.get(vars.$colors, 'primary-hover');
-    color: white;
-  }
-
-  &:active {
-    background-color: map.get(vars.$colors, 'primary-active');
-  }
-
-  &:disabled {
-    background-color: color.scale(map.get(vars.$colors, 'primary'), $lightness: -20%);
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
-}
-
-// Additional Button Sizes (if needed)
+// Additional Button Sizes
 button.large,
 a.button.large {
   padding: map.get(vars.$spacing, 'medium') map.get(vars.$spacing, 'xlarge');
-  font-size: map.get(vars.$typography, 'font-size-lg');
+  font-size: map.get(vars.$font-sizes, 'lg');
 }
 
 button.small,
 a.button.small {
   padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
-  font-size: map.get(vars.$typography, 'font-size-base');
+  font-size: map.get(vars.$font-sizes, 'base');
 }
 
-// Button with Icon (For icon integration)
+// Button with Icon
 button.icon,
 a.button.icon {
   display: flex;
@@ -128,7 +96,7 @@ a.button.icon {
 // Focus State for Accessibility
 button:focus,
 a.button:focus {
-  outline: 2px solid map.get(vars.$colors, 'focus-outline');
+  outline: 2px solid map.get(vars.$color-variations, 'border');
   outline-offset: 2px;
 }
 

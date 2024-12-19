@@ -1,113 +1,68 @@
-@use 'sass:map';  // Import map functions
-@use 'sass:color';  // Import color functions
-@use '../abstracts/variables.scss' as vars;  // Import variables using 'vars'
-@use '../abstracts/mixins.scss';  // Import mixins
+//_base_reset.scss
+@use 'sass:map';
+@use 'sass:color';
+@use '../abstracts/variables.scss' as vars;
+@use '../abstracts/mixins.scss' as mixins;
 
 /* Normalize CSS */
 *,
 *::before,
 *::after {
-  box-sizing: border-box;  // Ensures padding and border are included in the element's total width and height
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
-  font-family: map.get(vars.$typography, 'font-family-base');  // Use base font family
-  line-height: map.get(vars.$typography, 'line-height-normal');
-  color: map.get(vars.$colors, 'text-color');  // Set default text color
-  background-color: map.get(vars.$colors, 'background-color');  // Set background color for the page
-  min-height: 100vh;  // Ensure the body takes at least the full viewport height
+  font-family: map.get(vars.$font-family, 'base');
+  line-height: map.get(vars.$line-heights, 'normal');
+  color: map.get(vars.$colors, 'text');
+  background-color: map.get(vars.$colors, 'background');
+  min-height: 100vh;
 }
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  padding: 0;
-  font-weight: map.get(vars.$typography, 'font-weight-bold');  // Apply bold font weight
-  color: map.get(vars.$colors, 'text-dark');  // Use dark text color for headings
+  font-weight: map.get(vars.$font-weights, 'bold');
+  color: map.get(vars.$color-variations, 'text-dark');
+  line-height: map.get(vars.$line-heights, 'heading');
 }
 
-h1 {
-  font-size: map.get(vars.$typography, 'h1-font-size');
-}
-h2 {
-  font-size: map.get(vars.$typography, 'h2-font-size');
-}
-h3 {
-  font-size: map.get(vars.$typography, 'h3-font-size');
-}
-h4 {
-  font-size: map.get(vars.$typography, 'h4-font-size');
-}
-h5 {
-  font-size: map.get(vars.$typography, 'h5-font-size');
-}
-h6 {
-  font-size: map.get(vars.$typography, 'h6-font-size');
-}
 
 /* Links */
 a {
-  color: map.get(vars.$colors, 'primary');  // Default link color
-  text-decoration: none;  // Remove underlines from links by default
-  transition: color 0.3s ease-in-out;  // Add smooth color transition on hover
+  color: map.get(vars.$colors, 'primary');
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
   &:hover {
-    color: color.adjust(map.get(vars.$colors, 'primary'), $lightness: 10%);  // Lighten primary color on hover
+    @include mixins.color-adjust('color', map.get(vars.$colors, 'primary'), 10%);
+    text-decoration: underline;
   }
 }
 
 /* Lists */
 ul, ol {
-  padding: 0;
-  margin: 0;
-  list-style: none;  // Remove bullet points or numbers
-}
-
-/* Forms */
-input,
-button,
-textarea,
-select {
-  border: 1px solid map.get(vars.$colors, 'border-color');  // Use border color from variables
-  padding: map.get(vars.$spacing, 'small');  // Use small spacing for inputs, buttons, etc.
-  font-size: map.get(vars.$typography, 'font-size-base');
-}
-
-/* Buttons */
-button {
-  cursor: pointer;
-  background-color: map.get(vars.$colors, 'primary');  // Default button background
-  color: white;
-  border-radius: map.get(vars.$spacing, 'small');
-  &:hover {
-    background-color: color.adjust(map.get(vars.$colors, 'primary'), $lightness: -10%);  // Darken on hover
-  }
-}
-
-textarea, input[type="text"], input[type="email"], input[type="password"] {
-  width: 100%;
-  padding: map.get(vars.$spacing, 'medium');  // Medium padding for text inputs
+  list-style: none;
 }
 
 /* Tables */
 table {
   border-collapse: collapse;
   width: 100%;
-  margin-bottom: map.get(vars.$spacing, 'medium');  // Use medium spacing for table bottom margin
+  margin-bottom: map.get(vars.$spacing, 'medium');
 }
 
 th, td {
-  padding: map.get(vars.$spacing, 'small');  // Add padding for table cells
-  border: 1px solid map.get(vars.$colors, 'border-color');  // Use border color from variables
+  padding: map.get(vars.$spacing, 'small');
+  border: 1px solid map.get(vars.$color-variations, 'border');
 }
 
 th {
-  text-align: left;  // Align table headers to the left
-  background-color: map.get(vars.$colors, 'background-dark');  // Use dark background for table headers
+  text-align: left;
+  background-color: map.get(vars.$color-variations, 'background-dark');
 }
 
 /* Clearfix for floated elements */
-.some-container {
+.clearfix {
   @include mixins.clearfix;
 }

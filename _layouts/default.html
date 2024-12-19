@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ site.title }}</title>
-  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
 </head>
-
 <body>
-  {% include header.html %}  <!-- Includes the header with navigation -->
-
-  <main>
-    {{ content }}  <!-- This is where the page-specific content like the hero and sections will go -->
-  </main>
-
-  {% include footer.html %}  <!-- Includes the footer -->
+    {% include header.html %}
+    <main class="main-content">
+        {% if page.layout == 'home' %}
+            <section class="hero">
+                 <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Welcome to LumoLetters</h1>
+                            <p>Illuminating Conversations, Connecting Lives, One Letter at a Time</p>
+                        </div>
+                     <div class="cta-container">
+                         <a href="/sign-up" class="button primary">Sign Up Now</a>
+                     </div>
+                  </div>
+            </section>
+        {% endif %}
+      {{ content }}
+    </main>
+    {% include footer.html %}
 </body>
-
 </html>
