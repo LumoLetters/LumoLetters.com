@@ -1,0 +1,21 @@
+# _data/navigation.yml
+
+main_nav:
+  - title: "About Us"
+    url: "/about/"
+    class: "nav-link"
+  - title: "Services"
+    url: "/services/"
+    class: "nav-link"
+  - title: "Testimonials"
+    url: "/testimonials/"
+    class: "nav-link"
+  - title: "Contact"
+    url: "/contact/"
+    class: "nav-link"
+  - title: "Sign Up"
+    url: "/sign-up/"
+    class: "nav-link"
+  - title: "Login"
+    url: "/login/"
+    class: "nav-link"

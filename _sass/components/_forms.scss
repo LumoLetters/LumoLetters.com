@@ -156,7 +156,7 @@ select {
 
   &:hover,
   &:focus {
-        @include color-adjust('background', map.get(vars.$colors, 'primary'), 10%);
+       @include color-adjust('background', map.get(vars.$colors, 'primary'), 10%);
     color: white;
   }
 
@@ -169,4 +169,8 @@ select {
     cursor: not-allowed;
     opacity: 0.6;
   }
+}
+
+#login-form button{
+   margin-top: map.get(vars.$spacing, 'medium');
 }

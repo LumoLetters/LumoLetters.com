@@ -1,0 +1,7 @@
+# _data/ui-text.yml
+pages:
+  login:
+    heading: "Login to Your Account"
+    email_placeholder: "Email"
+    password_placeholder: "Password"
+    login_button: "Login"

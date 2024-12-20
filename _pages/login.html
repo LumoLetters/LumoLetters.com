@@ -1,14 +1,18 @@
-<!-- login.html -->
-{% layout page %}
-{% include header.html %}
+---
+layout: page
+title: Login
+permalink: /login/
+---
 
-<div id="login-container">
-  <h2>Login to Your Account</h2>
-  <form id="login-form">
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Login</button>
-  </form>
+<!-- Login Section  -->
+<div class="container">
+    <h1>{{ site.data.ui-text.pages.login.heading }}</h1>
+    <div id="login-container">
+    <form id="login-form">
+        <input type="email" id="email" placeholder="{{ site.data.ui-text.pages.login.email_placeholder }}" required>
+        <input type="password" id="password" placeholder="{{ site.data.ui-text.pages.login.password_placeholder }}" required>
+        <button type="submit" class="button primary">{{ site.data.ui-text.pages.login.login_button }}</button>
+    </form>
+    </div>
+    <p> {{ site.data.ui-text.pages.login.login_paragraph }} </p>
 </div>
-
-{% include footer.html %}

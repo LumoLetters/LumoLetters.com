@@ -13,10 +13,7 @@ plugins:
   - jekyll-feed
 
 # Enable SCSS and Sass preprocessing for custom styles
-sass:
-  style: compressed # Compresses the final output
-  load_paths:
-    - "_sass"  # Allows importing partials in the _sass folder
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -35,7 +32,7 @@ exclude:
 # Include folders
 include:
   - assets # Ensure assets are included
-  - _pages # Ensure pages are included
+  - _pages
 
 # Optional: Add settings for your custom collections or paths
 # collections:

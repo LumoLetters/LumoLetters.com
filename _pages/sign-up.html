@@ -3,20 +3,15 @@ layout: default
 title: Sign Up
 permalink: /sign-up/
 ---
-
-<form name="sign-up" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-  <input type="hidden" name="form-name" value="sign-up">
-  <input type="hidden" name="redirect" value="/thank-you">
-  <!-- Form fields go here -->
-</form>
-
 <section class="sign-up">
-    <div class="container">
-      <h1>Welcome to LumoLetters</h1>
+  <div class="container">
+        <h1>Sign Up for LumoLetters</h1>
       <p>LumoLetters: Personalized Letters for Seniors, providing a unique blend of emotional support and cognitive stimulation.</p> 
+      <p> Please use the form below to sign up for LumoLetters. Fill in your details and we will create personalized letters for the senior in your life. </p>
       <h2>Recipient's Information</h2>
       <form name="sign-up-form" method="POST" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="sign-up-form">
+        <input type="hidden" name="redirect" value="/thank-you">
   
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
