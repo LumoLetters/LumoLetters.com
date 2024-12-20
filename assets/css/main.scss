@@ -1,32 +1,29 @@
----
----
-
 // Core utilities and settings
-@use '../_sass/abstracts/variables' as vars;
-@use '../_sass/abstracts/mixins' as mix;
-@use '../_sass/abstracts/functions' as func;
+@use '../../_sass/abstracts/variables' as vars;
+@use '../../_sass/abstracts/mixins' as mix;
+@use '../../_sass/abstracts/functions' as func;
 
 // Global base styles
-@use '../_sass/base/reset' as reset;
-@use '../_sass/base/typography' as typography;
-@use '../_sass/base/global' as global;
-@use '../_sass/base/utilities' as utilities;
+@use '../../_sass/base/reset' as reset;
+@use '../../_sass/base/typography' as typography;
+@use '../../_sass/base/global' as global;
+@use '../../_sass/base/utilities' as utilities;
 
 // Components
-@use '../_sass/components/buttons' as buttons;
-@use '../_sass/components/cards' as cards;
-@use '../_sass/components/forms' as forms;
+@use '../../_sass/components/buttons' as buttons;
+@use '../../_sass/components/cards' as cards;
+@use '../../_sass/components/forms' as forms;
 
 // Layout styles
-@use '../_sass/layout/grid' as grid;
-@use '../_sass/layout/navigation' as nav;
-@use '../_sass/layout/header' as header;
-@use '../_sass/layout/footer' as footer;
-@use '../_sass/layout/hero' as hero;
-@use '../_sass/layout/page' as page;
+@use '../../_sass/layout/grid' as grid;
+@use '../../_sass/layout/navigation' as nav;
+@use '../../_sass/layout/header' as header;
+@use '../../_sass/layout/footer' as footer;
+@use '../../_sass/layout/hero' as hero;
+@use '../../_sass/layout/page' as page;
 
 // Page-specific styles
-@use '../_sass/pages/account' as account;
-@use '../_sass/pages/home' as home;
-@use '../_sass/pages/login' as login;
-@use '../_sass/pages/services' as services;
+@use '../../_sass/pages/account' as account;
+@use '../../_sass/pages/home' as home;
+@use '../../_sass/pages/login' as login;
+@use '../../_sass/pages/services' as services;
