@@ -1,4 +1,89 @@
 ---
-layout: home
-title: Home
+layout: default
+title: Home - LumoLetters
+permalink: /
 ---
+<!-- Home page content -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Welcome to LumoLetters</h1>
+      <p>Illuminating Conversations, Connecting Lives, One Letter at a Time</p>
+      </div>
+      <div class="cta-container">
+        <a href="/sign-up" class="button primary">Sign Up Now</a>
+      </div>
+   </div>
+</section>
+
+<section class="about">
+  <div class="container">
+    <h2>About LumoLetters</h2>
+    <p>
+      At LumoLetters, we believe in the transformative power of personalized letters to
+      connect hearts and illuminate lives, especially for seniors. In a world that often
+      moves too fast, we specialize in creating heartfelt, custom-written messages that
+      foster a sense of community and belonging, one letter at a time.
+    </p>
+ </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <h2>Testimonials</h2>
+         <div class="testimonial-box">
+            <p class="testimonial-quote">I was very impressed by the level of personal care and attention that went into crafting a letter for my grandma. It was such a wonderful gift, and she really appreciated it.</p>
+            <p class="testimonial-author">- Candice L</p>
+        </div>
+         <div class="testimonial-box">
+            <p class="testimonial-quote">The service was excellent, and it provided my grandpa with some much needed stimulation. Thank you.</p>
+            <p class="testimonial-author">- Bob K</p>
+    </div>
+  </div>
+</section>
+    
+<section class="services-container">
+    <div class="container">
+     <h2 class="section-title">Our Services</h2>
+         <p class="section-intro">Our services are designed to provide a unique way to create meaningful connections with the people in your life.</p>
+    </div>
+    <div class="services-items">
+        <div class="service-item">
+        <h3 class="section-subheading">Personalized Letters</h3>
+        <p>Each letter we create is as unique as the person receiving it. We delve into their interests, hobbies, and personality to craft a message that resonates with their heart and spirit.</p>
+        </div>
+        <div class="service-item">
+        <h3 class="section-subheading">Letter Series</h3>
+        <p>With our unique letter series, each letter builds upon the last, creating an ongoing story that the recipient can look forward to.</p>
+        </div>
+        <div class="service-item">
+            <h3 class="section-subheading">Keepsake Memories</h3>
+             <p>At the end of a letter series, we can compile all your messages into a beautifully crafted keepsake book. This tangible reminder of shared moments and heartfelt words becomes a treasure to be cherished forever.</p>
+       </div>
+   </div>
+</section>
+        
+<section class="contact">
+  <div class="container">
+        <h2>Contact Us</h2>
+        <p>Have any questions or want to get started with LumoLetters? Reach out to us! We're here to help.</p>
+        
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="contact">
+            <div hidden>
+              <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
+            </div>
+            
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="message">Your Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            
+            <button type="submit" class="button primary">Send Message</button>
+          </form>
+    </div>
+</section>

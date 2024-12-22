@@ -1,29 +1,34 @@
-// Core utilities and settings
+---
+ # To compile main.css
+---
+
+
+// Core utilities and settings (These are fundamental and should be imported first)
 @use '../../_sass/abstracts/variables' as vars;
 @use '../../_sass/abstracts/mixins' as mix;
 @use '../../_sass/abstracts/functions' as func;
 
-// Global base styles
-@use '../../_sass/base/reset' as reset;
-@use '../../_sass/base/typography' as typography;
-@use '../../_sass/base/global' as global;
+// Global base styles (These apply to all elements)
+@use '../../_sass/base/reset' as reset;   // CSS resets to normalize styling
+@use '../../_sass/base/typography' as typography; // Typography base styles
+@use '../../_sass/base/global' as global; // Global styles and utilities
 @use '../../_sass/base/utilities' as utilities;
 
-// Components
-@use '../../_sass/components/buttons' as buttons;
-@use '../../_sass/components/cards' as cards;
-@use '../../_sass/components/forms' as forms;
+// Components (Reusable UI components)
+@use '../../_sass/components/buttons' as buttons; // Button styles
+@use '../../_sass/components/cards' as cards;    // Card styles
+@use '../../_sass/components/forms' as forms;    // Form styles
 
-// Layout styles
-@use '../../_sass/layout/grid' as grid;
-@use '../../_sass/layout/navigation' as nav;
-@use '../../_sass/layout/header' as header;
-@use '../../_sass/layout/footer' as footer;
-@use '../../_sass/layout/hero' as hero;
-@use '../../_sass/layout/page' as page;
+// Layout styles (Styles for the overall layout and structure of pages)\
+@use '../../_sass/layout/404' as error404;
+@use '../../_sass/layout/grid' as grid;       // Grid system styles
+@use '../../_sass/layout/footer' as footer;    // Footer styles
+@use '../../_sass/layout/hero' as hero;       // Hero section styles
+@use '../../_sass/layout/page' as page;       // Styles for general pages
+@use '../../_sass/layout/header' as header;    // Header and Navigation styles
 
-// Page-specific styles
-@use '../../_sass/pages/account' as account;
-@use '../../_sass/pages/home' as home;
-@use '../../_sass/pages/login' as login;
-@use '../../_sass/pages/services' as services;
+// Page-specific styles (Styles specific to individual pages)
+@use '../../_sass/pages/account' as account;  // Styles specific to the account page
+@use '../../_sass/pages/home' as home;     // Styles specific to the home page
+@use '../../_sass/pages/login' as login;    // Styles specific to the login page
+@use '../../_sass/pages/services' as services; // Styles specific to the services page
