@@ -1,44 +1,50 @@
 //_layout/_hero.scss
 @use 'sass:color';
 @use 'sass:map';
-@use '../abstracts/variables' as vars;
+@use '../abstracts/variables.scss' as vars;
 @use '../abstracts/mixins' as *;
 
 .hero {
-  background-image: url('../../assets/img/hero-image.jpg'); // Adjust the path accordingly
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 60vh; // You can adjust the height based on your design needs
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: map.get(vars.$spacing, 'large') 0;
-  padding-top: 100px; // Ensure the content clears the fixed header height
-  margin-top: -40px;
-  
-  .hero-content {
-    max-width: 100%;
-    margin: 0 auto;
-  }
+    background-image: url('../../assets/img/hero-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 60vh; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: map.get(vars.$spacing, 'large') 0;
 
-  .hero-text {
-    margin-bottom: map.get(vars.$spacing, 'large'); 
-
-    h1 {
-      color: map.get(vars.$colors, 'primary'); // Darken the text color
+    .hero-content {
+      max-width: 100%;
+      margin: 0 auto;
     }
+
+   .hero-text {
+        margin-bottom: map.get(vars.$spacing, 'medium');
     
-    p {
-      color: map.get(vars.$colors, 'primary'); // Same for the paragraph
-      background-color: white;
-      border: 1px solid map.get(vars.$colors, 'primary');
-      border-radius: 15px;
-      padding: 5px 15px;
-      display: inline-block;
-      margin-top: 10px;
+       h1 {
+        color: map.get(vars.$colors, 'primary');
+       line-height: 1.2;
+       font-size: 3em;
+       margin-bottom: map.get(vars.$spacing, 'medium');
+      }
+       p {
+            font-size: 1.25em;
+         line-height: 1.5;
+           color: map.get(vars.$colors, 'primary');
+          background-color: white;
+          border: 1px solid map.get(vars.$colors, 'primary');
+         border-radius: 15px;
+           padding: 5px 15px;
+          display: inline-block;
+            margin-top: 10px;
+       }
     }
-  }
+
+    .cta-container {
+         margin-top: map.get(vars.$spacing, 'large');
+    }
 }

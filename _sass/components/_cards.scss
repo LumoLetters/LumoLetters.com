@@ -11,12 +11,13 @@
   padding: map.get(vars.$spacing, 'large') 0; // Add padding around the cards section
 
   .cards-container {
-    display: flex;
-    justify-content: space-around;
-    gap: map.get(vars.$spacing, 'medium'); // Space between the cards
-    max-width: 1200px; // Optional: restrict container width for readability
-    margin: 0 auto; // Center the container
-    padding: map.get(vars.$spacing, 'medium'); // Add padding inside the container
+   display: flex;
+   flex-direction: column; // stack cards in a column
+   gap: map.get(vars.$spacing, 'medium'); // Space between the cards
+    width: 100%;
+   max-width: 1500px;
+   margin: 0 auto; // Center the container
+  padding: map.get(vars.$spacing, 'medium'); // Add padding inside the container
   }
 
   .card {
@@ -24,16 +25,16 @@
     border: 1px solid map.get(vars.$color-variations, 'border');     // Border color for the card
     border-radius: map.get(vars.$border-radius, 'medium'); // Rounded corners for the card
     box-shadow: map.get(vars.$box-shadows, 'small');          // Box shadow for depth
-    width: 30%; // Make the cards a bit more narrow to fit 3 in a row
+    width: 100%; // Make the cards a bit more narrow to fit 3 in a row
     text-align: center; // Center text inside the card
-
-    &-header {
+    
+   &-header {
       font-size: map.get(vars.$font-sizes, 'lg');          // Larger font for the card header
       font-weight: map.get(vars.$font-weights, 'bold');    // Bold header text
       padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium'); // Padding around header
-      background-color: map.get(vars.$colors, 'background-light');  // Light background for the header
+      background-color: map.get(vars.$color-variations, 'background-light');  // Light background for the header
     }
-
+    
     &-body {
       font-size: map.get(vars.$font-sizes, 'base');        // Default font size for body
       color: map.get(vars.$colors, 'text');                          // Text color
@@ -46,7 +47,7 @@
       padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium'); // Padding inside the footer
       background-color: map.get(vars.$color-variations, 'background-dark');    // Dark background for the footer
     }
-
+    
     // Hover effect for card
     &:hover {
       box-shadow: map.get(vars.$box-shadows, 'medium');       // Apply hover shadow
@@ -55,17 +56,17 @@
     }
   }
 
-  // Responsive design (using breakpoints dynamically)
-  @each $breakpoint, $value in vars.$breakpoints {
+// Responsive design (using breakpoints dynamically)
+@each $breakpoint, $value in vars.$breakpoints {
     @media screen and (max-width: #{$value}) {
-      .cards-container {
-        flex-direction: column; // Stack cards on small screens
-        align-items: center;    // Center cards
-      }
+        .cards-container {
+            flex-direction: column; // Stack cards on small screens
+            align-items: center;    // Center cards
+        }
 
-      .card {
-        width: 90%; // Make cards wider on small screens
-      }
+        .card {
+            width: 90%; // Make cards wider on small screens
+        }
     }
-  }
+}
 }

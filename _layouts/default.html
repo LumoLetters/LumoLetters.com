@@ -4,29 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
-    {% if jekyll.environment == "production" %}
-      <link rel="stylesheet" href="{{ site.url }}/assets/css/main.css">
-   {% else %}
-        <link rel="stylesheet" href="/assets/css/main.css">
-   {% endif %}
+        <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 </head>
 <body>
     {% include header.html %}
     <main class="main-content">
-        {% if page.layout == 'home' %}
-            <section class="hero">
-                 <div class="hero-content">
-                    <div class="hero-text">
-                        <h1>Welcome to LumoLetters</h1>
-                            <p>Illuminating Conversations, Connecting Lives, One Letter at a Time</p>
-                        </div>
-                     <div class="cta-container">
-                         <a href="/sign-up" class="button primary">Sign Up Now</a>
-                     </div>
-                  </div>
-            </section>
-        {% endif %}
-      {{ content }}
+        {{ content }}
     </main>
     {% include footer.html %}
 </body>
