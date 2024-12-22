@@ -1,4 +1,3 @@
-<!-- _includes/header.html -->
 <header>
   <!-- Top Navigation Bar -->
   <nav class="top-nav">
@@ -8,10 +7,14 @@
         LumoLetters
       </a>
     </div>
-    <div class="right-side">
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <label for="nav-toggle" class="nav-toggle-label">
+          <span></span>
+      </label>
+    <div class="right-side nav-right-side">
       {% for item in site.data.navigation.main_nav %}
-           <a href="{{ item.url | relative_url }}" class="top-nav-link">{{ item.title }}</a>
+          <a href="{{ item.url | relative_url }}" class="top-nav-link">{{ item.title }}</a>
       {% endfor %}
+        <a href="{{ '/sign-up/' | relative_url }}" class="top-nav-link sign-up-link">Sign Up</a>
     </div>
   </nav>
-</header>
