@@ -6,91 +6,91 @@
 
 // Top Navigation Bar
 nav.top-nav {
-display: flex;
-justify-content: space-between;
-align-items: center;
-background-color: map.get(vars.$colors, 'accent');
-padding: map.get(vars.$spacing, 'xsmall') map.get(vars.$spacing, 'small');
-width: 100%;
-position: fixed;
-top: 0;
-left: 0;
-z-index: map.get(vars.$z-index, 'navbar');
-height: auto;
-min-height: 50px;
-
-.left-side {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-
-    .top-nav-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: map.get(vars.$spacing, 'small');
-    }
-
-    .logo {
-    font-size: 2rem;
-    font-weight: map.get(vars.$font-weights, 'bold');
-    display: flex;
-    align-items: center;
-    }
-}
-
-// Hamburger Icon Styles
-.nav-toggle-label{
-    position: absolute;
-    top: 16px; // updated to 16
-    right: 1rem;
-    width: 30px; // updated to 30
-    height: 30px; // updated to 30
-    cursor: pointer;
-    display: none;  // Hide the icon by default
+    background-color: map.get(vars.$colors, 'accent');
+    padding: map.get(vars.$spacing, 'xsmall') map.get(vars.$spacing, 'small');
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: map.get(vars.$z-index, 'navbar');
+    height: auto;
+    min-height: 50px;
+    
+    .left-side {
+        display: flex;
+        align-items: center;
 
-    span{
-        position: relative;
-        display: block;
+        .top-nav-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: map.get(vars.$spacing, 'small');
+        }
+
+        .logo {
+        font-size: 2rem;
+        font-weight: map.get(vars.$font-weights, 'bold');
+        display: flex;
+        align-items: center;
+        }
+    }
+    
+    // Hamburger Icon Styles
+    .nav-toggle-label{
+        position: absolute;
+        top: 16px; // updated to 16
+        right: 1rem;
         width: 30px; // updated to 30
-        height: 4px; // updated to 4
-        background-color: white;
+        height: 30px; // updated to 30
+        cursor: pointer;
+        display: none;  // Hide the icon by default
+        z-index: map.get(vars.$z-index, 'navbar');
 
-        &::before,
-        &::after {
-            content: '';
-            position: absolute;
+        span{
+            position: relative;
+            display: block;
             width: 30px; // updated to 30
             height: 4px; // updated to 4
             background-color: white;
-            transform-origin: 50% 50%;
-            transition: all 0.3s ease-in-out;
-            left: 0;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                width: 30px; // updated to 30
+                height: 4px; // updated to 4
+                background-color: white;
+                transform-origin: 50% 50%;
+                transition: all 0.3s ease-in-out;
+                left: 0;
+            }
+
+                &::before{
+                    transform: translateY(-8px);
+                
+                }
+
+                &::after{
+                    transform: translateY(8px);
+                }
+
         }
+}
 
-            &::before{
-                transform: translateY(-8px);
-            
-            }
-
-            &::after{
-                transform: translateY(8px);
-            }
-
+    #nav-toggle {
+        display: none;
     }
-}
 
-#nav-toggle {
-    display: none;
-}
-
-.nav-right-side {
-    display: flex;
-    gap: map.get(vars.$spacing, 'medium');
-    align-items: center;
-    flex-wrap: wrap;
-    transition: all 0.3s ease-in-out;
-
-    .top-nav-link {
+    .nav-right-side {
+        display: flex;
+        gap: map.get(vars.$spacing, 'medium');
+        align-items: center;
+        transition: all 0.3s ease-in-out;
+        white-space: nowrap; // Added to prevent wrapping
+        
+        .top-nav-link {
             text-decoration: none;
             color: map.get(vars.$color-variations, 'primary');
             font-size: map.get(vars.$font-sizes, 'base');
@@ -98,16 +98,17 @@ min-height: 50px;
             padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
             position: relative;
             margin-bottom: 2px;
-
+           white-space: nowrap; // Added to prevent text from wrapping
+            flex-shrink: 0;
             &::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0%;
-            width: 0;
-            height: 1px;
-            background-color: map.get(vars.$colors, 'secondary');
-            transition: width 0.2s ease-in-out, left 0.2s ease-in-out;
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0%;
+                width: 0;
+                height: 1px;
+                background-color: map.get(vars.$colors, 'secondary');
+                transition: width 0.2s ease-in-out, left 0.2s ease-in-out;
             }
 
             &:hover {
@@ -121,10 +122,12 @@ min-height: 50px;
             }
         }
     }
-  @media screen and (max-width: 768px) {
+  
+    @media screen and (max-width: 768px) {
             .nav-toggle-label {
                 display: block;
                 right: 1rem;
+               top: 16px;
             }
 
         .nav-right-side {
@@ -142,12 +145,11 @@ min-height: 50px;
 
             #nav-toggle:checked ~ .nav-right-side {
                 display: flex;
-
             }
     
-           .nav-right-side > .top-nav-link{
+            .nav-right-side > .top-nav-link{
                     width: 100%;
                 border-bottom: 1px solid map.get(vars.$color-variations, 'primary');
-            }
-     }
-}
+              }
+        }
+    }
