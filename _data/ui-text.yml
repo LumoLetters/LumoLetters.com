@@ -5,3 +5,4 @@ pages:
     email_placeholder: "Email"
     password_placeholder: "Password"
     login_button: "Login"
+    logout_button: "Log Out"

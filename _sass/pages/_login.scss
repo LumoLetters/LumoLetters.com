@@ -6,10 +6,12 @@
 @use '../abstracts/variables.scss' as vars;
 @use '../abstracts/mixins' as *;
 
+.hidden {
+  display: none;
+}
+
 // Login Page Container
 .login-page {
-  background-color: map.get(vars.$colors, 'background');
-  color: map.get(vars.$colors, 'text');
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -19,8 +21,10 @@
   background-image: linear-gradient(135deg, map.get(vars.$colors, 'primary'), map.get(vars.$colors, 'secondary'));
   background-size: cover;
   background-position: center;
+  position: relative;
 
-  animation: fadeIn 2s ease-out;
+
+   animation: fadeIn 2s ease-out;
 
   @keyframes fadeIn {
     0% {
@@ -33,112 +37,73 @@
     }
   }
 
+  &::before {
+     content: "";
+      position: absolute;
+        top: 0;
+      left: 0;
+    width: 100%;
+      height: 100%;
+     background: rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+     }
+
   @media (max-width: map.get(vars.$breakpoints, 'medium')) {
     padding: map.get(vars.$spacing, 'large');
   }
-}
 
-// Login Form Container
-.login-form-container {
-  background-color: map.get(vars.$color-variations, 'background-light');
-  border-radius: map.get(vars.$border-radius, 'medium');
-  padding: map.get(vars.$spacing, 'xlarge');
-  box-shadow: map.get(vars.$box-shadows, 'medium');
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-
-  h2 {
-    font-size: map.get(vars.$font-sizes, 'xl');
-    color: map.get(vars.$colors, 'primary');
-    margin-bottom: map.get(vars.$spacing, 'large');
-  }
-
-  .login-form {
-    display: flex;
-    flex-direction: column;
-
-    input[type='text'],
-    input[type='password'] {
+    .container {
         background-color: map.get(vars.$color-variations, 'background-light');
-         border: 1px solid map.get(vars.$color-variations, 'border');
-      padding: map.get(vars.$spacing, 'medium');
-      border-radius: map.get(vars.$border-radius, 'small');
-      margin-bottom: map.get(vars.$spacing, 'medium');
-      font-size: map.get(vars.$font-sizes, 'base');
-        color: map.get(vars.$colors, 'text');
+        border-radius: map.get(vars.$border-radius, 'medium');
+        padding: map.get(vars.$spacing, 'xlarge');
+        box-shadow:  0 10px 20px rgba(0,0,0,0.05);
+        max-width: 400px;
+        width: 100%;
+         text-align: center;
+        h1 {
+           margin-bottom: map.get(vars.$spacing, 'large');
+        }
 
-      &:focus {
-        outline: none;
-        border-color: map.get(vars.$color-variations, 'active');
-         box-shadow: 0 0 5px map.get(vars.$color-variations, 'active');
-      }
 
-      @media (max-width: map.get(vars.$breakpoints, 'medium')) {
-        padding: map.get(vars.$spacing, 'small');
-      }
-    }
+        #login-container {
+           margin: 0;
 
-   .submit-btn {
-        background-color: map.get(vars.$colors, 'primary');
-        color: map.get(vars.$color-variations, 'background-light');
-      padding: map.get(vars.$spacing, 'medium');
-     font-size: map.get(vars.$font-sizes, 'lg');
-      border-radius: map.get(vars.$border-radius, 'medium');
-      cursor: pointer;
-      border: none;
-      transition: background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
 
-      &:hover {
+            .netlify-identity-button {
+                background-color: map.get(vars.$colors, 'primary');
+                color: map.get(vars.$color-variations, 'background-light');
+                padding: map.get(vars.$spacing, 'medium');
+               font-size: map.get(vars.$font-sizes, 'lg');
+                border-radius: map.get(vars.$border-radius, 'medium');
+                cursor: pointer;
+                border: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .netlify-identity-button:hover {
             @include color-adjust('background', map.get(vars.$colors, 'primary'), 10%);
+             }
+
+            span {
+              margin-top: map.get(vars.$spacing, 'medium');
+            }
+
+         }
+
+
     }
 
-      &:disabled {
-            background-color: map.get(vars.$color-variations, 'disabled');
-        cursor: not-allowed;
-      }
+
+    // Responsive Design
+  @media (max-width: map.get(vars.$breakpoints, 'medium')) {
+     .container {
+      padding: map.get(vars.$spacing, 'large');
+      width: 90%;
     }
 
-    .forgot-password {
-         font-size: map.get(vars.$font-sizes, 'base');
-       color: map.get(vars.$colors, 'primary');
-      text-decoration: none;
-      margin-top: map.get(vars.$spacing, 'medium');
-      transition: color 0.3s ease;
-
-      &:hover {
-            @include color-adjust('color', map.get(vars.$colors, 'primary'), 10%);
-      }
-    }
-  }
-}
-
-// Sign-up / Alternate options
-.alternate-options {
-  display: flex;
-  justify-content: space-between;
-  margin-top: map.get(vars.$spacing, 'large');
-
-  a {
-        font-size: map.get(vars.$font-sizes, 'base');
-     color: map.get(vars.$colors, 'primary');
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-           @include color-adjust('color', map.get(vars.$colors, 'primary'), 10%);
-    }
-  }
-}
-
-// Responsive Design
-@media (max-width: map.get(vars.$breakpoints, 'medium')) {
-  .login-form-container {
-    padding: map.get(vars.$spacing, 'large');
-    width: 90%;
-  }
-
-  .login-page {
     padding: map.get(vars.$spacing, 'medium');
   }
 }

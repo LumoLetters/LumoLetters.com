@@ -29,6 +29,11 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
 
+sass:
+  sass_dir: _sass
+  style: compressed
+  sourcemap: auto
+
 # Include folders
 include:
   - assets # Ensure assets are included
