@@ -3,16 +3,16 @@ layout: default
 title: Login
 permalink: /login/
 ---
-
 <!-- Login Section  -->
+ 
+<section class="login-page">
 <div class="container">
     <h1>{{ site.data.ui-text.pages.login.heading }}</h1>
     <div id="login-container">
-    <form id="login-form">
-        <input type="email" id="email" placeholder="{{ site.data.ui-text.pages.login.email_placeholder }}" required>
-        <input type="password" id="password" placeholder="{{ site.data.ui-text.pages.login.password_placeholder }}" required>
-        <button type="submit" class="button primary">{{ site.data.ui-text.pages.login.login_button }}</button>
-    </form>
+        <button id="loginButton" class="netlify-identity-button">{{ site.data.ui-text.pages.login.login_button }}</button>
+        <button id="logoutButton" class="netlify-identity-button hidden">{{ site.data.ui-text.pages.login.logout_button }}</button>
+        <span id="userDisplayName" class="hidden"></span>
     </div>
     <p> {{ site.data.ui-text.pages.login.login_paragraph }} </p>
 </div>
+</section>
