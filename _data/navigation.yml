@@ -16,6 +16,3 @@ main_nav:
   - title: "Sign Up"
     url: "/sign-up/"
     class: "nav-link nav-item"
-  - title: "Login"
-    url: "/login/"
-    class: "nav-link nav-item"

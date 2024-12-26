@@ -100,9 +100,3 @@ a.button:focus {
   outline-offset: 2px;
 }
 
-.cta-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: map.get(vars.$spacing, 'large'); // Optional: adjust spacing if necessary
-}

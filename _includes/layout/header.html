@@ -15,5 +15,11 @@
       {% for item in site.data.navigation.main_nav %}
           <a href="{{ item.url | relative_url }}" class="top-nav-link">{{ item.title }}</a>
       {% endfor %}
+      
+       <button id="loginButton" class="netlify-identity-button">Log In</button>
+       <button id="logoutButton" class="netlify-identity-button hidden">Log Out</button>
+       <span id="userDisplayName" class="hidden"></span>
+       
     </div>
   </nav>
+</header>

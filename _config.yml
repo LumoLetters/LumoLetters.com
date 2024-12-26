@@ -12,7 +12,8 @@ github_username: lumoletters # Corrected: use your actual GitHub username
 plugins:
   - jekyll-feed
 
-# Enable SCSS and Sass preprocessing for custom styles
+# ... other settings ...
+font_awesome_url: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 
 # Exclude from processing.
@@ -29,10 +30,6 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
 
-sass:
-  sass_dir: _sass
-  style: compressed
-  sourcemap: auto
 
 # Include folders
 include:
