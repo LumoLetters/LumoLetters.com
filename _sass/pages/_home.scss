@@ -139,38 +139,13 @@ html {
   }
 }
 
-// Call to Action Section
-.call-to-action {
-  background-color: map.get(vars.$colors, 'primary');
-  padding: map.get(vars.$spacing, 'xlarge');
-  text-align: center;
-  color: map.get(vars.$colors, 'background');
-
-  h2 {
-    font-size: map.get(vars.$font-sizes, 'xl');
-    margin-bottom: map.get(vars.$spacing, 'medium');
-  }
-
-  p {
-    font-size: 1.25rem;
-    color: map.get(vars.$colors, 'background');
-    margin-bottom: map.get(vars.$spacing, 'medium');
-  }
-
-  a {
-        background-color: map.get(vars.$colors, 'accent');
-         color: map.get(vars.$colors, 'background');
-    padding: map.get(vars.$spacing, 'small') map.get(vars.$spacing, 'medium');
-    border-radius: map.get(vars.$border-radius, 'small');
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-          background-color: map.get(vars.$colors, 'primary');
-    }
-  }
+// Call to Action
+.cta-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: map.get(vars.$spacing, 'large'); // Optional: adjust spacing if necessary
 }
-
 // Responsive Design for Mobile
 @media (max-width: map.get(vars.$breakpoints, 'medium')) {
     .hero {
