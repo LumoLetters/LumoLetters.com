@@ -13,6 +13,3 @@ main_nav:
   - title: "Contact"
     url: "/contact/"
     class: "nav-link nav-item"
-  - title: "Sign Up"
-    url: "/sign-up/"
-    class: "nav-link nav-item"

@@ -46,24 +46,44 @@
 // 5. **Button Mixin**
 @mixin button(
   $background: map.get($colors, 'primary'),
-  $padding: map.get($spacing, 'medium'),
-  $border-radius: map.get($border-radius, 'medium')
+  $color: #fff,
+  $padding: map.get($spacing, 'small') map.get($spacing, 'large'),
+  $border-radius: map.get($border-radius, 'large'),
+  $shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+  $hover-lightness: 10%,
+  $focus-outline: map.get($colors, 'secondary')
 ) {
   background-color: $background;
-  color: #fff;
+  color: $color;
   padding: $padding;
   border-radius: $border-radius;
   border: none;
+  box-shadow: $shadow;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: map.get($font-weights, 'bold');
+  font-size: map.get($font-sizes, 'base');
+  text-align: center;
+  transition: 
+    background-color 0.3s ease, 
+    box-shadow 0.3s ease, 
+    transform 0.2s ease;
 
   &:hover {
-    @include color-adjust('background', $background, 10%);
+    background-color: color.adjust($background, $lightness: $hover-lightness);
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: 3px solid $focus-outline;
+    outline-offset: 2px;
   }
 
   &:disabled {
     background-color: map.get($color-variations, 'disabled');
+    box-shadow: none;
     cursor: not-allowed;
+    opacity: 0.6;
   }
 }
 

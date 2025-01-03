@@ -30,6 +30,8 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
 
+sass:
+  style: compressed
 
 # Include folders
 include:

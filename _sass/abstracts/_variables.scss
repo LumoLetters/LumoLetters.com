@@ -46,6 +46,14 @@ $colors: (
     accent-gradient: $accent-gradient
 );
 
+// --- Sizes ---
+$sizes: (
+  sidebar-width: 250px,
+  sidebar-collapsed-width: 80px,
+  max-container-width: 1200px,
+  header-height: 30px
+);
+
 // --- Typography ---
 $font-family: (
   base: "'Helvetica Neue', 'Arial', sans-serif",  // Base font family

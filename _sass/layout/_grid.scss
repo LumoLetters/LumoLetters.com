@@ -13,7 +13,7 @@ $gutter: map.get(vars.$spacing, 'small');
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: map.get(vars.$spacing, 'large');
+    padding-top: map.get(vars.$spacing, 'large');
   padding-bottom: map.get(vars.$spacing, 'large');
   padding-left: map.get(vars.$spacing, 'medium');
   padding-right: map.get(vars.$spacing, 'medium');
@@ -27,9 +27,11 @@ $gutter: map.get(vars.$spacing, 'small');
   grid-template-columns: repeat($columns, 1fr);
   gap: $gutter;
   width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: map.get(vars.$border-radius, 'small');
-    .grid-item {
+      min-height: 80vh; /* Added min-height here */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   border-radius: map.get(vars.$border-radius, 'small');
+      
+  .grid-item {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
@@ -44,16 +46,16 @@ $gutter: map.get(vars.$spacing, 'small');
 @media (max-width: map.get(vars.$breakpoints, 'medium')) {
   .container {
     padding-left: map.get(vars.$spacing, 'small');
-    padding-right: map.get(vars.$spacing, 'small');
+      padding-right: map.get(vars.$spacing, 'small');
   }
 
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+   .grid {
+     grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: map.get(vars.$breakpoints, 'small')) {
   .grid {
-    grid-template-columns: 1fr;
-  }
+       grid-template-columns: 1fr;
+     }
 }
