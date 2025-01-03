@@ -1,125 +1,93 @@
-// _sass/layout/_dashboard.scss
-@use 'sass:color'; // Add color
-@use 'sass:map'; // Add maps
-@use '../abstracts/variables' as *;
+// lsass/layout/_dashboard.scss
+
+@use 'sass:map';
+@use 'sass:math';
+@use '../abstracts/variables.scss' as vars;
 @use '../abstracts/mixins' as *;
 
-// Dashboard Container (Main Layout Area for all elements)
+// Sidebar width
+$sidebar-width: map.get(vars.$sizes, 'sidebar-width');
+$sidebar-collapsed-width: map.get(vars.$sizes, 'sidebar-collapsed-width');
+$header-height: map.get(vars.$sizes, 'header-height'); // Header height from variables
+$transition-duration: 0.3s;
+
+// Dashboard Layout
 .dashboard-container {
-  @include flex-center(row, flex-start, flex-start, map.get($spacing, 'medium'));
-  @include full-width();
-  padding: map.get($spacing, 'medium');
+  margin-top: map.get(vars.$sizes, 'header-height'); 
+  @include flex-center(row, flex-start, stretch); // Flexbox layout for sidebar and content
 
-  @include respond('small') {
-     flex-direction: column;
-      align-items: stretch;
-  }
-}
+  &__sidebar {
+    width: $sidebar-width;
+    min-width: $sidebar-width;
+    height: 100vh; // Full viewport height
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: map.get(vars.$spacing, 'medium');
+    background-color: map.get(vars.$colors, 'background-light');
+    transition: width $transition-duration ease;
 
-// Left Panel (Form Container) for inputs related on admin user form change
-.dashboard-form-panel {
-    width: 50%;
-     padding: map.get($spacing, 'medium');
-
-    @include respond('small'){
-         width: 100%; // Form panel gets full width
-         padding: map.get($spacing, 'small');
-    }
-  // Styles form elements using component
-  .form-container {
-      background-color: map.get($colors, 'background-light');
-    }
-}
-
-// Right Panel (Display Area for Lists) with profile content area of users
-.dashboard-profiles-panel {
-    width: 50%;
-   padding: map.get($spacing, 'medium');
-
-
-  @include respond('small'){
-         width: 100%; // display area gets full width on small device
-          padding: map.get($spacing, 'small');
+    &--collapsed {
+      width: $sidebar-collapsed-width;
+      min-width: $sidebar-collapsed-width;
     }
 
-    // style container with all cards list items inside this dashboard UI. Using grid style and default value for gaps
-      .dashboard-profiles-container {
-           @include grid(2, map.get($spacing, 'small'));
-            list-style-type: none; // Remove bullet points
-
-            @include respond('medium'){
-                 @include grid(3, map.get($spacing, 'small'));
-              }
-         @include respond('large') {
-          @include grid(4, map.get($spacing, 'medium'));
-          }
-
-         @include respond('xlarge') {
-                @include grid(5, map.get($spacing, 'medium'));
-           }
-
-         .profile-card {
-              padding: map.get($spacing, 'small');
-               margin-bottom: map.get($spacing, 'small');
-
-               border-radius:  map.get($border-radius, 'medium');
-                  background: map.get($colors, 'background-light');
-              @include box-shadow('small');
-           &-title {
-              font-size: map.get($font-sizes, 'lg');
-             margin-bottom: map.get($spacing, 'small');
-                color: map.get($colors, 'primary');
-             }
-             &-content {
-                 margin-bottom: map.get($spacing, 'small');
-                 }
-          }
-
-         &--empty { //Empty profiles list style case. Default style if zero list of profiles on given moment
-            padding: map.get($spacing, 'medium');
-             font-style: italic;
-              text-align: center;
-           color: map.get($color-variations,'text-light');
-            }
-         }
-    }
-
-    //Button
-  .dashboard-button {
-   @include button('primary', map.get($spacing, 'medium'),  map.get($border-radius, 'medium'))
- }
-
-
-// Style Specific dashboard elements like user/form labels
-.dashboard-input-label {
-   display: block;
-      font-size: map.get($font-sizes, 'base');
-  color: map.get($colors, 'text');
-  margin-bottom: map.get($spacing, 'small');
-}
-
-//Text Inputs styling
-.dashboard-input--text {
-   @include box-sizing();
+    .sidebar-item {
       display: block;
-      width: 100%; // Make input field fit form
-    padding: map.get($spacing, 'small');
-      font-size: map.get($font-sizes, 'base');
-     border: 1px solid map.get($color-variations, 'border');
-  border-radius: map.get($border-radius, 'small');
-    background-color: map.get($colors, 'background');
-    color: map.get($colors, 'text');
-      margin-bottom: map.get($spacing, 'small'); //Added margin so label does not stack next element, keeping layout clearer for dashboard component
+      margin: map.get(vars.$spacing, 'small') 0;
+      color: map.get(vars.$colors, 'text-light');
+      font-weight: map.get(vars.$font-weights, 'medium');
+      text-decoration: none;
+      padding: map.get(vars.$spacing, 'small');
+      @include border-radius(map.get(vars.$border-radius, 'small'));
 
-      &:focus{
-     border-color: map.get($colors, 'primary');
-       outline: none; // Remove default outline
+      &:hover {
+        @include color-adjust('background', map.get(vars.$colors, 'background-light'), -10%);
       }
+    }
   }
 
- // Textarea for profile descrpition on forms (use same classes in textarea inputs)
-.dashboard-textarea--description{
-     @extend .dashboard-input--text;
-      min-height: 120px;
-    resize: vertical; // Allows user to resize textarea vertically
+  &__content {
+    margin-left: $sidebar-width;
+    margin-top: $header-height; // Adjusts for the header
+    width: calc(100% - #{$sidebar-width});
+    padding: map.get(vars.$spacing, 'large');
+    transition: margin-left $transition-duration ease, margin-top $transition-duration ease, width $transition-duration ease;
+
+    &--expanded {
+      margin-left: $sidebar-collapsed-width;
+      width: calc(100% - #{$sidebar-collapsed-width});
     }
+
+    .content-header {
+      @include typography(map.get(vars.$font-sizes, 'large'), map.get(vars.$font-weights, 'bold'));
+      margin-bottom: map.get(vars.$spacing, 'large');
+    }
+
+    .content-body {
+      background-color: map.get(vars.$colors, 'background-light');
+      @include border-radius(map.get(vars.$border-radius, 'medium'));
+      padding: map.get(vars.$spacing, 'large');
+      @include box-shadow('medium');
+    }
+  }
+}
+
+// Responsive Layout
+@include respond('small') {
+  .dashboard {
+    flex-direction: column;
+
+    &__sidebar {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    &__content {
+      margin-left: 0;
+      margin-top: 0; // No header adjustment needed on smaller screens
+      width: 100%;
+    }
+  }
+}

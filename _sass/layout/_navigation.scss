@@ -1,0 +1,40 @@
+//_sass/layout/_navigation
+@use 'sass:color';
+@use 'sass:map';
+@use '../abstracts/variables' as vars;
+@use '../abstracts/mixins' as *;
+
+.sidebar {
+    width: 200px;
+    background-color: map.get(vars.$colors, 'background-light');
+    padding: map.get(vars.$spacing, 'medium');
+    padding-top: 80px;
+    height: 100%;
+    position: relative;
+    top:0;
+    z-index: map.get(vars.$z-index, 'default'); // Set the z-index to a lower value
+    overflow-y: auto;
+
+    nav {
+        ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+                margin-bottom: 10px;
+
+                a {
+                    display: block;
+                    padding: map.get(vars.$spacing, 'medium');
+                    text-decoration: none;
+                   color: map.get(vars.$colors, 'text');
+                    transition: background-color 0.3s ease;
+
+                    &:hover {
+                       background-color: map.get(vars.$color-variations, 'border');
+                    }
+                }
+            }
+        }
+    }
+}

@@ -2,7 +2,7 @@
 @use 'sass:color';
 @use 'sass:map';
 @use '../abstracts/variables.scss' as vars;
-@use '../abstracts/mixins' as *;
+@use '../abstracts/mixins.scss' as *;
 
 .hero {
     background-image: url('../../assets/img/hero-image.jpg');

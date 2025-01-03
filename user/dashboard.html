@@ -1,36 +1,17 @@
 ---
 layout: dashboard
-title: LumoLetters Admin Dashboard
+title: LumoLetters User Dashboard
 ---
 <div class="dashboard-container">
-    <div class="dashboard-form-panel">
-        <div class="form-container">
-        <h2>Create New Profile</h2>
-        <form id="profile-form">
-            <div>
-               <label class="dashboard-input-label" for="profileName">Recipient Name:</label>
-                <input type="text" id="profileName" class="dashboard-input--text" required placeholder="Enter full name">
-            </div>
-               <div>
-            <label class="dashboard-input-label" for="profileLocation">Location:</label>
-                <input type="text" id="profileLocation" class="dashboard-input--text" required  placeholder="City/State">
-            </div>
-              <div>
-                  <label class="dashboard-input-label" for="profileDescription">Description</label>
-                  <textarea id="profileDescription"  class="dashboard-textarea--description" placeholder="Short description"></textarea>
-              </div>
-              <button type="button" class="dashboard-button" onclick="updateProfileData()">Save Profile</button>
-
-            </form>
-           </div>
-    </div>
-      <div class="dashboard-profiles-panel">
-              <h2>Recipient Profiles</h2>
-            <ul id="profile-list" class="dashboard-profiles-container">
-                  <p class="dashboard-profiles-container--empty">No profiles added yet.</p> <!-- Default state (If list is empty on first load) -->
-             </ul>
-      </div>
+      <main class="dashboard-content">
+            <section class="letter-history">
+                <h2>Past Letter Collection</h2>
+              <p>Here you can find past letters we've generated for you.</p>
+               <ul>
+                    <li><a href="#">Letter 1</a></li>
+                    <li><a href="#">Letter 2</a></li>
+                    <li><a href="#">Letter 3</a></li>
+               </ul>
+             </section>
+    </main>
 </div>
-
-
- <script src="{{ '/assets/js/pages/dashboard.js' | relative_url }}"></script>

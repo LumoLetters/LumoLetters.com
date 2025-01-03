@@ -13,9 +13,11 @@
 @use '../../_sass/base/utilities' as utilities;
 
 // Components (Reusable UI components)
+@use '../../_sass/components/alert' as alert; // Alert styles
 @use '../../_sass/components/buttons' as buttons; // Button styles
 @use '../../_sass/components/cards' as cards;    // Card styles
 @use '../../_sass/components/forms' as forms;    // Form styles
+@use '../../_sass/components/modal' as modal;    // Modal styles
 
 // Layout styles (Styles for the overall layout and structure of pages)\
 @use '../../_sass/layout/404' as error404;
@@ -23,10 +25,10 @@
 @use '../../_sass/layout/footer' as footer;    // Footer styles
 @use '../../_sass/layout/hero' as hero;       // Hero section styles
 @use '../../_sass/layout/page' as page;       // Styles for general pages
+@use '../../_sass/layout/navigation' as navigation;  // Styles for general navigation
 @use '../../_sass/layout/header' as header;    // Header and Navigation styles
+@use '../../_sass/layout/dashboard' as dashboard;    // Dashboard styles
 
 // Page-specific styles (Styles specific to individual pages)
-@use '../../_sass/pages/account' as account;  // Styles specific to the account page
 @use '../../_sass/pages/home' as home;     // Styles specific to the home page
-@use '../../_sass/pages/login' as login;    // Styles specific to the login page
 @use '../../_sass/pages/services' as services; // Styles specific to the services page
