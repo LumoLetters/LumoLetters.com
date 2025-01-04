@@ -1,78 +1,35 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('user-profile-form');
-  const netlifyIdentity = window.netlifyIdentity;
-  const user = netlifyIdentity.currentUser();
-  
+const { MongoClient } = require("mongodb");
+    
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 
-  async function populateForm(){
-      if(!user) return;
-     try{
-        const response = await fetch('/.netlify/functions/get-user-profile', {
-           method: 'POST',
-           headers: {
-           'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({}),
-          });
-         const data = await response.json();
+exports.handler = async (event, context) => {
+  try {
+     console.log("Attempting to connect")
+    await client.connect();
+      console.log("Successfully Connected");
+      const db = client.db("lumoletters");
+       console.log("Got Database: ", db);
+    const collection = db.collection("user-profiles");
+     console.log("Got Collection: ", collection);
+    const userData = JSON.parse(event.body);
+       console.log("User Data:",userData)
 
-       if(data.data){
-         const userData = data.data;
-         for(const key in userData){
-            const input = form.elements[key];
-         if(input){
-           if(input.type === 'checkbox'){
-              if(Array.isArray(userData[key])){
-                 if(userData[key].includes(input.value)){
-                   input.checked = true
-              } else{
-                 input.checked = false;
-               }
-           }
-         } else{
-            input.value = userData[key]
-           }
-        }
-       }
-     }
-     } catch(error){
-        console.error('Error getting user data', error)
-     }
-
- }
- populateForm();
-
-  form.addEventListener('submit', async function(event) {
-      event.preventDefault(); // Prevent default form submission
-      const formData = new FormData(form);
-     const userData = Object.fromEntries(formData.entries());
-     
-     // Handle saving of checkbox values
-     const interests = [];
-     document.querySelectorAll('input[name="interests"]:checked').forEach(checkbox => {
-      interests.push(checkbox.value);
-     });
-
-     const topics = [];
-     document.querySelectorAll('input[name="topics"]:checked').forEach(checkbox => {
-       topics.push(checkbox.value);
-     });
-     userData.interests = interests;
-     userData.topics = topics;
-      console.log("User Data",userData);
-       try{
-            const response = await fetch('/.netlify/functions/save-user-profile', {
-               method: 'POST',
-              headers: {
-               'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(userData),
-              });
-             const data = await response.json();
-              console.log("saved data", data);
-            alert("Profile updated.");
-         } catch (error){
-            console.error("Error saving data:", error)
-        }
-  });
-});
+    // Add a document to the collection.
+    const result = await collection.insertOne({ ...userData, userId: context.clientContext.user.sub });
+     console.log("Data was saved", result);
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: "User profile saved successfully", result: result }),
+    };
+  } catch (error) {
+      console.error("Error connecting to MongoDB:", error);
+       return {
+         statusCode: 500,
+        body: JSON.stringify({ error: "Failed to save to MongoDB", message: error.message }),
+      };
+  } finally {
+     console.log("Closing Connection");
+   await client.close();
+  }
+};
