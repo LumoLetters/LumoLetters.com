@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
   form.addEventListener('submit', async function(event) {
       event.preventDefault(); // Prevent default form submission
       const formData = new FormData(form);
-      const userData = Object.fromEntries(formData.entries());
-      
+     const userData = Object.fromEntries(formData.entries());
+     
      // Handle saving of checkbox values
      const interests = [];
      document.querySelectorAll('input[name="interests"]:checked').forEach(checkbox => {
@@ -54,13 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
      });
 
      const topics = [];
-      document.querySelectorAll('input[name="topics"]:checked').forEach(checkbox => {
+     document.querySelectorAll('input[name="topics"]:checked').forEach(checkbox => {
        topics.push(checkbox.value);
-      });
-
-      userData.interests = interests;
-      userData.topics = topics;
-
+     });
+     userData.interests = interests;
+     userData.topics = topics;
       console.log("User Data",userData);
        try{
             const response = await fetch('/.netlify/functions/save-user-profile', {
@@ -70,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function() {
               },
               body: JSON.stringify(userData),
               });
-
              const data = await response.json();
               console.log("saved data", data);
             alert("Profile updated.");
