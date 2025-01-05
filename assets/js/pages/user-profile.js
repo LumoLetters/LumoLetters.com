@@ -1,3 +1,5 @@
+//user-profile.js
+
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('user-profile-form');
   const netlifyIdentity = window.netlifyIdentity;

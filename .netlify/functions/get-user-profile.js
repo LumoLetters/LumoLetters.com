@@ -1,3 +1,5 @@
+//get-user-profile.js
+
 const mongoose = require('mongoose');
 
 // Define MongoDB URI (ensure this is set in your Netlify environment variables)
