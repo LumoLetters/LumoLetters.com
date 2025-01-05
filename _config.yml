@@ -37,6 +37,7 @@ sass:
 include:
   - assets # Ensure assets are included
   - _pages
+  - _user
 
 # Optional: Add settings for your custom collections or paths
 # collections:
