@@ -1,7 +1,9 @@
 [build]
   command = "bundle exec jekyll build"
   publish = "_site"
-  functions = ".netlify/functions"
 
- [build.environment]
-   RUBY_VERSION = "3.3.6"
+[build.environment]
+  RUBY_VERSION = "3.3.6"
+
+[functions]
+  directory = ".netlify/functions"
