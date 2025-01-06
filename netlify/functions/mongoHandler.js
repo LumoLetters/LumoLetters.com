@@ -22,10 +22,7 @@ const connectToDatabase = async () => {
     throw new Error('MongoDB URI is not defined');
   }
 
-  await mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoose.connect(uri); // Removed deprecated options here
 
   cachedDb = mongoose.connection;
   return cachedDb;
