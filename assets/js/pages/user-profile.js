@@ -47,44 +47,39 @@ document.addEventListener('DOMContentLoaded', function () {
   populateForm();
 
   form.addEventListener('submit', async function (event) {
-    console.log('Form submit triggered'); // Log when form submission is triggered
     event.preventDefault(); // Prevent the default form submission behavior
-
+  
     const formData = new FormData(form);
     const userData = Object.fromEntries(formData.entries());
-    const otherInterestCheckbox = document.getElementById('interest-other');
-    if (otherInterestCheckbox.checked) {
-      userData.otherInterests = document.getElementById('other-interests').value;
-      console.log('Other Interest:', userData.otherInterests);  // Log other interest data if selected
-    }
-    
+  
     // Handle checkbox values
     const interests = Array.from(
       document.querySelectorAll('input[name="interests"]:checked')
     ).map((checkbox) => checkbox.value);
-    console.log('Selected Interests:', interests);  // Log selected interests
-
+  
     const topics = Array.from(
       document.querySelectorAll('input[name="topics"]:checked')
     ).map((checkbox) => checkbox.value);
-    console.log('Selected Topics:', topics);  // Log selected topics
-
+  
     userData.interests = interests;
     userData.topics = topics;
-
+  
     try {
-      console.log('Sending data to save-user-profile function:', userData);  // Log userData being sent
+      // Get JWT from Netlify Identity
+      const token = await netlifyIdentity.currentUser().jwt();
+  
+      // Send request to the server
       const response = await fetch('/.netlify/functions/save-user-profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(userData),
       });
-
+  
       if (response.ok) {
         alert('Profile updated successfully!');
-        console.log('Profile update successful');  // Log success message
       } else {
         const errorData = await response.json();
         console.error('Error saving data:', errorData);
@@ -95,4 +90,3 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Error saving your profile. Please try again later.');
     }
   });
-});

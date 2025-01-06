@@ -1,5 +1,3 @@
-//save-user-profile.js
-
 const { Handler } = require('@netlify/functions');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -22,11 +20,27 @@ const handler = async (event, context) => {
   }
 
   try {
-    const { name, email, interests, topics } = JSON.parse(event.body);
-    const userId = context.clientContext.user.sub;
+    // Log the client context to debug
+    console.log('Client Context:', context.clientContext);
 
+    const { name, email, interests, topics } = JSON.parse(event.body);
+
+    // Check for user in the client context
+    const user = context.clientContext && context.clientContext.user;
+    if (!user || !user.sub) {
+      console.error('User object or sub is missing:', user);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'User ID is missing or invalid' }),
+      };
+    }
+
+    const userId = user.sub;
+
+    // Connect to the database
     await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+    // Update or insert user profile
     const updatedProfile = await UserProfile.findOneAndUpdate(
       { userId },
       { name, email, interests, topics },
