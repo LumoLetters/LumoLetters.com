@@ -1,0 +1,20 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Seattle",
+			"country": {
+				"code": "US",
+				"name": "United States"
+			},
+			"subdivision": {
+				"code": "WA",
+				"name": "Washington"
+			},
+			"timezone": "America/Los_Angeles",
+			"latitude": 47.4936,
+			"longitude": -122.2415,
+			"postalCode": "98178"
+		},
+		"timestamp": 1736067169349
+	}
+}
