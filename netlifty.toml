@@ -6,4 +6,4 @@
   RUBY_VERSION = "3.3.6"
 
 [functions]
-  directory = ".netlify/functions"
+  directory = "netlify/functions"
