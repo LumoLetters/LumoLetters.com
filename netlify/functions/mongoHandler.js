@@ -1,54 +1,82 @@
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 require('dotenv').config({ path: './netlify/functions/.env' });
 
+// Mongoose Schema
+const UserProfileSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  interests: [String],
+  topics: [String],
+});
+
+const UserProfile = mongoose.model('UserProfile', UserProfileSchema);
+
+let cachedDb = null;
+
+// Function to connect to MongoDB
+const connectToDatabase = async () => {
+  if (cachedDb) return cachedDb;
+
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error('MongoDB URI is not defined');
+  }
+
+  await mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  cachedDb = mongoose.connection;
+  return cachedDb;
+};
+
 exports.handler = async function (event, context) {
-  // Load variables from .env file
-  const uri = process.env.MONGODB_URI; // MongoDB connection string
-  const dbName = process.env.DB_NAME; // Database name
-  const collectionName = process.env.COLLECTION_NAME; // Collection name
-
-  console.log('MONGODB_URI:', process.env.MONGODB_URI);
-console.log('DB_NAME:', process.env.DB_NAME);
-console.log('COLLECTION_NAME:', process.env.COLLECTION_NAME);
-  // Create a new MongoClient instance
-  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
   try {
-    await client.connect(); // Connect to MongoDB
+    // Ensure the DB connection is established
+    const db = await connectToDatabase();
 
-    // Access the database and collection
-    const database = client.db(dbName);
-    const collection = database.collection(collectionName);
-
+    // Handle POST request to save data
     if (event.httpMethod === 'POST') {
-      // Parse incoming data
-      const data = JSON.parse(event.body);
+      const { name, email, interests, topics } = JSON.parse(event.body);
 
-      // Insert into MongoDB
-      const result = await collection.insertOne(data);
+      // Create a new user profile or update an existing one
+      const userProfile = new UserProfile({
+        name,
+        email,
+        interests,
+        topics,
+      });
+
+      const result = await userProfile.save();
+
       return {
         statusCode: 200,
-        body: JSON.stringify({ message: 'Data saved!', result }),
+        body: JSON.stringify({ message: 'Data saved successfully', result }),
       };
-    } else if (event.httpMethod === 'GET') {
-      // Fetch data
-      const users = await collection.find({}).toArray();
+    }
+
+    // Handle GET request to fetch data
+    else if (event.httpMethod === 'GET') {
+      const users = await UserProfile.find({});
       return {
         statusCode: 200,
         body: JSON.stringify(users),
       };
-    } else {
+    }
+
+    // Handle unsupported methods
+    else {
       return {
         statusCode: 405,
         body: JSON.stringify({ message: 'Method not allowed' }),
       };
     }
   } catch (error) {
+    console.error('Error in MongoDB operation:', error.message);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: 'Server error', error: error.message }),
     };
-  } finally {
-    await client.close(); // Ensure MongoClient is closed
   }
 };
