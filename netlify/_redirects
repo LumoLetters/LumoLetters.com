@@ -1,5 +1,5 @@
-# Redirect all dashboard routes to require authentication
-/dashboard/*  /index.html  401!  # If not logged in, get a 401 error
+# Redirect to Netlify’s authentication if the user is not logged in
+/user/*  /.netlify/functions/auth-required  401
 
 # You can also create a rule for a specific URL if you'd prefer
 /profile/*    /index.html  401!
