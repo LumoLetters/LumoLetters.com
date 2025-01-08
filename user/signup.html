@@ -1,0 +1,147 @@
+<section class="user-signup">
+    <div class="container">
+        <h1>Sign Up</h1>
+        <p>Fill out the information below to get started with LumoLetters.</p>
+        <form id="signup-form">
+          
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="dob">Date of Birth (optional):</label>
+              <input type="text" id="dob" name="dob">
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+
+            <h3>Address</h3>
+            <div class="form-group address">
+              <label for="address">Street Address:</label>
+              <input type="text" id="address" name="address" required>
+      
+              <label for="city">City:</label>
+              <input type="text" id="city" name="city" required>
+          
+              <label for="state">State:</label>
+              <input type="text" id="state" name="state" required>
+            
+              <label for="zip">Zip Code:</label>
+              <input type="text" id="zip" name="zip" required>
+            </div>
+
+            <h3>Interests & Preferences</h3>
+            <div class="form-group">
+                <label><strong>Senior's Interests (check all that apply):</strong></label>
+                <div class="checkbox-group">
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-reading" name="interests" value="Reading">
+                    <label for="interest-reading">Reading</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-travel" name="interests" value="Travel">
+                    <label for="interest-travel">Travel</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-music" name="interests" value="Music/Film/Theater">
+                    <label for="interest-music">Music/Film/Theater</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-arts" name="interests" value="Arts/Crafts">
+                    <label for="interest-arts">Arts/Crafts</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-sports" name="interests" value="Sports">
+                    <label for="interest-sports">Sports</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-history" name="interests" value="History">
+                    <label for="interest-history">History</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-food" name="interests" value="Food/Cooking">
+                    <label for="interest-food">Food/Cooking</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-nature" name="interests" value="Nature/Outdoors">
+                    <label for="interest-nature">Nature/Outdoors</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="interest-other" name="interests" value="Other">
+                    <label for="interest-other">Other:</label>
+                    <input type="text" name="other-interests" id="other-interests">
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h3>Preferred Letter Topics (check all that apply):</h3>
+                <div class="checkbox-group">
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="topic-conversation" name="topics" value="General Conversation">
+                    <label for="topic-conversation">General Conversation</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="topic-memories" name="topics" value="Memories and Reminiscing on the Past">
+                    <label for="topic-memories">Memories and Reminiscing on the Past</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="topic-current-events" name="topics" value="Current Events">
+                    <label for="topic-current-events">Current Events</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="topic-hobbies" name="topics" value="Hobbies/Interests">
+                    <label for="topic-hobbies">Hobbies/Interests</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="topic-inspirational" name="topics" value="Inspirational/Motivational">
+                    <label for="topic-inspirational">Inspirational/Motivational</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="topic-humor" name="topics" value="Humor/Lighthearted">
+                    <label for="topic-humor">Humor/Lighthearted</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="topic-specific" name="topics" value="Specific Theme/Topic">
+                    <label for="topic-specific">Specific Theme/Topic (optional):</label>
+                    <input type="text" name="specific-topic" id="specific-topic">
+                  </div>
+                </div>
+            </div>
+            <!--Payment plan place holder-->
+                  <h3>Payment Plan</h3>
+                  <div class="form-group">
+                    <label for="payment-plan">Select a Plan:</label>
+                    <select id="payment-plan" name="payment-plan" required>
+                      <option value="basic">Basic Plan</option>
+                      <option value="premium">Premium Plan</option>
+                      <option value="deluxe">Deluxe Plan</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="payment-method">Payment Method:</label>
+                    <select id="payment-method" name="payment-method" required>
+                      <option value="credit-card">Credit Card</option>
+                      <option value="paypal">PayPal</option>
+                    </select>
+                  </div>
+
+            <div class="form-group">
+                <h3>Authorization</h3>
+                <p>I authorize LumoLetters to create and send personalized letters to the recipient listed above. I understand that my information will be kept confidential.</p>
+                
+                <label for="signature">Signature:</label>
+                <input type="text" id="signature" name="signature" required>
+      
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-container">
+                <button type="submit" class="button primary">Sign Up</button>
+            </div>
+        </form>
+    </div>
+</section>

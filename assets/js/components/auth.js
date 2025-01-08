@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const loginButton = document.getElementById('loginButton');
   const logoutButton = document.getElementById('logoutButton');
   const userDisplayName = document.getElementById('userDisplayName');
+  const dashboardIcon = document.getElementById('dashboardIcon');
   const netlifyIdentity = window.netlifyIdentity;
   const signUpButtons = document.querySelectorAll('.trigger-signup'); // Changed to target signup links
 
@@ -48,15 +49,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Function to update UI based on user state
   function updateUI(user) {
+    const dashboardIcon = document.getElementById('dashboardIcon'); // Correctly selecting the dashboard icon
+    console.log(dashboardIcon); // Log the element to see if it's being selected
+  
     if (user) {
       userDisplayName.textContent = user.user_metadata.full_name;
       logoutButton.classList.remove('hidden');
       loginButton.classList.add('hidden');
+      dashboardIcon.classList.remove('hidden'); // Show the icon
       userDisplayName.classList.remove('hidden');
     } else {
       logoutButton.classList.add('hidden');
       loginButton.classList.remove('hidden');
       userDisplayName.classList.add('hidden');
+      dashboardIcon.classList.add('hidden'); // Hide the icon
     }
   }
+  
 });

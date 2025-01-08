@@ -100,3 +100,36 @@ a.button:focus {
   outline-offset: 2px;
 }
 
+// Dashboard Icon Button Style
+#dashboardIcon {
+  display: inline-flex;  // Flexbox to center the icon
+  align-items: center;   // Vertically center the icon
+  justify-content: center;
+  font-size: 24px;       // Adjust size of the icon
+  color: map.get(vars.$colors, 'primary');  // Adjust color if needed
+  background-color: transparent;  // No background color
+  border: none;                // Remove border if any
+  cursor: pointer;             // Make it interactive
+  padding: map.get(vars.$spacing, 'small');  // Add padding around the icon
+  
+  transition: color 0.3s ease, transform 0.2s ease; // Smooth color and transform change on hover
+
+  &:hover {
+    color: map.get(vars.$colors, 'secondary');  // Hover color (adjust this to your theme)
+    transform: scale(1.1);   // Slightly enlarge on hover
+  }
+
+  &:focus {
+    outline: 2px solid map.get(vars.$color-variations, 'border');
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.95);  // Shrink slightly when clicked
+  }
+}
+
+// Ensure icon visibility based on login status
+#dashboardIcon.hidden {
+  display: none;
+}
