@@ -1,5 +1,0 @@
-# Redirect to Netlify’s authentication if the user is not logged in
-/user/*  /.netlify/functions/auth-required  401
-
-# You can also create a rule for a specific URL if you'd prefer
-/profile/*    /index.html  401!
