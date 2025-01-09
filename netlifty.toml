@@ -14,30 +14,26 @@
   status = 200
   force = true
 
+# Redirect unauthenticated users from /dashboard/* to the login page
+[[redirects]]
+  from = "/dashboard/*"
+  to = "/login"
+  status = 302
+  force = false
+  conditions = { Role = ["user"] }
+
+# Redirect unauthenticated users from /user/* to the login page
 [[redirects]]
   from = "/user/*"
-  to = "/index.html"
-  status = 302 # 302 = found (redirect)
-  force = false # no force needed, we do not want the user to have to be logged in to access the login page
+  to = "/login"
+  status = 302
+  force = false
   conditions = { Role = ["user"] }
 
+# You can also add this to redirect any other unauthenticated paths:
 [[redirects]]
- from = "/user/*"
- to = "/index.html"
- status = 302 # 302 = found (redirect)
- force = false # no force needed, we do not want the user to have to be logged in to access the login page
-
-
-[[redirects]]
-  from = "/dashboard/*"
-  to = "/index.html"
-  status = 302 # 302 = found (redirect)
-  force = false # no force needed, we do not want the user to have to be logged in to access the login page
+  from = "/user/dashboard/*"
+  to = "/login"
+  status = 302
+  force = false
   conditions = { Role = ["user"] }
-
-
-[[redirects]]
-  from = "/dashboard/*"
-  to = "/index.html"
-  status = 302 # 302 = found (redirect)
-  force = false # no force needed, we do not want the user to have to be logged in to access the login page
