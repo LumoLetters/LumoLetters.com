@@ -8,10 +8,36 @@
 [functions]
   directory = "netlify/functions"
 
-
 [[redirects]]
   from = "/.netlify/functions/*"
   to = "/.netlify/functions/:splat"
   status = 200
   force = true
-  conditions = { Role = ["authenticated"] }
+
+[[redirects]]
+  from = "/user/*"
+  to = "/index.html"
+  status = 302 # 302 = found (redirect)
+  force = false # no force needed, we do not want the user to have to be logged in to access the login page
+  conditions = { Role = ["user"] }
+
+[[redirects]]
+ from = "/user/*"
+ to = "/index.html"
+ status = 302 # 302 = found (redirect)
+ force = false # no force needed, we do not want the user to have to be logged in to access the login page
+
+
+[[redirects]]
+  from = "/dashboard/*"
+  to = "/index.html"
+  status = 302 # 302 = found (redirect)
+  force = false # no force needed, we do not want the user to have to be logged in to access the login page
+  conditions = { Role = ["user"] }
+
+
+[[redirects]]
+  from = "/dashboard/*"
+  to = "/index.html"
+  status = 302 # 302 = found (redirect)
+  force = false # no force needed, we do not want the user to have to be logged in to access the login page
