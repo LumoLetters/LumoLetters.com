@@ -78,6 +78,11 @@ select {
   border-radius: map.get(vars.$border-radius, 'small');
   background-color: map.get(vars.$colors, 'background');
   font-size: map.get(vars.$font-sizes, 'base');
+   appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23555'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 10px top 50%;
+         background-size: 14px;
 }
 
 
@@ -130,6 +135,7 @@ select {
       font-size: map.get(vars.$font-sizes, 'base');
       color: map.get(vars.$colors, 'text');
       margin: 0;
+      cursor: pointer;
     }
 
     input[type="text"] {
@@ -174,3 +180,57 @@ select {
 #login-form button{
    margin-top: map.get(vars.$spacing, 'medium');
 }
+
+
+
+.authorization {
+    margin-top: map.get(vars.$spacing, 'medium');
+    display: block;
+
+    .agreement-checkbox {
+        display: inline-flex;
+        
+        gap: map.get(vars.$spacing, 'xsmall');
+
+
+          input[type="checkbox"] {
+            // Copying styles from .checkbox-group .checkbox-item input[type="checkbox"]
+            width: 18px;
+            height: 18px;
+            border: 2px solid map.get(vars.$color-variations, 'border');
+            border-radius: 4px;
+            background-color: #fff;
+            appearance: none;
+            position: relative;
+            cursor: pointer;
+            margin-right: 5px; /* Re-add margin right for spacing */
+             display: inline-block;
+           width: auto;
+
+            &:checked {
+               background-color: map.get(vars.$colors, 'primary');
+               border-color: map.get(vars.$colors, 'primary');
+            }
+
+           &:checked::after {
+                content: '';
+                position: absolute;
+                top: 3px;
+                left: 3px;
+               width: 8px;
+               height: 8px;
+               background-color: #fff;
+                border-radius: 2px;
+            }
+
+            &:focus {
+               outline: none;
+               box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+           }
+        }
+      label {
+         cursor: pointer;
+          white-space: nowrap;
+        }
+     }
+    }

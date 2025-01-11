@@ -1,0 +1,57 @@
+// _login.scss
+
+@use 'sass:map';
+@use '../abstracts/variables' as vars;
+@use '../abstracts/mixins' as *;
+
+.login-page {
+    @include flex-center(column, center, center);
+    min-height: 100vh;
+    background-color: map.get(vars.$colors, 'background-light');
+    padding: map.get(vars.$spacing, 'large');
+
+    .container {
+        background-color: map.get(vars.$colors, 'background');
+        padding: map.get(vars.$spacing, 'large');
+        @include border-radius(map.get(vars.$border-radius, 'medium'));
+        @include box-shadow('medium');
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+
+        h1 {
+            @include typography(
+                map.get(vars.$heading-sizes, 'h1'),
+                
+            );
+            color: map.get(vars.$colors, 'primary');
+            margin-bottom: map.get(vars.$spacing, 'medium');
+        }
+
+        .netlify-identity-button {
+            @include button(
+                map.get(vars.$colors, 'primary'),
+                map.get(vars.$colors, 'background')
+            );
+            margin-bottom: map.get(vars.$spacing, 'small');
+
+            &.hidden {
+                display: none;
+            }
+        }
+
+        #userDisplayName {
+            margin-top: map.get(vars.$spacing, 'medium');
+            color: map.get(vars.$color-variations, 'text-dark');
+        }
+
+        p {
+            margin-top: map.get(vars.$spacing, 'medium');
+            @include typography(
+                map.get(vars.$font-sizes, 'base'),
+                
+            );
+            color: map.get(vars.$colors, 'text');
+        }
+    }
+}

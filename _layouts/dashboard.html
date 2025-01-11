@@ -24,7 +24,20 @@
     </div>
     
     {% include layout/footer.html %}
-    
+
     <script src="/assets/js/pages/dashboard.js"></script>
+
+    <script>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on('init', (user) => {
+                if (!user) {
+                    // User is not logged in, redirect to login page
+                    window.location.href = "/login"; // Change to your login page URL
+                }
+            });
+
+            window.netlifyIdentity.init();
+        }
+    </script>
 </body>
 </html>

@@ -15,8 +15,9 @@ nav.top-nav {
     position: fixed;
     top: 0;
     z-index: map.get(vars.$z-index, 'navbar');
-    height: auto;
-    min-height: 50px;
+    height: 60px;
+    box-sizing: border-box;
+
 
     .left-side {
         display: flex;

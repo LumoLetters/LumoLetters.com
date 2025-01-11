@@ -104,9 +104,9 @@
 }
 
 // 8. **Grid Layout Mixin**
-@mixin grid($columns: 3, $gap: map.get($spacing, 'medium')) {
+@mixin grid($columns: 3, $col: 1fr, $gap: map.get($spacing, 'medium')) {
   display: grid;
-  grid-template-columns: repeat($columns, 1fr);
+  grid-template-columns: repeat($columns, $col);
   gap: $gap;
 }
 
