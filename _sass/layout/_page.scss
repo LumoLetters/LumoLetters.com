@@ -13,15 +13,18 @@
   color: map.get(vars.$colors, 'text');
   border-radius: map.get(vars.$border-radius, 'medium');
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid color.adjust(map.get(vars.$colors, 'primary'), $lightness: -5%);
+  border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 60px;
+    box-sizing: border-box;
+      border-top: 1px solid color.adjust(map.get(vars.$colors, 'primary'), $lightness: -5%); /* Added for top border */
 }
 
 // Page Content: main body content section
 .page-content {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: map.get(vars.$spacing, 'medium');
-  padding-top: map.get(vars.$spacing, 'large');
+
 
   .content-item {
     background-color: map.get(vars.$colors, 'background');
@@ -30,21 +33,24 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-    &:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    h2 {
-      font-size: map.get(vars.$font-sizes, 'h2');
+    .content-item-heading {
+      font-size: map.get(vars.$heading-sizes, 'h2');
       font-weight: map.get(vars.$font-weights, 'bold');
       color: map.get(vars.$colors, 'primary');
+      margin-bottom: map.get(vars.$spacing, 'medium');
     }
 
-    p {
-      font-size: map.get(vars.$font-sizes, 'base');
+    .content-item-paragraph {
+      font-size: map.get(vars.$font-sizes, 'lg');
       line-height: map.get(vars.$line-heights, 'normal');
       color: map.get(vars.$colors, 'text');
+      margin-bottom: map.get(vars.$spacing, 'small');
+    }
+    .content-item-value {
+       font-size: map.get(vars.$font-sizes, 'lg');
+      line-height: map.get(vars.$line-heights, 'normal');
+      color: map.get(vars.$colors, 'text');
+      margin-bottom: map.get(vars.$spacing, 'small');
     }
   }
 
@@ -52,4 +58,85 @@
   @media (max-width: map.get(vars.$breakpoints, 'medium')) {
     grid-template-columns: 1fr;
   }
+}
+.cta-container {
+  text-align: center;
+  margin-top: map.get(vars.$spacing, 'large');
+  margin-bottom: map.get(vars.$spacing, 'medium');
+}
+
+.pricing-cards {
+    @include flex-center(row, space-around, start, 2rem);
+   flex-wrap: wrap;
+   padding: map.get(vars.$spacing, 'medium');
+    box-sizing: border-box;
+}
+
+.pricing-card {
+    width: 300px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: map.get(vars.$spacing, 'medium');
+  border-radius: map.get(vars.$border-radius, 'medium');
+    background-color: map.get(vars.$colors, 'background');
+    display: flex;
+   flex-direction: column;
+  align-items: flex-start;
+  margin-top: 4rem;
+      margin-bottom: 2rem;
+
+
+      &.basic {
+           border-top: 4px solid color.adjust(map.get(vars.$colors, 'primary'), $lightness: 20%); /* light blue top border */
+      }
+        &.premium {
+             border-top: 4px solid map.get(vars.$colors, 'primary');
+        }
+        &.deluxe {
+               border-top: 4px solid color.adjust(map.get(vars.$colors, 'primary'), $lightness: -20%); /* Dark blue top border */
+       }
+
+    .card-title {
+        font-size: map.get(vars.$heading-sizes, 'h3');
+        font-weight: map.get(vars.$font-weights, 'bold');
+        color: map.get(vars.$colors, 'primary');
+       margin-bottom: map.get(vars.$spacing, 'small');
+    }
+    .card-features {
+        list-style-type: none;
+        padding: 0;
+        margin-bottom: map.get(vars.$spacing, 'medium');
+            li {
+               margin-bottom: .5rem;
+              font-size: map.get(vars.$font-sizes, 'base');
+          }
+    }
+     .card-price {
+          font-size: map.get(vars.$heading-sizes, 'h2');
+         font-weight: map.get(vars.$font-weights, 'bold');
+        color: map.get(vars.$colors, 'text');
+       margin-bottom: map.get(vars.$spacing, 'small');
+           .frequency {
+              font-size: map.get(vars.$font-sizes, 'base');
+                font-weight: map.get(vars.$font-weights, 'medium');
+           }
+       }
+           // Hover effect for card
+    &:hover {
+      box-shadow: map.get(vars.$box-shadows, 'large');       // Apply hover shadow
+      transform: translateY(-10px);                        // Slight lift effect on hover
+      transition: box-shadow 0.3s ease, transform 0.3s ease; // Smooth hover animation
+    }
+}
+
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: map.get(vars.$breakpoints, 'medium')) {
+    .pricing-cards {
+    flex-direction: column; /* Stack cards vertically */
+        align-items: center;
+
+   }
+      .pricing-card {
+        width: 80%; /* Adjust card width on smaller screens */
+       }
 }

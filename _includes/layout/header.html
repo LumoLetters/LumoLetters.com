@@ -1,5 +1,3 @@
-<!--layout/header.html-->
-
 <header>
   <!-- Top Navigation Bar -->
   <link
@@ -22,13 +20,18 @@
         <a href="{{ item.url | relative_url }}" class="top-nav-link">{{ item.title }}</a>
       {% endfor %}
       
+      <!-- Dashboard Icon -->
       <a id="dashboardIcon" href="/user/dashboard" class="dashboard-icon hidden">
         <i class="fa-regular fa-user"></i>
       </a>
+
+      <!-- Login/Logout Buttons -->
       <button id="loginButton" class="netlify-identity-button">Log In</button>
       <button id="logoutButton" class="netlify-identity-button hidden">Log Out</button>
       <span id="userDisplayName" class="hidden"></span>
     </div>
   </nav>
+
+  <!-- Include the auth.js for login/logout logic -->
   <script src="{{ '/assets/js/components/auth.js' | relative_url }}"></script>
 </header>

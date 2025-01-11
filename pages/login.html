@@ -3,16 +3,29 @@ layout: default
 title: Login
 permalink: /login/
 ---
-<!-- Login Section  -->
- 
+
+<!-- Login Section -->
 <section class="login-page">
-<div class="container">
-    <h1>{{ site.data.ui-text.pages.login.heading }}</h1>
-    <div id="login-container">
-        <button id="loginButton" class="netlify-identity-button">{{ site.data.ui-text.pages.login.login_button }}</button>
-        <button id="logoutButton" class="netlify-identity-button hidden">{{ site.data.ui-text.pages.login.logout_button }}</button>
-        <span id="userDisplayName" class="hidden"></span>
+    <div class="container">
+        <h1>{{ site.data.ui-text.pages.login.heading }}</h1>
+        <div id="login-container">
+            <button id="loginButton" class="netlify-identity-button">
+                {{ site.data.ui-text.pages.login.login_button }}
+            </button>
+            <button id="logoutButton" class="netlify-identity-button hidden">
+                {{ site.data.ui-text.pages.login.logout_button }}
+            </button>
+            <span id="userDisplayName" class="hidden"></span>
+            </a>
+        </div>
+        <p> {{ site.data.ui-text.pages.login.login_paragraph }} </p>
     </div>
-    <p> {{ site.data.ui-text.pages.login.login_paragraph }} </p>
-</div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
 </section>
+
+<!-- Netlify Identity Widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+<!-- Authentication Script -->
+<script src="{{ '/assets/js/components/auth.js' | relative_url }}"></script>
+
