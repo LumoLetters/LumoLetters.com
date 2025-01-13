@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Netlify Identity Test</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <h1>Netlify Identity Test</h1>
+    <button id="login-test">Log in</button>
+    <script>
+        const loginButton = document.getElementById('login-test');
+        loginButton.addEventListener('click', () => {
+            netlifyIdentity.open();
+        });
+        netlifyIdentity.on('login', user => {
+            console.log('Login event triggered!', user);
+        });
+         netlifyIdentity.on('logout', () => {
+            console.log('Logout event triggered!');
+        });
+    </script>
+</body>
+</html>

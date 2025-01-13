@@ -1,13 +1,13 @@
-<!--_layouts/default.html-->
+<!-- _layouts/default.html -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/img/favicon.ico" type="image/ico">
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </head>
 <body>
     {% include layout/header.html %}
@@ -15,6 +15,10 @@
         {{ content }}
     </main>
     {% include layout/footer.html %}
+    
+    <!-- Scripts -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+    <script src="{{ '/assets/js/components/auth.js' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
 </body>
 </html>

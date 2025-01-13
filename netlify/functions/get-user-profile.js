@@ -1,49 +1,60 @@
-//get-user-profile.js
-
 const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
-// Define MongoDB URI (ensure this is set in your Netlify environment variables)
-const uri = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI;
+const DATABASE_NAME = process.env.DATABASE_NAME;
 
-// Define the schema and model (reuse the schema)
-const UserProfileSchema = new mongoose.Schema({
-  userId: { type: String, required: true, unique: true },
-  name: String,
-  email: String,
-  interests: [String],
-  topics: [String],
-});
-const UserProfile = mongoose.model('UserProfile', UserProfileSchema);
+let UserProfile; // Declare the model outside the handler
+
+if (mongoose.models.UserProfile) {
+    UserProfile = mongoose.model('UserProfile'); // If the model has already been compiled, use it
+} else {
+    // Create the schema
+    const userProfileSchema = new mongoose.Schema({
+        user_id: { type: String, required: true },
+        date: { type: Date, required: true },
+    }, { strict: false });
+    // Create a model from the schema
+    UserProfile = mongoose.model('UserProfile', userProfileSchema);
+}
 
 exports.handler = async (event, context) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
-
-  try {
-    const userId = context.clientContext.user.sub;
-
+    if (event.httpMethod !== 'GET') { // Correct http method
+        return { statusCode: 405, body: 'Method Not Allowed' };
+    }
+    const userId = event.queryStringParameters.userId;
     if (!userId) {
-      throw new Error('User ID is missing from the context.');
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: 'User ID is missing' }),
+        };
     }
 
-    // Connect to MongoDB
-    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    try {
+        const client = new MongoClient(MONGODB_URI);
+        await client.connect();
 
-    // Fetch the user profile
-    const userProfile = await UserProfile.findOne({ userId });
+        const db = client.db(DATABASE_NAME);
+        const usersCollection = db.collection('user-profile');
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ data: userProfile || null }),
-    };
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch user profile.' }),
-    };
-  } finally {
-    await mongoose.disconnect();
-  }
+        const userProfile = await usersCollection.findOne({ user_id: userId });
+
+        if (!userProfile) {
+            return {
+                statusCode: 404,
+                body: JSON.stringify({ error: 'User profile not found' }),
+            };
+        }
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: 'User data retrieved', data: userProfile }),
+        };
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Failed to fetch user data', details: error.message }),
+        };
+    }
 };
