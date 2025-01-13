@@ -8,32 +8,30 @@
 [functions]
   directory = "netlify/functions"
 
+[functions]
+  included_files = ["**/*.env"]
+
 [[redirects]]
   from = "/.netlify/functions/*"
   to = "/.netlify/functions/:splat"
   status = 200
   force = true
 
-# Redirect unauthenticated users from /dashboard/* to the login page
-[[redirects]]
-  from = "/dashboard/*"
-  to = "/login"
-  status = 302
-  force = false
-  conditions = { Role = ["user"] }
-
-# Redirect unauthenticated users from /user/* to the login page
 [[redirects]]
   from = "/user/*"
   to = "/login"
   status = 302
   force = false
-  conditions = { Role = ["user"] }
 
-# You can also add this to redirect any other unauthenticated paths:
 [[redirects]]
-  from = "/user/dashboard/*"
+  from = "/login"
   to = "/login"
+  status = 200
+  force = false
+  
+[[redirects]]
+  from = "/login"
+  to = "/user/dashboard"
   status = 302
   force = false
-  conditions = { Role = ["user"] }
+  conditions = { Role = ["user"]}

@@ -263,8 +263,50 @@ permalink: /user/sign-up/
     </div>
 
       <div class="form-container">
-        <button type="submit" class="button primary">Sign Up</button>
+        <button type="submit" class="button primary">Submit Intake Form</button>
       </div>
     </form>
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const signupForm = document.getElementById('signup-form');
+    signupForm.addEventListener('submit', function(event) {
+      event.preventDefault();  // Prevent form submission
+
+      // Collect the form data
+      const formData = new FormData(signupForm);
+      const formObject = {};
+      formData.forEach((value, key) => {
+        formObject[key] = value;
+      });
+
+      // Validate form fields before submitting
+      if (!formObject.name || !formObject.email || !formObject.agreement) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Ensure Netlify Identity is available
+      const netlifyIdentity = window.netlifyIdentity;
+      const currentUser = netlifyIdentity.currentUser();
+
+      if (currentUser) {
+        // Update user metadata to mark the signup as complete and store the name
+        currentUser.updateUser({
+          user_metadata: {
+            name: formObject.name  // Use the name from the form input
+          }
+        }).then(() => {
+          // Redirect to the dashboard after successful update
+          window.location.href = '/user/dashboard';  // Redirect to your dashboard URL
+        }).catch((error) => {
+          console.error('Error updating user metadata:', error);
+        });
+      } else {
+        console.error('User is not logged in');
+      }
+    });
+  });
+</script>
