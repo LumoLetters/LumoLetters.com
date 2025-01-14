@@ -9,8 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const signupForm = document.getElementById('signup-form');
     const interestsContainer = document.getElementById('interestsContainer');
     const interestsPage = document.querySelector('.interests-page');
-     const siteBaseURL = window.location.origin;
-
+    const siteBaseURL = window.location.origin;
 
     if (!netlifyIdentity) {
         console.error("Netlify Identity not found!");
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateUI(currentUser);
     checkAndRedirect(currentUser);
     displayMetadata(currentUser);
-   fetchAndPopulateDashboard(currentUser);
+    fetchAndPopulateDashboard(currentUser);
 
     // Event Listeners for login buttons
     loginButtons.forEach(button => {
@@ -49,8 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-
-     // Netlify Identity Event Handlers
+    // Netlify Identity Event Handlers
     netlifyIdentity.on('init', user => {
         if (user) {
             handleLoginRedirect(user);
@@ -59,16 +57,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     netlifyIdentity.on('login', user => {
         closeModal().then(() => {
-             updateUI(user);
-             displayMetadata(user);
-            handleLoginRedirect(user)
-       });
+            updateUI(user);
+            displayMetadata(user);
+            handleLoginRedirect(user);
+        });
     });
+
     netlifyIdentity.on('logout', () => {
         updateUI(null);
-       checkAndRedirect(null);
-   });
-
+        checkAndRedirect(null);
+    });
 
     // Function to update UI based on user state
     function updateUI(user) {
@@ -79,192 +77,203 @@ document.addEventListener('DOMContentLoaded', function () {
             dashboardIcon.classList.remove('hidden');
             userDisplayName.classList.remove('hidden');
         } else {
-           logoutButtons.forEach(button => button.classList.add('hidden'));
+            logoutButtons.forEach(button => button.classList.add('hidden'));
             loginButtons.forEach(button => button.classList.remove('hidden'));
             userDisplayName.classList.add('hidden');
             dashboardIcon.classList.add('hidden');
         }
     }
+
     // Function to check if user is logged in and redirect client-side
     function checkAndRedirect(user) {
         const currentPath = window.location.pathname;
-        
-        // Redirect if not logged in and trying to access the dashboard
-        if (currentPath === "/user/dashboard" && !user) {
-            window.location.assign('/login');
-        }
-        // If user is logged in but on the login page, redirect to dashboard
-        else if (currentPath === "/login" && user) {
+
+        // If user is logged in and on the login page, redirect to dashboard
+        if (user && currentPath === "/login") {
             window.location.assign('/user/dashboard');
         }
-      }
-   function closeModal() {
+        // If user is not logged in and tries to access dashboard, redirect to login
+        else if (!user && currentPath === "/user/dashboard") {
+            window.location.assign('/login');
+        }
+    }
+
+    // Function to close modal and allow redirect after login
+    function closeModal() {
         return new Promise(resolve => {
-          netlifyIdentity.close();
+            netlifyIdentity.close();
             setTimeout(resolve, 50); // Give the modal some time to close (adjust if needed)
         });
-   }
-   function handleLoginRedirect(user) {
-    if (!user) return;
-
-    // Directly check for the onboarding completion here
-    if (user.user_metadata.onboardingComplete) {
-        window.location.assign('/user/dashboard');
-    } else {
-        window.location.assign('/user/sign-up');
     }
-}
-    // Handle the form submission
-     if (signupForm && !signupForm.dataset.listenerAdded) {
-         signupForm.dataset.listenerAdded = true; // Mark as initialized
+
+    // Function to handle login redirects
+    function handleLoginRedirect(user) {
+        if (user && !sessionStorage.getItem("redirected")) {
+            sessionStorage.setItem("redirected", "true");
+            window.location.assign('/user/dashboard');
+        }
+        else if (!user || !user.user_metadata.onboardingComplete) {
+            window.location.assign('/user/sign-up');
+        } else {
+            window.location.assign('/user/dashboard');
+        }
+    }
+
+    // Handle the form submission for signup
+    if (signupForm && !signupForm.dataset.listenerAdded) {
+        signupForm.dataset.listenerAdded = true; // Mark as initialized
         signupForm.addEventListener('submit', async function (event) {
             event.preventDefault();
-          const submitButton = signupForm.querySelector('button[type="submit"]');
-              submitButton.disabled = true;
-            if(!signupForm.dataset.isSubmitting) {
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            if (!signupForm.dataset.isSubmitting) {
                 signupForm.dataset.isSubmitting = true;
-                try{
+                try {
                     const formData = new FormData(signupForm);
-                   const formObject = {};
-                       formData.forEach((value, key) => {
-                           if (formObject[key]) {
-                             if (!Array.isArray(formObject[key])) {
-                                    formObject[key] = [formObject[key]];
+                    const formObject = {};
+                    formData.forEach((value, key) => {
+                        if (formObject[key]) {
+                            if (!Array.isArray(formObject[key])) {
+                                formObject[key] = [formObject[key]];
                             }
-                               formObject[key].push(value);
-                             } else {
-                                 formObject[key] = value;
-                              }
-                         });
+                            formObject[key].push(value);
+                        } else {
+                            formObject[key] = value;
+                        }
+                    });
 
                     const user = netlifyIdentity.gotrue.currentUser();
-                        if (user) {
-                            await user.update({
-                                data: {
-                                     name: formObject.name,
-                                     onboardingComplete: true,
-                                },
-                           });
-                       const response = await fetch('/.netlify/functions/save-user-profile', {
+                    if (user) {
+                        await user.update({
+                            data: {
+                                name: formObject.name,
+                                onboardingComplete: true,
+                            },
+                        });
+                        const response = await fetch('/.netlify/functions/save-user-profile', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                             body: JSON.stringify({
-                                  ...formObject,
-                                  user_id: user.id,
-                             }),
+                            body: JSON.stringify({
+                                ...formObject,
+                                user_id: user.id,
+                            }),
                         });
-                     const data = await response.json();
-                     console.log("User data saved:", data);
-                       sessionStorage.setItem("redirectAfterLogin", "true");
-                         handleLoginRedirect(user);
-                   }  else {
-                         console.error("No user logged in");
-                   }
-               } catch (error) {
-                   console.error("Error saving user data:", error);
-               } finally {
-                 submitButton.disabled = false;
-                  signupForm.dataset.isSubmitting = false;
-             }
-          }
-     });
+                        const data = await response.json();
+                        console.log("User data saved:", data);
+                        sessionStorage.setItem("redirectAfterLogin", "true");
+                        handleLoginRedirect(user);
+                    } else {
+                        console.error("No user logged in");
+                    }
+                } catch (error) {
+                    console.error("Error saving user data:", error);
+                } finally {
+                    submitButton.disabled = false;
+                    signupForm.dataset.isSubmitting = false;
+                }
+            }
+        });
     }
-
 
     function displayMetadata(user) {
-         if (user) {
+        if (user) {
             const metadata = user.user_metadata;
-             console.log("User Metadata:", metadata);
-          }
+            console.log("User Metadata:", metadata);
+        }
     }
-     // Fetches user data from MongoDB and populates the dashboard
+
+    // Fetches user data from MongoDB and populates the dashboard
     async function fetchAndPopulateDashboard(user) {
         if (user && window.location.pathname === '/user/dashboard') {
             try {
-                 const response = await fetch(`${siteBaseURL}/.netlify/functions/get-user-profile?userId=${user.id}`);
-                   const data = await response.json();
-                    if(data && data.data){
-                        const userProfile = data.data;
-                        //Populate User Name
-                         const nameElement = document.getElementById('userName');
-                         if (nameElement) {
-                              nameElement.textContent = userProfile.name;
-                           }
-                           //Populate Interests
-                        if(interestsContainer){
-                           interestsContainer.innerHTML = '';
-                           if(userProfile.interests) {
-                              for(const interest of userProfile.interests){
-                                   const p = document.createElement('p');
-                                     p.textContent = interest;
-                                     interestsContainer.appendChild(p);
-                                 }
-                           }
-                      }
-                  } else {
-                     console.error("User data not found in MongoDB");
-                  }
-           } catch (error) {
-               console.error("Error fetching user profile data:", error);
-          }
-      }
-   }
-    //Fetches and populates the interests form when the interests tab is loaded
-   async function fetchAndPopulateInterests(user){
-         if(user && window.location.pathname === '/user/interests') {
-              try{
-                 const response = await fetch(`/.netlify/functions/get-user-profile?userId=${user.id}`);
-                   const data = await response.json();
-                    if(data && data.data){
-                        const userProfile = data.data
-                        if(userProfile.interests) {
-                             for(const interest of userProfile.interests) {
-                                  const interestInput = document.getElementById(interest);
-                                     if(interestInput) {
-                                       interestInput.checked = true
-                                  }
-                             }
+                const response = await fetch(`${siteBaseURL}/.netlify/functions/get-user-profile?userId=${user.id}`);
+                const data = await response.json();
+                if (data && data.data) {
+                    const userProfile = data.data;
+                    // Populate User Name
+                    const nameElement = document.getElementById('userName');
+                    if (nameElement) {
+                        nameElement.textContent = userProfile.name;
+                    }
+                    // Populate Interests
+                    if (interestsContainer) {
+                        interestsContainer.innerHTML = '';
+                        if (userProfile.interests) {
+                            for (const interest of userProfile.interests) {
+                                const p = document.createElement('p');
+                                p.textContent = interest;
+                                interestsContainer.appendChild(p);
+                            }
                         }
-                      if(userProfile.topics) {
-                          for(const topic of userProfile.topics) {
-                               const topicInput = document.getElementById(topic);
-                                if(topicInput) {
-                                     topicInput.checked = true;
-                                  }
-                           }
-                      }
-                   }
-          } catch (error) {
-              console.error("Error fetching user profile data for interests page:", error);
-         }
-       }
+                    }
+                } else {
+                    console.error("User data not found in MongoDB");
+                }
+            } catch (error) {
+                console.error("Error fetching user profile data:", error);
+            }
+        }
     }
-   // Call fetchDataOnPageLoad whenever a new page is loaded
+
+    // Fetches and populates the interests form when the interests tab is loaded
+    async function fetchAndPopulateInterests(user) {
+        if (user && window.location.pathname === '/user/interests') {
+            try {
+                const response = await fetch(`/.netlify/functions/get-user-profile?userId=${user.id}`);
+                const data = await response.json();
+                if (data && data.data) {
+                    const userProfile = data.data;
+                    if (userProfile.interests) {
+                        for (const interest of userProfile.interests) {
+                            const interestInput = document.getElementById(interest);
+                            if (interestInput) {
+                                interestInput.checked = true;
+                            }
+                        }
+                    }
+                    if (userProfile.topics) {
+                        for (const topic of userProfile.topics) {
+                            const topicInput = document.getElementById(topic);
+                            if (topicInput) {
+                                topicInput.checked = true;
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching user profile data for interests page:", error);
+            }
+        }
+    }
+
+    // Call fetchDataOnPageLoad whenever a new page is loaded
     window.addEventListener("load", () => {
         const currentUser = netlifyIdentity.currentUser();
         checkAndRedirect(currentUser);
-         displayMetadata(currentUser);
-         fetchAndPopulateDashboard(currentUser)
-           if(interestsPage){
-                fetchAndPopulateInterests(currentUser)
-            }
-     });
-    window.addEventListener('popstate', () => {
-         const currentUser = netlifyIdentity.currentUser();
-        checkAndRedirect(currentUser);
-         displayMetadata(currentUser);
-          fetchAndPopulateDashboard(currentUser);
-            if(interestsPage){
-                 fetchAndPopulateInterests(currentUser);
-              }
-      });
-    window.addEventListener('hashchange', () => {
-       const currentUser = netlifyIdentity.currentUser();
-       checkAndRedirect(currentUser);
         displayMetadata(currentUser);
         fetchAndPopulateDashboard(currentUser);
-        if(interestsPage){
-             fetchAndPopulateInterests(currentUser)
-         }
+        if (interestsPage) {
+            fetchAndPopulateInterests(currentUser);
+        }
+    });
+
+    window.addEventListener('popstate', () => {
+        const currentUser = netlifyIdentity.currentUser();
+        checkAndRedirect(currentUser);
+        displayMetadata(currentUser);
+        fetchAndPopulateDashboard(currentUser);
+        if (interestsPage) {
+            fetchAndPopulateInterests(currentUser);
+        }
+    });
+
+    window.addEventListener('hashchange', () => {
+        const currentUser = netlifyIdentity.currentUser();
+        checkAndRedirect(currentUser);
+        displayMetadata(currentUser);
+        fetchAndPopulateDashboard(currentUser);
+        if (interestsPage) {
+            fetchAndPopulateInterests(currentUser);
+        }
     });
 });
