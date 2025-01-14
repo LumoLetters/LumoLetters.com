@@ -101,6 +101,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Redirect only if not redirected already
         if (!redirected) {
             sessionStorage.setItem("redirected", "true");
+
+            // Redirect based on user state
             if (user && user.user_metadata.onboardingComplete) {
                 window.location.assign('/user/dashboard');
             } else {
@@ -173,9 +175,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
                 if (data && data.data) {
                     const userProfile = data.data;
-                    const nameElement = document.getElementById('userName');
+                    const nameElement = document.getElementById('userName'); // Check that this ID matches the element in your HTML
                     if (nameElement) {
-                        nameElement.textContent = userProfile.name;
+                        nameElement.textContent = userProfile.name; // Assuming 'name' is the correct field
                     }
                     if (interestsContainer) {
                         interestsContainer.innerHTML = '';
