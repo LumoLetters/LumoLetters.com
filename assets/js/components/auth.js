@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // Redirect based on user state
             if (user && user.user_metadata.onboardingComplete) {
                 window.location.assign('/user/dashboard');
+            } else if (!user) {
+                window.location.assign('/login');
             } else {
                 window.location.assign('/user/sign-up');
             }
