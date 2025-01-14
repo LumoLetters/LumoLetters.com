@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Select ALL logout buttons using a common class and the ID for the header button
     const logoutButtons = document.querySelectorAll('.logoutButton, #logoutButton, #sidebarLogoutButton');
     const loginButtons = document.querySelectorAll('.loginButton, #loginButton');
     const userDisplayName = document.getElementById('userDisplayName');
@@ -19,12 +18,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize Netlify Identity
     netlifyIdentity.init();
 
-    // Check if the user is logged in
+    // Check the initial login state
     const currentUser = netlifyIdentity.currentUser();
     updateUI(currentUser);
     checkAndRedirect(currentUser);
-    displayMetadata(currentUser);
-    fetchAndPopulateDashboard(currentUser);
 
     // Event Listeners for login buttons
     loginButtons.forEach(button => {
@@ -45,27 +42,20 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', () => {
             netlifyIdentity.logout();
             updateUI(null);
+            sessionStorage.removeItem("redirected"); // Reset redirected flag on logout
         });
     });
 
     // Netlify Identity Event Handlers
-    netlifyIdentity.on('init', user => {
-        if (user) {
-            handleLoginRedirect(user);
-        }
-    });
-
     netlifyIdentity.on('login', user => {
-        closeModal().then(() => {
-            updateUI(user);
-            displayMetadata(user);
-            handleLoginRedirect(user);
-        });
+        updateUI(user);
+        sessionStorage.setItem("redirected", "true"); // Set redirected flag after login
+        handleLoginRedirect(user);
     });
 
     netlifyIdentity.on('logout', () => {
         updateUI(null);
-        checkAndRedirect(null);
+        sessionStorage.removeItem("redirected"); // Reset redirected flag on logout
     });
 
     // Function to update UI based on user state
@@ -87,6 +77,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to check if user is logged in and redirect client-side
     function checkAndRedirect(user) {
         const currentPath = window.location.pathname;
+        const redirected = sessionStorage.getItem("redirected");
+
+        // Avoid redirect if already redirected
+        if (redirected) {
+            return;
+        }
 
         // If user is logged in and on the login page, redirect to dashboard
         if (user && currentPath === "/login") {
@@ -98,24 +94,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Function to close modal and allow redirect after login
-    function closeModal() {
-        return new Promise(resolve => {
-            netlifyIdentity.close();
-            setTimeout(resolve, 50); // Give the modal some time to close (adjust if needed)
-        });
-    }
-
     // Function to handle login redirects
     function handleLoginRedirect(user) {
-        if (user && !sessionStorage.getItem("redirected")) {
+        const redirected = sessionStorage.getItem("redirected");
+
+        // Redirect only if not redirected already
+        if (!redirected) {
             sessionStorage.setItem("redirected", "true");
-            window.location.assign('/user/dashboard');
-        }
-        else if (!user || !user.user_metadata.onboardingComplete) {
-            window.location.assign('/user/sign-up');
-        } else {
-            window.location.assign('/user/dashboard');
+            if (user && user.user_metadata.onboardingComplete) {
+                window.location.assign('/user/dashboard');
+            } else {
+                window.location.assign('/user/sign-up');
+            }
         }
     }
 
@@ -175,14 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function displayMetadata(user) {
-        if (user) {
-            const metadata = user.user_metadata;
-            console.log("User Metadata:", metadata);
-        }
-    }
-
-    // Fetches user data from MongoDB and populates the dashboard
+    // Fetch and populate user data on the dashboard
     async function fetchAndPopulateDashboard(user) {
         if (user && window.location.pathname === '/user/dashboard') {
             try {
@@ -190,12 +173,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
                 if (data && data.data) {
                     const userProfile = data.data;
-                    // Populate User Name
                     const nameElement = document.getElementById('userName');
                     if (nameElement) {
                         nameElement.textContent = userProfile.name;
                     }
-                    // Populate Interests
                     if (interestsContainer) {
                         interestsContainer.innerHTML = '';
                         if (userProfile.interests) {
@@ -206,42 +187,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             }
                         }
                     }
-                } else {
-                    console.error("User data not found in MongoDB");
                 }
             } catch (error) {
                 console.error("Error fetching user profile data:", error);
-            }
-        }
-    }
-
-    // Fetches and populates the interests form when the interests tab is loaded
-    async function fetchAndPopulateInterests(user) {
-        if (user && window.location.pathname === '/user/interests') {
-            try {
-                const response = await fetch(`/.netlify/functions/get-user-profile?userId=${user.id}`);
-                const data = await response.json();
-                if (data && data.data) {
-                    const userProfile = data.data;
-                    if (userProfile.interests) {
-                        for (const interest of userProfile.interests) {
-                            const interestInput = document.getElementById(interest);
-                            if (interestInput) {
-                                interestInput.checked = true;
-                            }
-                        }
-                    }
-                    if (userProfile.topics) {
-                        for (const topic of userProfile.topics) {
-                            const topicInput = document.getElementById(topic);
-                            if (topicInput) {
-                                topicInput.checked = true;
-                            }
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("Error fetching user profile data for interests page:", error);
             }
         }
     }
@@ -250,30 +198,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener("load", () => {
         const currentUser = netlifyIdentity.currentUser();
         checkAndRedirect(currentUser);
-        displayMetadata(currentUser);
         fetchAndPopulateDashboard(currentUser);
-        if (interestsPage) {
-            fetchAndPopulateInterests(currentUser);
-        }
-    });
-
-    window.addEventListener('popstate', () => {
-        const currentUser = netlifyIdentity.currentUser();
-        checkAndRedirect(currentUser);
-        displayMetadata(currentUser);
-        fetchAndPopulateDashboard(currentUser);
-        if (interestsPage) {
-            fetchAndPopulateInterests(currentUser);
-        }
-    });
-
-    window.addEventListener('hashchange', () => {
-        const currentUser = netlifyIdentity.currentUser();
-        checkAndRedirect(currentUser);
-        displayMetadata(currentUser);
-        fetchAndPopulateDashboard(currentUser);
-        if (interestsPage) {
-            fetchAndPopulateInterests(currentUser);
-        }
     });
 });
