@@ -4,10 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const userDisplayName = document.getElementById('userDisplayName');
     const dashboardIcon = document.getElementById('dashboardIcon');
     const netlifyIdentity = window.netlifyIdentity;
-    const signUpButtons = document.querySelectorAll('.trigger-signup');
-    const signupForm = document.getElementById('signup-form');
-    const interestsContainer = document.getElementById('interestsContainer');
-    const interestsPage = document.querySelector('.interests-page');
     const siteBaseURL = window.location.origin;
 
     if (!netlifyIdentity) {
@@ -18,10 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize Netlify Identity
     netlifyIdentity.init();
 
-    // Check the initial login state
+    // Check if the user is logged in
     const currentUser = netlifyIdentity.currentUser();
     updateUI(currentUser);
     checkAndRedirect(currentUser);
+    displayMetadata(currentUser);
 
     // Event Listeners for login buttons
     loginButtons.forEach(button => {
@@ -30,32 +27,37 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    signUpButtons.forEach(button => {
-        button.addEventListener('click', function (event) {
-            event.preventDefault();
-            netlifyIdentity.open('signup');
-        });
-    });
-
     // Event Listeners for logout buttons
     logoutButtons.forEach(button => {
         button.addEventListener('click', () => {
             netlifyIdentity.logout();
             updateUI(null);
-            sessionStorage.removeItem("redirected"); // Reset redirected flag on logout
+            closeModal().then(() => {
+                window.location.assign('/'); // Redirect to homepage after logout
+            });
         });
     });
 
     // Netlify Identity Event Handlers
+    netlifyIdentity.on('init', user => {
+        if (user) {
+            handleLoginRedirect(user);
+        }
+    });
+
     netlifyIdentity.on('login', user => {
-        updateUI(user);
-        sessionStorage.setItem("redirected", "true"); // Set redirected flag after login
-        handleLoginRedirect(user);
+        closeModal().then(() => {
+            updateUI(user);
+            displayMetadata(user);
+            handleLoginRedirect(user);
+        });
     });
 
     netlifyIdentity.on('logout', () => {
         updateUI(null);
-        sessionStorage.removeItem("redirected"); // Reset redirected flag on logout
+        closeModal().then(() => {
+            window.location.assign('/'); // Redirect to homepage after logout
+        });
     });
 
     // Function to update UI based on user state
@@ -76,132 +78,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to check if user is logged in and redirect client-side
     function checkAndRedirect(user) {
-        const currentPath = window.location.pathname;
-        const redirected = sessionStorage.getItem("redirected");
+        const currentPath = window.location.pathname.replace(/\/$/, '');
 
-        // Avoid redirect if already redirected
-        if (redirected) {
-            return;
-        }
+        console.log("Checking redirection for path:", currentPath);
 
-        // If user is logged in and on the login page, redirect to dashboard
-        if (user && currentPath === "/login") {
+        if (currentPath === '/login' && user) {
+            console.log("User is logged in, redirecting to dashboard");
             window.location.assign('/user/dashboard');
-        }
-        // If user is not logged in and tries to access dashboard, redirect to login
-        else if (!user && currentPath === "/user/dashboard") {
+        } else if (currentPath === '/user/dashboard' && !user) {
+            console.log("User is not logged in, redirecting to login");
             window.location.assign('/login');
         }
     }
 
-    // Function to handle login redirects
     function handleLoginRedirect(user) {
-        const redirected = sessionStorage.getItem("redirected");
-
-        // Redirect only if not redirected already
-        if (!redirected) {
-            sessionStorage.setItem("redirected", "true");
-
-            // Redirect based on user state
-            if (user && user.user_metadata.onboardingComplete) {
-                window.location.assign('/user/dashboard');
-            } else if (!user) {
-                window.location.assign('/login');
-            } else {
-                window.location.assign('/user/sign-up');
-            }
+        if (sessionStorage.getItem("redirectAfterLogin") === "true") {
+            sessionStorage.removeItem("redirectAfterLogin");
+            window.location.assign("/user/dashboard");
+        } else if (!user || !user.user_metadata.onboardingComplete) {
+            window.location.assign('/user/sign-up');
+        } else {
+            window.location.assign('/user/dashboard');
         }
     }
 
-    // Handle the form submission for signup
-    if (signupForm && !signupForm.dataset.listenerAdded) {
-        signupForm.dataset.listenerAdded = true; // Mark as initialized
-        signupForm.addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const submitButton = signupForm.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
-            if (!signupForm.dataset.isSubmitting) {
-                signupForm.dataset.isSubmitting = true;
-                try {
-                    const formData = new FormData(signupForm);
-                    const formObject = {};
-                    formData.forEach((value, key) => {
-                        if (formObject[key]) {
-                            if (!Array.isArray(formObject[key])) {
-                                formObject[key] = [formObject[key]];
-                            }
-                            formObject[key].push(value);
-                        } else {
-                            formObject[key] = value;
-                        }
-                    });
+    function displayMetadata(user) {
+        if (user) {
+            const metadata = user.user_metadata;
+            console.log("User Metadata:", metadata);
+        }
+    }
 
-                    const user = netlifyIdentity.gotrue.currentUser();
-                    if (user) {
-                        await user.update({
-                            data: {
-                                name: formObject.name,
-                                onboardingComplete: true,
-                            },
-                        });
-                        const response = await fetch('/.netlify/functions/save-user-profile', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                ...formObject,
-                                user_id: user.id,
-                            }),
-                        });
-                        const data = await response.json();
-                        console.log("User data saved:", data);
-                        sessionStorage.setItem("redirectAfterLogin", "true");
-                        handleLoginRedirect(user);
-                    } else {
-                        console.error("No user logged in");
-                    }
-                } catch (error) {
-                    console.error("Error saving user data:", error);
-                } finally {
-                    submitButton.disabled = false;
-                    signupForm.dataset.isSubmitting = false;
-                }
-            }
+    // Function to close the Netlify Identity modal
+    function closeModal() {
+        return new Promise(resolve => {
+            netlifyIdentity.close();
+            setTimeout(resolve, 50); // Give the modal a bit of time to close
         });
     }
-
-    // Fetch and populate user data on the dashboard
-    async function fetchAndPopulateDashboard(user) {
-        if (user && window.location.pathname === '/user/dashboard') {
-            try {
-                const response = await fetch(`${siteBaseURL}/.netlify/functions/get-user-profile?userId=${user.id}`);
-                const data = await response.json();
-                if (data && data.data) {
-                    const userProfile = data.data;
-                    const nameElement = document.getElementById('userName'); // Check that this ID matches the element in your HTML
-                    if (nameElement) {
-                        nameElement.textContent = userProfile.name; // Assuming 'name' is the correct field
-                    }
-                    if (interestsContainer) {
-                        interestsContainer.innerHTML = '';
-                        if (userProfile.interests) {
-                            for (const interest of userProfile.interests) {
-                                const p = document.createElement('p');
-                                p.textContent = interest;
-                                interestsContainer.appendChild(p);
-                            }
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("Error fetching user profile data:", error);
-            }
-        }
-    }
-
-    // Call fetchDataOnPageLoad whenever a new page is loaded
-    window.addEventListener("load", () => {
-        const currentUser = netlifyIdentity.currentUser();
-        checkAndRedirect(currentUser);
-        fetchAndPopulateDashboard(currentUser);
-    });
 });
