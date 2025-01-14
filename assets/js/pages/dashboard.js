@@ -158,10 +158,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Initialize dashboard on first load
-    loadContent(
-        'Welcome to Your Dashboard',
-        `<p>Select an option from the sidebar to get started.</p>`,
-        '/user/dashboard'
-    );
 });
