@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
-require('dotenv').config();
+require('dotenv').config({ path: './netlify/functions/.env' });
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const DATABASE_NAME = process.env.DATABASE_NAME;
@@ -13,10 +13,9 @@ if (mongoose.models.UserProfile) {
     // Create the schema
     const userProfileSchema = new mongoose.Schema({
         user_id: { type: String, required: true },
-        date: { type: Date, required: true },
     }, { strict: false });
     // Create a model from the schema
-    UserProfile = mongoose.model('UserProfile', userProfileSchema);
+     UserProfile = mongoose.model('UserProfile', userProfileSchema);
 }
 
 exports.handler = async (event, context) => {
