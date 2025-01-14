@@ -111,12 +111,15 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function checkOnboarding(user) {
-      if (!user || !user.user_metadata.onboardingComplete) {
-           window.location.href = '/user/sign-up';
-      } else {
-         window.location.href = '/user/dashboard';
-     }
-  }
+    if (!user || !user.user_metadata.onboardingComplete) {
+        if (window.location.pathname !== '/user/sign-up') {
+            window.location.href = '/user/sign-up';
+        }
+    } else if (window.location.pathname !== '/user/dashboard') {
+        window.location.href = '/user/dashboard';
+    }
+}
+
 
   // Handle the form submission
   if (signupForm && !signupForm.dataset.listenerAdded) {
