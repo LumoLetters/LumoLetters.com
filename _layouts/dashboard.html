@@ -8,6 +8,7 @@
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="{{ '/assets/js/components/auth.js' | relative_url }}" defer></script>
 </head>
 <body>
     {% include layout/header.html %}
@@ -26,7 +27,7 @@
     {% include layout/footer.html %}
 
     <script src="/assets/js/pages/dashboard.js"></script>
-    <script src="{{ '/assets/js/components/auth.js' | relative_url }}" defer></script>
+
     <script>
         if (window.netlifyIdentity) {
             window.netlifyIdentity.on('init', (user) => {
