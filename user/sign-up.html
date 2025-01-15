@@ -272,7 +272,6 @@ permalink: /user/sign-up/
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const signupForm = document.getElementById('signup-form');
-
   signupForm.addEventListener('submit', function(event) {
     event.preventDefault();  // Prevent form submission
 
@@ -282,6 +281,8 @@ document.addEventListener('DOMContentLoaded', function() {
     formData.forEach((value, key) => {
       formObject[key] = value;
     });
+
+    console.log(formObject);  // Log the form data to ensure it's collected correctly
 
     // Validate form fields before submitting
     if (!formObject.name || !formObject.email || !formObject.agreement) {
@@ -294,12 +295,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentUser = netlifyIdentity.currentUser();
 
     if (currentUser) {
-      // Update user metadata to mark the signup as complete and store the name
-      currentUser.updateUser({
+      // Update user metadata using the currentUser.update method
+      currentUser.update({
         user_metadata: {
           name: formObject.name  // Use the name from the form input
         }
       }).then(() => {
+        console.log('User metadata updated');
+        
         // Send user data to Netlify function to save to MongoDB
         fetch('/.netlify/functions/save-user-profile', {
           method: 'POST',
@@ -315,7 +318,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-          // Handle response from the function (success or error)
           console.log('User data saved:', data);
           window.location.href = '/user/dashboard';  // Redirect to dashboard after success
         })
