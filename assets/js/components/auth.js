@@ -1,4 +1,4 @@
-//asssets/js/components/auth.js
+//assets/js/components/auth.js
 
 document.addEventListener('DOMContentLoaded', function () {
     const logoutButtons = document.querySelectorAll('.logoutButton, #logoutButton, #sidebarLogoutButton');
@@ -52,18 +52,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Setup login and logout button events
     function setupLoginLogout() {
-        // Event listener for login buttons
         loginButtons.forEach(button => {
             button.addEventListener('click', () => netlifyIdentity.open());
         });
-    
-        // Event listener for sign-up buttons
+
         const signUpButtons = document.querySelectorAll('.trigger-signup');
         signUpButtons.forEach(button => {
             button.addEventListener('click', () => netlifyIdentity.open('signup')); // Explicitly trigger the signup flow
         });
-    
-        // Event listener for logout buttons
+
         logoutButtons.forEach(button => {
             button.addEventListener('click', () => {
                 netlifyIdentity.logout();
@@ -73,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-    
 
     // Update UI elements based on user state
     function updateUI(user) {
@@ -104,8 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function checkAndRedirect(user) {
         const currentPath = window.location.pathname.replace(/\/$/, '');
 
-        console.log("Checking redirection for path:", currentPath);
-
         if (currentPath === '/login' && user) {
             window.location.assign('/user/dashboard');
         } else if (currentPath === '/user/dashboard' && !user) {
@@ -115,13 +109,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Redirect user after login based on session storage flag
     function handleLoginRedirect(user) {
-        if (sessionStorage.getItem("redirectAfterLogin") === "true") {
-            sessionStorage.removeItem("redirectAfterLogin");
+        // Check if onboarding is complete and redirect accordingly
+        if (user && user.user_metadata.onboardingComplete) {
+            // Onboarding is complete, redirect to dashboard
             window.location.assign("/user/dashboard");
-        } else if (!user || !user.user_metadata.onboardingComplete) {
+        } else if (user) {
+            // Onboarding not complete, redirect to sign-up page
             window.location.assign('/user/sign-up');
         } else {
-            window.location.assign('/user/dashboard');
+            // User not logged in, redirect to login
+            window.location.assign('/login');
         }
     }
 
@@ -139,7 +136,6 @@ document.addEventListener('DOMContentLoaded', function () {
             redirectToHome(); // Redirect to home after logout
         }, INACTIVITY_TIMEOUT);
 
-        // Reset timer on any user interaction (mouse move, key press, etc.)
         document.addEventListener('mousemove', resetInactivityTimer);
         document.addEventListener('keypress', resetInactivityTimer);
     }
