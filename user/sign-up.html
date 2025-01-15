@@ -270,43 +270,65 @@ permalink: /user/sign-up/
 </section>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const signupForm = document.getElementById('signup-form');
-    signupForm.addEventListener('submit', function(event) {
-      event.preventDefault();  // Prevent form submission
+document.addEventListener('DOMContentLoaded', function() {
+  const signupForm = document.getElementById('signup-form');
 
-      // Collect the form data
-      const formData = new FormData(signupForm);
-      const formObject = {};
-      formData.forEach((value, key) => {
-        formObject[key] = value;
-      });
+  signupForm.addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent form submission
 
-      // Validate form fields before submitting
-      if (!formObject.name || !formObject.email || !formObject.agreement) {
-        alert('Please fill in all required fields.');
-        return;
-      }
-
-      // Ensure Netlify Identity is available
-      const netlifyIdentity = window.netlifyIdentity;
-      const currentUser = netlifyIdentity.currentUser();
-
-      if (currentUser) {
-        // Update user metadata to mark the signup as complete and store the name
-        currentUser.updateUser({
-          user_metadata: {
-            name: formObject.name  // Use the name from the form input
-          }
-        }).then(() => {
-          // Redirect to the dashboard after successful update
-          window.location.href = '/user/dashboard';  // Redirect to your dashboard URL
-        }).catch((error) => {
-          console.error('Error updating user metadata:', error);
-        });
-      } else {
-        console.error('User is not logged in');
-      }
+    // Collect the form data
+    const formData = new FormData(signupForm);
+    const formObject = {};
+    formData.forEach((value, key) => {
+      formObject[key] = value;
     });
+
+    // Validate form fields before submitting
+    if (!formObject.name || !formObject.email || !formObject.agreement) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    // Ensure Netlify Identity is available
+    const netlifyIdentity = window.netlifyIdentity;
+    const currentUser = netlifyIdentity.currentUser();
+
+    if (currentUser) {
+      // Update user metadata to mark the signup as complete and store the name
+      currentUser.updateUser({
+        user_metadata: {
+          name: formObject.name  // Use the name from the form input
+        }
+      }).then(() => {
+        // Send user data to Netlify function to save to MongoDB
+        fetch('/.netlify/functions/save-user-profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: currentUser.id,  // Use the current user ID from Netlify Identity
+            name: formObject.name,
+            email: formObject.email,
+            agreement: formObject.agreement,
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Handle response from the function (success or error)
+          console.log('User data saved:', data);
+          window.location.href = '/user/dashboard';  // Redirect to dashboard after success
+        })
+        .catch((error) => {
+          console.error('Error saving user data:', error);
+        });
+      }).catch((error) => {
+        console.error('Error updating user metadata:', error);
+      });
+    } else {
+      console.error('User is not logged in');
+    }
   });
+});
+
 </script>

@@ -1,3 +1,5 @@
+//netlify/functions/save-user-profile.js
+
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 require('dotenv').config({ path: './netlify/functions/.env' }); //Explicitly define dotenv location
