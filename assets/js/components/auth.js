@@ -66,14 +66,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
   
         logoutButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                netlifyIdentity.logout();
-                updateUI(null);
-                resetInactivityTimer(); // Reset timer on logout
-                redirectToHome();
+            button.addEventListener('click', async () => {
+                try {
+                    await netlifyIdentity.logout(); // Wait for logout to complete
+                    console.log("Logout completed!");
+                    updateUI(null);
+                    resetInactivityTimer(); // Reset timer on logout
+                    redirectToHome();
+                } catch (error) {
+                    console.error("Error during logout:", error);
+                }
             });
         });
-    }
   
     // Update UI elements based on user state
     function updateUI(user) {
