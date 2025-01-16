@@ -1,11 +1,9 @@
-// netlify/functions/save-user-profile.js
-
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
-require('dotenv').config({ path: './netlify/functions/.env' }); //Explicitly define dotenv location
+require('dotenv').config({ path: './netlify/functions/shared/.env' }); // Explicitly define dotenv location
 
-const uri = process.env.MONGODB_URI; // Using process.env
-const dbName = process.env.DATABASE_NAME; // Using process.env
+const MONGODB_URI = process.env.MONGODB_URI;
+const DATABASE_NAME = process.env.DATABASE_NAME;
 
 let UserProfile; // Declare the model outside the handler
 
@@ -19,6 +17,11 @@ if (mongoose.models.UserProfile) {
         onboardingComplete: { type: Boolean, default: false }, // Add the onboardingComplete field
         interests: { type: [String], default: [] }, // Array of strings for interests
         topics: { type: [String], default: [] }, // Array of strings for topics
+        name: { type: String }, // Explicitly define name
+        email: { type: String }, // Explicitly define email
+        address: { type: String }, // Explicitly define address
+        paymentPlan: {type: String}, // explicitly define paymentPlan
+        paymentMethod: {type: String} // explicitly define paymentMethod
     }, { strict: false });
     // Create a model from the schema
     UserProfile = mongoose.model('UserProfile', userProfileSchema);
@@ -30,24 +33,30 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        const client = new MongoClient(uri);
+        const client = new MongoClient(MONGODB_URI);
         await client.connect();
-        const db = client.db(dbName);
+        const db = client.db(DATABASE_NAME);
         const usersCollection = db.collection('user-profile');
 
         // Parse the incoming data
         const data = JSON.parse(event.body);
         console.log('Received Data:', data);
-        // Ensure onboardingComplete, interests, and topics are passed or default to empty values
-        const { user_id, onboardingComplete = false, interests = [], topics = [], ...otherData } = data;
 
-        // Create a new user profile object with onboardingComplete, interests, and topics
+        // Ensure onboardingComplete, interests, topics, name, and email are extracted
+        const { user_id, onboardingComplete = false, interests = [], topics = [], name, email, address, paymentPlan, paymentMethod, ...otherData } = data;
+
+        // Create a new user profile object
         const userProfile = new UserProfile({
             user_id,
             onboardingComplete,
             interests,
             topics,
-            ...otherData // Include any additional fields (like name, email, etc.)
+            name,
+            email,
+            address,
+            paymentPlan,
+            paymentMethod,
+            ...otherData // Include any additional fields dynamically
         });
 
         // Insert the new user profile into the MongoDB collection

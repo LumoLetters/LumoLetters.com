@@ -160,34 +160,75 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Fetch and display user profile data from MongoDB
+        let userProfileData = {};
+        // Fetch and display user profile data from MongoDB
     const userName = document.getElementById('userName');
     const userInterests = document.getElementById('userInterests');
     const userTopics = document.getElementById('userTopics');
     const userAddress = document.getElementById('userAddress');
+    const paymentPlan = document.getElementById('payment-plan')
+    const paymentMethod = document.getElementById('payment-method')
 
     const netlifyIdentity = window.netlifyIdentity;
     const currentUser = netlifyIdentity.currentUser();
+    
 
     if (currentUser) {
-        fetch(`/.netlify/functions/get-user-profile?userId=${currentUser.id}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.data) {
-                    const userProfile = data.data;
-
-                    // Populate the user's details on the dashboard
-                    userName.textContent = userProfile.name || 'No name available';
-                    userInterests.textContent = userProfile.interests ? userProfile.interests.join(', ') : 'No interests available';
-                    userTopics.textContent = userProfile.topics ? userProfile.topics.join(', ') : 'No topics available';
-                    userAddress.textContent = userProfile.address || 'No address available';
-                } else {
-                    console.error('User data not found');
+      // Construct a URL relative to the current origin for local development
+      const url = new URL(`/.netlify/functions/get-user-profile`, window.location.origin);
+      url.searchParams.append("userId", currentUser.id);
+    
+        fetch(url.toString())
+        .then(response => {
+          if (!response.ok) {
+            console.error(`HTTP error!!!!!!! status: ${response.status}`);
+              if(response.status === 404){
+                  console.log("User data not found")
+              }
+              return null;
+          }
+          return response.json();
+        })
+        .then(data => {
+            if (data) { 
+                userProfileData = data.data
+                if(userName){
+                   userName.textContent = userProfileData.name || 'No name available'; 
+                }else{
+                   console.error('Could not find element with id userName')
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching user profile:', error);
-            });
+                if(userInterests){
+                   userInterests.textContent = userProfileData.interests ? userProfileData.interests.join(', ') : 'No interests available';
+                }else{
+                   console.error('Could not find element with id userInterests')
+                }
+                 if(userTopics){
+                  userTopics.textContent = userProfileData.topics ? userProfileData.topics.join(', ') : 'No topics available';
+                }else{
+                  console.error('Could not find element with id userTopics')
+                }
+                 if(userAddress){
+                  userAddress.textContent = userProfileData.address || 'No address available';
+                }else{
+                  console.error('Could not find element with id userAddress')
+                }
+                 if(paymentPlan){
+                   paymentPlan.textContent = userProfileData.paymentPlan || 'No plan selected';
+                }else{
+                  console.error('Could not find element with id paymentPlan')
+                }
+                if(paymentMethod){
+                   paymentMethod.textContent = userProfileData.paymentMethod || 'No method selected';
+                }else{
+                 console.error('Could not find element with id paymentMethod')
+               }
+            } else {
+                console.error('User data not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching user profile:', error);
+        });
     } else {
         console.log('User is not logged in');
     }
