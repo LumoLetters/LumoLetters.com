@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Check user authentication state
     const currentUser = netlifyIdentity.currentUser();
     updateUI(currentUser);
-    checkAndRedirect(currentUser);
 
 
     // Event listeners for login and logout
@@ -30,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     startInactivityTimer();
 
     // Netlify Identity Event Handlers
-   netlifyIdentity.on('init', async user => {
+     netlifyIdentity.on('init', async user => {
         console.log("Init event triggered!")
         updateUI(user);
          if(user){
@@ -41,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
            }
            handleLoginRedirect(user);
          }
-        checkAndRedirect(user);
     });
     netlifyIdentity.on('login', async user => {
            console.log("Login event triggered!")
@@ -57,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
    netlifyIdentity.on('logout', () => {
         console.log("Logout event triggered!")
-        //  netlifyIdentity.logout() --Removed this. logout is called in the onclick event
+          netlifyIdentity.logout();
         redirectToHome();
     });
 
@@ -75,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         logoutButtons.forEach(button => {
-             button.addEventListener('click', async () => {
+            button.addEventListener('click', async () => {
                 try {
                     await netlifyIdentity.logout(); // Wait for logout to complete
                     console.log("Logout completed!");
@@ -114,19 +112,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Check if the user is logged in and redirect if necessary
-    function checkAndRedirect(user) {
-        const currentPath = window.location.pathname.replace(/\/$/, '');
-
-        if (currentPath === '/login' && user) {
-            window.location.assign('/user/dashboard');
-        } else if (currentPath === '/user/dashboard' && !user) {
-            window.location.assign('/login');
-        }
-    }
 
     // Redirect user after login based on session storage flag
-     async function handleLoginRedirect(user) {
+    async function handleLoginRedirect(user) {
         console.log("handleLoginRedirect called!")
           if (user) {
             // fetch user profile from mongoDB
@@ -148,8 +136,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(data => {
                   if(data){
                     console.log("User data from MongoDB", data);
-                    const onboardingComplete = data.data?.onboardingComplete
-                    console.log("Is onboarding complete? " + onboardingComplete)
+                    const onboardingComplete = data.data?.onboardingComplete;
+                    console.log("Is onboarding complete? " + onboardingComplete);
                     if (onboardingComplete) {
                         window.location.assign("/user/dashboard");
                     } else {
