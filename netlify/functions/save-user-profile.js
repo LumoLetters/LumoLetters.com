@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const { MongoClient, ObjectId } = require('mongodb');
-require('dotenv').config({ path: './netlify/functions/shared/.env' }); // Explicitly define dotenv location
-
+const { ObjectId } = require('mongodb');
+require('dotenv').config({ path: './netlify/functions/shared/.env' });
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const DATABASE_NAME = process.env.DATABASE_NAME;
@@ -12,14 +11,14 @@ if (mongoose.models.UserProfile) {
     UserProfile = mongoose.model('UserProfile');
 } else {
     const userProfileSchema = new mongoose.Schema({
-        user_id: { type: String, required: true },
+        user_id: { type: String, required: true, unique: true },
         date: { type: Date, default: Date.now },
         onboardingComplete: { type: Boolean, default: false },
         interests: { type: [String], default: [] },
         topics: { type: [String], default: [] },
         name: { type: String },
         email: { type: String },
-        dob: { type: String },
+         dob: { type: String },
         address: {
             street: { type: String },
             city: { type: String },
@@ -28,10 +27,27 @@ if (mongoose.models.UserProfile) {
         },
         paymentPlan: { type: String },
         paymentMethod: { type: String },
-        // Add a catch all for any other data being passed, since strict is set to false
+       // Add a catch all for any other data being passed, since strict is set to false
     }, { strict: false });
 
     UserProfile = mongoose.model('UserProfile', userProfileSchema);
+}
+
+let Letter;
+
+if(mongoose.models.Letter){
+    Letter = mongoose.model('Letter')
+}else {
+        const letterSchema = new mongoose.Schema({
+            _id: { type: ObjectId, default: () => new ObjectId() },
+                sender_id: { type: String, required: true },
+                receiver_id: { type: String, required: true},
+                 content: { type: String, required: true},
+                sent_at: { type: Date, default: Date.now },
+                is_read: { type: Boolean, default: false },
+               is_default: {type: Boolean, default: false}
+        })
+    Letter = mongoose.model("Letter", letterSchema)
 }
 
 exports.handler = async (event, context) => {
@@ -40,40 +56,30 @@ exports.handler = async (event, context) => {
     }
 
     try {
-         const client = new MongoClient(MONGODB_URI);
-        await client.connect();
-         const db = client.db(DATABASE_NAME);
-        const usersCollection = db.collection('user-profile'); // Get your user profile collection here
-           const lettersCollection = db.collection('letters'); // Get your letters collection here
+        await mongoose.connect(MONGODB_URI, { dbName: DATABASE_NAME });
 
         const data = JSON.parse(event.body);
         console.log('Received Data:', data);
 
-        const { 
-            user_id, 
+        const {
+            user_id,
             onboardingComplete,
-            name, 
-            email, 
-            address,
-            paymentPlan, 
-            paymentMethod,
+            name,
+            email,
              dob,
-            interests,
+            address,
+            paymentPlan,
+            paymentMethod,
+              interests,
             topics,
-            generateLetter, // Check that you are using this variable to trigger letter generation
-             ...otherData
+              generateLetter,
+            ...otherData
         } = data;
 
-        const existingUser = await usersCollection.findOne({ user_id: user_id });
-        
-        let userProfile = {
-            user_id
-        };
+        let userProfile = await UserProfile.findOne({ user_id: user_id });
 
-
-        if (existingUser) {
-            // Use a more reliable way to update fields without overwriting other existing data
-            const updateObject = { $set: {} };
+        if (userProfile) {
+             const updateObject = { $set: {} };
 
             if (onboardingComplete !== undefined) updateObject.$set.onboardingComplete = onboardingComplete;
              if (name !== undefined) updateObject.$set.name = name;
@@ -94,78 +100,75 @@ exports.handler = async (event, context) => {
            for (const key in otherData) {
                  updateObject.$set[key] = otherData[key];
             }
-
-                if (Object.keys(updateObject.$set).length > 0) {
-                  const result = await usersCollection.updateOne({ user_id: user_id }, updateObject);
-                  console.log('Update Result:', result);
-                   // Fetch updated document for return
-                        const updatedUser = await usersCollection.findOne({user_id: user_id});
-                       if(generateLetter){ //Check that the if statement is correctly targeting your boolean
-                            const letterId = new ObjectId();
+            if (Object.keys(updateObject.$set).length > 0) {
+                 const result = await UserProfile.updateOne({user_id: user_id}, updateObject)
+                   const updatedUser = await UserProfile.findOne({user_id: user_id})
+                         if(generateLetter){
                            const defaultLetter = `This is a sample letter generated for you. You can create your own content here!`
                             console.log("Attempting to insert letter");
-                               await lettersCollection.insertOne({ // Verify your insert is working as expected
-                                    _id: letterId,
-                                    user_id: user_id,
-                                    letter: defaultLetter,
-                                    date: new Date(),
-                                });
-                               console.log("Letter inserted!")
-                        }
-                        return {
-                            statusCode: 200,
-                           body: JSON.stringify({ message: 'User data updated in MongoDB', data: updatedUser }),
-                       };
-                 } else {
-                      if(generateLetter){
-                             const letterId = new ObjectId();
-                             const defaultLetter = `This is a sample letter generated for you. You can create your own content here!`
-                                 await lettersCollection.insertOne({
-                                        _id: letterId,
-                                        user_id: user_id,
-                                        letter: defaultLetter,
-                                        date: new Date(),
-                                    });
-                        }
-                       return {
-                           statusCode: 200,
-                            body: JSON.stringify({ message: 'No updates needed', data: existingUser }),
-                         };
-                 }
+                            const newLetter = new Letter({
+                                    sender_id: user_id,
+                                    receiver_id: user_id,
+                                     content: defaultLetter,
+                                   is_default: true,
+                             })
+                             await newLetter.save()
 
-            } else {
-                // Insert new user
-                userProfile = {
-                    user_id,
-                    onboardingComplete,
-                    name,
-                    email,
-                    address: address || { street: '', city: '', state: '', zip: '' },
-                    paymentPlan,
-                    paymentMethod,
-                    dob,
-                    interests: interests || [],
-                    topics: topics || [],
-                   ...otherData
-                   
-                };
-             if(generateLetter){ //Check that the if statement is correctly targeting your boolean
-                   const letterId = new ObjectId();
-                     const defaultLetter = `This is a sample letter generated for you. You can create your own content here!`
-                       await lettersCollection.insertOne({  // Verify your insert is working as expected
-                            _id: letterId,
-                            user_id: user_id,
-                            letter: defaultLetter,
-                            date: new Date(),
-                        });
-                }
-                const result =  await usersCollection.insertOne(userProfile);
-                  console.log('Insert Result:', result);
+                            console.log("Letter inserted!")
+                        }
                     return {
                         statusCode: 200,
-                        body: JSON.stringify({ message: 'User data saved to MongoDB', data: userProfile }),
-                  };
-            }
+                        body: JSON.stringify({ message: 'User data updated in MongoDB', data: updatedUser }),
+                    };
+                } else {
+                      if(generateLetter){
+                            const defaultLetter = `This is a sample letter generated for you. You can create your own content here!`
+                                const newLetter = new Letter({
+                                    sender_id: user_id,
+                                      receiver_id: user_id,
+                                       content: defaultLetter,
+                                  is_default: true,
+                             })
+                             await newLetter.save()
+                        }
+                    return {
+                        statusCode: 200,
+                        body: JSON.stringify({ message: 'No updates needed', data: userProfile }),
+                    };
+                }
+
+        } else {
+            const newUserProfile = new UserProfile({
+                user_id,
+                onboardingComplete,
+                name,
+                email,
+                address: address || { street: '', city: '', state: '', zip: '' },
+                paymentPlan,
+                paymentMethod,
+                 dob,
+                  interests: interests || [],
+                    topics: topics || [],
+                ...otherData,
+
+            });
+               if(generateLetter){
+                           const defaultLetter = `This is a sample letter generated for you. You can create your own content here!`
+                         const newLetter = new Letter({
+                            sender_id: user_id,
+                             receiver_id: user_id,
+                            content: defaultLetter,
+                              is_default: true,
+                         })
+                        await newLetter.save()
+                }
+
+            await newUserProfile.save();
+            return {
+                statusCode: 200,
+                body: JSON.stringify({ message: 'User data saved to MongoDB', data: newUserProfile }),
+            };
+        }
 
     } catch (error) {
         console.error('Error saving user data:', error);
@@ -173,5 +176,7 @@ exports.handler = async (event, context) => {
             statusCode: 500,
             body: JSON.stringify({ error: 'Failed to save user data', details: error.message }),
         };
+    } finally {
+        await mongoose.disconnect();
     }
 };

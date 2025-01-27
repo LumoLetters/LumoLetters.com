@@ -1,16 +1,32 @@
-// assets/js/pages/dashboard.js
 import { handleFormSubmission } from '../components/form-handler.js';
+
+// Helper function to get user token
+async function getUserToken() {
+  const netlifyIdentity = window.netlifyIdentity;
+  const currentUser = netlifyIdentity.currentUser();
+  if (currentUser) {
+      return currentUser.token.access_token;
+  }
+  return null;
+}
 export async function fetchAndPopulateData() {
+    const token = await getUserToken();
     const netlifyIdentity = window.netlifyIdentity;
     const currentUser = netlifyIdentity.currentUser();
   let userData = {};
-
-    if (currentUser) {
+  console.log("currentUser", currentUser);
+    if (currentUser && token) {
+        
       // Construct a URL relative to the current origin for local development
       const url = new URL(`/.netlify/functions/get-user-profile`, window.location.origin);
       url.searchParams.append("userId", currentUser.id);
       try {
-        const response = await fetch(url.toString());
+        const response = await fetch(url.toString(),{
+          method: 'GET',
+          headers:{
+               'Authorization': `Bearer ${token}`
+            }
+          });
         if (!response.ok) {
           console.error(`HTTP error!!!!!!! status: ${response.status}`);
           if (response.status === 404) {
@@ -51,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async function () {
            console.log("userProfileData", userProfileData)
       let userDataHTML = ``;
        if(path === '/user/dashboard'){
-         
+
           userDataHTML =`
                 <div>
                  <p>Name: ${userProfileData.name || 'No name available'}</p>
@@ -77,17 +93,24 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         setActiveLink(path); // Highlight the correct link
     }
-    
+
   async function fetchUserLetters() {
+    const token = await getUserToken();
     const netlifyIdentity = window.netlifyIdentity;
     const currentUser = netlifyIdentity.currentUser();
 
-    if (currentUser) {
+    if (currentUser && token) {
+       console.log("Token being sent with letter request", token);
         // Construct a URL relative to the current origin for local development
       const url = new URL(`/.netlify/functions/get-user-letters`, window.location.origin);
-      url.searchParams.append("userId", currentUser.id);
+          url.searchParams.append("userId", currentUser.id);
       try {
-          const response = await fetch(url.toString());
+          const response = await fetch(url.toString(),{
+           method: 'GET',
+           headers:{
+               'Authorization': `Bearer ${token}`
+                }
+            });
         if (!response.ok) {
           console.error(`HTTP error!!!!!!! status: ${response.status}`);
           if (response.status === 404) {
@@ -131,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                             <label for="email">Email</label>
                             <input type="email" id="email" name="email" value="${userProfileData.email || ''}">
-                            
+
                            <label for="dob">Date of Birth</label>
                             <input type="text" id="dob" name="dob" value="${userProfileData.dob || ''}">
 
@@ -150,8 +173,10 @@ document.addEventListener('DOMContentLoaded', async function () {
           const letterList = userLetters.map(letter => {
             return `
                <div>
-                 <p>${letter.date}</p>
-                <p>${letter.letter}</p>
+                 <p>${letter.sent_at}</p>
+                 <p>from: ${letter.sender_id}</p>
+                <p>to: ${letter.receiver_id}</p>
+                <p>${letter.content}</p>
                </div>
              `
            }).join('')
@@ -227,7 +252,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const path = event.state?.path || '/user/dashboard';
     let content = ``;
     if (path === '/user/dashboard') {
-       
+
          content = `
                        <p>Select an option from the sidebar to get started.</p>
                          <div>
@@ -267,8 +292,10 @@ document.addEventListener('DOMContentLoaded', async function () {
          const letterList = userLetters.map(letter => {
             return `
                <div>
-                 <p>${letter.date}</p>
-                <p>${letter.letter}</p>
+                 <p>${letter.sent_at}</p>
+                 <p>from: ${letter.sender_id}</p>
+                <p>to: ${letter.receiver_id}</p>
+                <p>${letter.content}</p>
                </div>
              `
            }).join('')
