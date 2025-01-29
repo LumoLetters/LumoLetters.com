@@ -8,4 +8,4 @@ vendor
 .netlify
 
 # Environment Variables
-.env
+**/.env
