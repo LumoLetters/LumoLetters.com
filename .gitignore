@@ -6,3 +6,6 @@ vendor
 
 # Local Netlify folder
 .netlify
+
+# Environment Variables
+.env
