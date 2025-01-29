@@ -2,59 +2,62 @@ import { handleFormSubmission } from '../components/form-handler.js';
 
 // Helper function to get user token
 async function getUserToken() {
-  const netlifyIdentity = window.netlifyIdentity;
-  const currentUser = netlifyIdentity.currentUser();
-  if (currentUser) {
-      return currentUser.token.access_token;
-  }
-  return null;
+    const netlifyIdentity = window.netlifyIdentity;
+    const currentUser = netlifyIdentity.currentUser();
+    if (currentUser) {
+        return currentUser.token.access_token;
+    }
+    return null;
 }
+
 export async function fetchAndPopulateData() {
     const token = await getUserToken();
     const netlifyIdentity = window.netlifyIdentity;
     const currentUser = netlifyIdentity.currentUser();
-  let userData = {};
-  console.log("currentUser", currentUser);
+    let userData = {};
+    console.log("currentUser", currentUser);
     if (currentUser && token) {
-        
-      // Construct a URL relative to the current origin for local development
-      const url = new URL(`/.netlify/functions/get-user-profile`, window.location.origin);
-      url.searchParams.append("userId", currentUser.id);
-      try {
-        const response = await fetch(url.toString(),{
-          method: 'GET',
-          headers:{
-               'Authorization': `Bearer ${token}`
-            }
-          });
-        if (!response.ok) {
-          console.error(`HTTP error!!!!!!! status: ${response.status}`);
-          if (response.status === 404) {
-            console.log("User data not found")
-          }
-          return;
-        }
-        const data = await response.json();
-        if (data && data.data) {
-           userData = data.data;
-          console.log("userProfileData", userData);
-        } else {
-          console.error('User data not found');
-        }
 
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-      }
+        // Construct a URL relative to the current origin for local development
+        const url = new URL(`/.netlify/functions/get-user-profile`, window.location.origin);
+        url.searchParams.append("userId", currentUser.id);
+        try {
+            const response = await fetch(url.toString(), {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                console.error(`HTTP error!!!!!!! status: ${response.status}`);
+                if (response.status === 404) {
+                    console.log("User data not found")
+                }
+                return;
+            }
+            const data = await response.json();
+            if (data && data.data) {
+                userData = data.data;
+                console.log("userProfileData", userData);
+            } else {
+                console.error('User data not found');
+            }
+
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
     } else {
-      console.log('User is not logged in');
+        console.log('User is not logged in');
     }
-  return userData;
-  }
+    return userData;
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
     const sidebarLinks = document.querySelectorAll('.sidebar nav a');
     const dashboardContent = document.getElementById('dashboardContent');
     let userProfileData = {}; // Store your data here
-     let userLetters = [];
+    let userLetters = [];
+
     // Function to highlight the active sidebar link
     function setActiveLink(href) {
         sidebarLinks.forEach(link => {
@@ -64,11 +67,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Function to dynamically load content
     async function loadContent(title, content, path, pushState = true) {
-           console.log("userProfileData", userProfileData)
-      let userDataHTML = ``;
-       if(path === '/user/dashboard'){
+        console.log("userProfileData", userProfileData)
+        let userDataHTML = ``;
+        if (path === '/user/dashboard') {
 
-          userDataHTML =`
+            userDataHTML = `
                 <div>
                  <p>Name: ${userProfileData.name || 'No name available'}</p>
                  <p>Interests: ${userProfileData.interests ? userProfileData.interests.join(', ') : 'No interests available'}</p>
@@ -78,8 +81,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                   <p>Payment-Method: ${userProfileData.paymentMethod || 'No method selected'}</p>
              </div>
          `
-       }
-    dashboardContent.innerHTML = `
+        }
+        dashboardContent.innerHTML = `
             <h1>${title}</h1>
             <div class="form-container">
             ${content}
@@ -88,65 +91,65 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
 
         if (pushState && path) {
-            history.pushState({ path }, title, path); // Update browser URL
+            history.pushState({path}, title, path); // Update browser URL
         }
 
         setActiveLink(path); // Highlight the correct link
     }
 
-  async function fetchUserLetters() {
-    const token = await getUserToken();
-    const netlifyIdentity = window.netlifyIdentity;
-    const currentUser = netlifyIdentity.currentUser();
+    async function fetchUserLetters() {
+        const token = await getUserToken();
+        const netlifyIdentity = window.netlifyIdentity;
+        const currentUser = netlifyIdentity.currentUser();
 
-    if (currentUser && token) {
-       console.log("Token being sent with letter request", token);
-        // Construct a URL relative to the current origin for local development
-      const url = new URL(`/.netlify/functions/get-user-letters`, window.location.origin);
-          url.searchParams.append("userId", currentUser.id);
-      try {
-          const response = await fetch(url.toString(),{
-           method: 'GET',
-           headers:{
-               'Authorization': `Bearer ${token}`
+        if (currentUser && token) {
+            console.log("Token being sent with letter request", token);
+            // Construct a URL relative to the current origin for local development
+            const url = new URL(`/.netlify/functions/get-user-letters`, window.location.origin);
+            url.searchParams.append("userId", currentUser.id);
+            try {
+                const response = await fetch(url.toString(), {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    console.error(`HTTP error!!!!!!! status: ${response.status}`);
+                    if (response.status === 404) {
+                        console.log("User letters not found")
+                    }
+                    return;
                 }
-            });
-        if (!response.ok) {
-          console.error(`HTTP error!!!!!!! status: ${response.status}`);
-          if (response.status === 404) {
-            console.log("User letters not found")
-          }
-          return;
+                const data = await response.json();
+                if (data && data.data) {
+                    userLetters = data.data;
+                    console.log("userLetters", userLetters);
+                } else {
+                    console.error('User letters not found');
+                }
+            } catch (error) {
+                console.error('Error fetching user letters:', error);
+            }
+        } else {
+            console.log('User is not logged in');
         }
-        const data = await response.json();
-          if (data && data.data) {
-              userLetters = data.data;
-                console.log("userLetters", userLetters);
-          }else{
-              console.error('User letters not found');
-          }
-      } catch (error) {
-          console.error('Error fetching user letters:', error);
-      }
-    } else {
-        console.log('User is not logged in');
     }
-}
 
-  // Event Listener for sidebar links
-  sidebarLinks.forEach(link => {
-    link.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const href = link.getAttribute('href');
-      let content = ``;
-      // Load content based on the selected section
-      if (href === '/user/dashboard') {
-          content = `
+    // Event Listener for sidebar links
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            let content = ``;
+            // Load content based on the selected section
+            if (href === '/user/dashboard') {
+                content = `
                         <p>Select an option from the sidebar to get started.</p>
                     `
-        await loadContent('Welcome, ' + (userProfileData.name || 'User') + '!', content, href);
-      } else if (href === '/user/account-settings') {
-         content = `
+                await loadContent('Welcome, ' + (userProfileData.name || 'User') + '!', content, href);
+            } else if (href === '/user/account-settings') {
+                content = `
                         <p>Modify your profile information below.</p>
                         <form id="settingsForm">
                             <label for="name">Full Name</label>
@@ -167,11 +170,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                             <button type="submit">Save Changes</button>
                         </form>
                     `;
-        await loadContent('User Settings', content, href);
-      } else if (href === '/user/letter-history') {
-         await fetchUserLetters()
-          const letterList = userLetters.map(letter => {
-            return `
+                await loadContent('User Settings', content, href);
+            } else if (href === '/user/letter-history') {
+                await fetchUserLetters()
+                const letterList = userLetters.map(letter => {
+                    return `
                <div>
                  <p>${letter.sent_at}</p>
                  <p>from: ${letter.sender_id}</p>
@@ -179,14 +182,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <p>${letter.content}</p>
                </div>
              `
-           }).join('')
-        content = `
+                }).join('')
+                content = `
                         <p>View all the letters we’ve generated for you.</p>
                         ${letterList}
                     `;
-        await loadContent('Past Letters', content, href);
-      } else if (href === '/user/interests') {
-          const allInterests = ["Reading", "Travel", "Music/Film/Theater", "Arts/Crafts", "Sports", "History", "Food/Cooking", "Nature/Outdoors", "Gardening", "Puzzles & Games", "Writing", "Dancing", "Photography", "Collecting", "Volunteering", "Astronomy", "Religious Activities", "Technology", "Animals/Pets", "Current Events", "Health & Wellness", "Family", "Other"];
+                await loadContent('Past Letters', content, href);
+            } else if (href === '/user/interests') {
+                const allInterests = ["Reading", "Travel", "Music/Film/Theater", "Arts/Crafts", "Sports", "History", "Food/Cooking", "Nature/Outdoors", "Gardening", "Puzzles & Games", "Writing", "Dancing", "Photography", "Collecting", "Volunteering", "Astronomy", "Religious Activities", "Technology", "Animals/Pets", "Current Events", "Health & Wellness", "Family", "Other"];
                 const interestCheckboxes = allInterests.map(interest => {
                     const isChecked = userProfileData.interests?.includes(interest) ? 'checked' : '';
                     return `
@@ -196,7 +199,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         </div>
                     `;
                 }).join('');
-                 content = `
+                content = `
                         <p>Manage the themes and topics you've selected for letters.</p>
                         <form id="interestsForm">
                             <div class="checkbox-group">
@@ -209,9 +212,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                           <button type="submit">Save Interests</button>
                          </form>
                     `;
-         await loadContent('Your Interests', content, href);
-      } else if (href === '/user/topics') {
-         const allTopics = ["General Conversation", "Memories and Reminiscing on the Past", "Current Events", "Hobbies/Interests", "Inspirational/Motivational", "Humor/Lighthearted", "Gratitude", "Family Stories", "Travel Adventures", "Personal Accomplishments", "Life Lessons", "Friendly Check-in", "Historical Facts", "Science & Nature", "Book/Movie Reviews", "Local Culture", "Tips and Tricks", "Fictional Stories", "Poetry & Rhymes", "Descriptive Letters", "Art and Creativity", "Word Games/Riddles", "Specific Theme/Topic"];
+                await loadContent('Your Interests', content, href);
+            } else if (href === '/user/topics') {
+                const allTopics = ["General Conversation", "Memories and Reminiscing on the Past", "Current Events", "Hobbies/Interests", "Inspirational/Motivational", "Humor/Lighthearted", "Gratitude", "Family Stories", "Travel Adventures", "Personal Accomplishments", "Life Lessons", "Friendly Check-in", "Historical Facts", "Science & Nature", "Book/Movie Reviews", "Local Culture", "Tips and Tricks", "Fictional Stories", "Poetry & Rhymes", "Descriptive Letters", "Art and Creativity", "Word Games/Riddles", "Specific Theme/Topic"];
                 const topicCheckboxes = allTopics.map(topic => {
                     const isChecked = userProfileData.topics?.includes(topic) ? 'checked' : '';
                     return `
@@ -221,7 +224,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         </div>
                     `;
                 }).join('');
-                  content = `
+                content = `
                         <p>Manage the themes and topics you've selected for letters.</p>
                         <form id="topicsForm">
                             <div class="checkbox-group">
@@ -234,26 +237,35 @@ document.addEventListener('DOMContentLoaded', async function () {
                           <button type="submit">Save Topics</button>
                          </form>
                     `;
-          await loadContent('Your Topics', content, href);
-      } else if (href === '/user/plan') {
-        content = `
+                await loadContent('Your Topics', content, href);
+            } else if (href === '/user/plan') {
+                content = `
                         <p>View or update your subscription plan.</p>
-                        <button aria-label="Manage plan">
-                            <a href="/user/plan">Manage Plan</a>
-                        </button>
+                         <form id="settingsForm">
+                            <label for="paymentPlan">Select a Plan:</label>
+                            <select id="paymentPlan" name="paymentPlan">
+                                <option value="price_1N1gD54o5v1sTq9hH7rC8L00">Basic Plan $35/Month</option> <!-- Replace with your actual price ID -->
+                                <option value="price_1N1gD54o5v1sTq9hH7rC8L01">Premium Plan $59/Month</option> <!-- Replace with your actual price ID -->
+                                <option value="price_1N1gD54o5v1sTq9hH7rC8L02">Deluxe Plan $119/Month</option> <!-- Replace with your actual price ID -->
+                             </select>
+                            <div id="card-element"></div>
+                             <div id="payment-result" role="alert"></div>
+                             <button type="submit">Change plan</button>
+                        </form>
                     `;
-        await loadContent('Plan & Payment', content, href);
-      }
+                 await loadContent('Plan & Payment', content, href);
+                  import('/assets/js/components/dashboard-payment.js')
+            }
+        });
     });
-  });
 
-  // Handle popstate event to support browser back/forward navigation
-  window.addEventListener('popstate', async (event) => {
-    const path = event.state?.path || '/user/dashboard';
-    let content = ``;
-    if (path === '/user/dashboard') {
+    // Handle popstate event to support browser back/forward navigation
+    window.addEventListener('popstate', async (event) => {
+        const path = event.state?.path || '/user/dashboard';
+        let content = ``;
+        if (path === '/user/dashboard') {
 
-         content = `
+            content = `
                        <p>Select an option from the sidebar to get started.</p>
                          <div>
                            <p>Name: ${userProfileData.name || 'No name available'}</p>
@@ -264,9 +276,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                             <p>Payment-Method: ${userProfileData.paymentMethod || 'No method selected'}</p>
                          </div>
                         `
-        await loadContent('Welcome, ' + (userProfileData.name || 'User') + '!', content, path, false);
-    } else if (path === '/user/account-settings') {
-          content = `
+            await loadContent('Welcome, ' + (userProfileData.name || 'User') + '!', content, path, false);
+        } else if (path === '/user/account-settings') {
+            content = `
                         <p>Modify your profile information below.</p>
                         <form id="settingsForm">
                             <label for="name">Full Name</label>
@@ -286,11 +298,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                             <button type="submit">Save Changes</button>
                         </form>
                     `;
-      await loadContent('User Settings', content, path, false);
-    } else if (path === '/user/letter-history') {
-        await fetchUserLetters()
-         const letterList = userLetters.map(letter => {
-            return `
+            await loadContent('User Settings', content, path, false);
+        } else if (path === '/user/letter-history') {
+            await fetchUserLetters()
+            const letterList = userLetters.map(letter => {
+                return `
                <div>
                  <p>${letter.sent_at}</p>
                  <p>from: ${letter.sender_id}</p>
@@ -298,24 +310,24 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <p>${letter.content}</p>
                </div>
              `
-           }).join('')
-          content = `
+            }).join('')
+            content = `
                         <p>View all the letters we’ve generated for you.</p>
                         ${letterList}
                     `;
-      await loadContent('Past Letters', content, path, false);
-    } else if (path === '/user/interests') {
-          const allInterests = ["Reading", "Travel", "Music/Film/Theater", "Arts/Crafts", "Sports", "History", "Food/Cooking", "Nature/Outdoors", "Gardening", "Puzzles & Games", "Writing", "Dancing", "Photography", "Collecting", "Volunteering", "Astronomy", "Religious Activities", "Technology", "Animals/Pets", "Current Events", "Health & Wellness", "Family", "Other"];
-                const interestCheckboxes = allInterests.map(interest => {
-                    const isChecked = userProfileData.interests?.includes(interest) ? 'checked' : '';
-                    return `
+            await loadContent('Past Letters', content, path, false);
+        } else if (path === '/user/interests') {
+            const allInterests = ["Reading", "Travel", "Music/Film/Theater", "Arts/Crafts", "Sports", "History", "Food/Cooking", "Nature/Outdoors", "Gardening", "Puzzles & Games", "Writing", "Dancing", "Photography", "Collecting", "Volunteering", "Astronomy", "Religious Activities", "Technology", "Animals/Pets", "Current Events", "Health & Wellness", "Family", "Other"];
+            const interestCheckboxes = allInterests.map(interest => {
+                const isChecked = userProfileData.interests?.includes(interest) ? 'checked' : '';
+                return `
                        <div class="checkbox-item">
                             <input type="checkbox" id="${interest}" name="interests" value="${interest}" ${isChecked}>
                             <label for="${interest}">${interest}</label>
                         </div>
                     `;
-                }).join('');
-                 content = `
+            }).join('');
+            content = `
                         <p>Manage the themes and topics you've selected for letters.</p>
                         <form id="interestsForm">
                             <div class="checkbox-group">
@@ -328,19 +340,19 @@ document.addEventListener('DOMContentLoaded', async function () {
                           <button type="submit">Save Interests</button>
                          </form>
                     `;
-      await loadContent('Your Interests', content, path, false);
-    }  else if (path === '/user/topics') {
-        const allTopics = ["General Conversation", "Memories and Reminiscing on the Past", "Current Events", "Hobbies/Interests", "Inspirational/Motivational", "Humor/Lighthearted", "Gratitude", "Family Stories", "Travel Adventures", "Personal Accomplishments", "Life Lessons", "Friendly Check-in", "Historical Facts", "Science & Nature", "Book/Movie Reviews", "Local Culture", "Tips and Tricks", "Fictional Stories", "Poetry & Rhymes", "Descriptive Letters", "Art and Creativity", "Word Games/Riddles", "Specific Theme/Topic"];
-                const topicCheckboxes = allTopics.map(topic => {
-                    const isChecked = userProfileData.topics?.includes(topic) ? 'checked' : '';
-                    return `
+            await loadContent('Your Interests', content, path, false);
+        } else if (path === '/user/topics') {
+            const allTopics = ["General Conversation", "Memories and Reminiscing on the Past", "Current Events", "Hobbies/Interests", "Inspirational/Motivational", "Humor/Lighthearted", "Gratitude", "Family Stories", "Travel Adventures", "Personal Accomplishments", "Life Lessons", "Friendly Check-in", "Historical Facts", "Science & Nature", "Book/Movie Reviews", "Local Culture", "Tips and Tricks", "Fictional Stories", "Poetry & Rhymes", "Descriptive Letters", "Art and Creativity", "Word Games/Riddles", "Specific Theme/Topic"];
+            const topicCheckboxes = allTopics.map(topic => {
+                const isChecked = userProfileData.topics?.includes(topic) ? 'checked' : '';
+                return `
                         <div class="checkbox-item">
                             <input type="checkbox" id="${topic.replace(/ /g, '_')}" name="topics" value="${topic}" ${isChecked}>
                             <label for="${topic.replace(/ /g, '_')}">${topic}</label>
                         </div>
                     `;
-                }).join('');
-                  content = `
+            }).join('');
+            content = `
                         <p>Manage the themes and topics you've selected for letters.</p>
                         <form id="topicsForm">
                             <div class="checkbox-group">
@@ -353,40 +365,50 @@ document.addEventListener('DOMContentLoaded', async function () {
                           <button type="submit">Save Topics</button>
                          </form>
                     `;
-      await loadContent('Your Topics', content, path, false);
-    }else if (path === '/user/plan') {
-        content = `
+            await loadContent('Your Topics', content, path, false);
+        } else if (path === '/user/plan') {
+            content = `
                         <p>View or update your subscription plan.</p>
-                        <button aria-label="Manage plan">
-                            <a href="/user/plan">Manage Plan</a>
-                        </button>
+                         <form id="settingsForm">
+                            <label for="paymentPlan">Select a Plan:</label>
+                            <select id="paymentPlan" name="paymentPlan">
+                                <option value="price_1N1gD54o5v1sTq9hH7rC8L00">Basic Plan $35/Month</option> <!-- Replace with your actual price ID -->
+                                <option value="price_1N1gD54o5v1sTq9hH7rC8L01">Premium Plan $59/Month</option> <!-- Replace with your actual price ID -->
+                                <option value="price_1N1gD54o5v1sTq9hH7rC8L02">Deluxe Plan $119/Month</option> <!-- Replace with your actual price ID -->
+                             </select>
+                            <div id="card-element"></div>
+                             <div id="payment-result" role="alert"></div>
+                             <button type="submit">Change plan</button>
+                        </form>
                     `;
-      await loadContent('Plan & Payment', content, path, false);
-    }
-  });
+            await loadContent('Plan & Payment', content, path, false);
+             import('/assets/js/components/dashboard-payment.js')
+        }
+    });
     document.addEventListener('change', function (event) {
         if (event.target.name === 'interests') {
             const otherInterestInput = document.getElementById('otherInterestInput');
-            if(event.target.value === 'Other'){
+            if (event.target.value === 'Other') {
                 otherInterestInput.style.display = event.target.checked ? 'block' : 'none';
             }
-        }else if(event.target.name === 'topics'){
-          const specificTopicInput = document.getElementById('specificTopicInput');
-          if(event.target.value === 'Specific Theme/Topic'){
+        } else if (event.target.name === 'topics') {
+            const specificTopicInput = document.getElementById('specificTopicInput');
+            if (event.target.value === 'Specific Theme/Topic') {
                 specificTopicInput.style.display = event.target.checked ? 'block' : 'none';
             }
         }
     });
-     document.addEventListener('submit', async function (event){
-            await handleFormSubmission(event)
-            const userData = await fetchAndPopulateData();
-              userProfileData = userData
-               loadContent('Welcome, ' + (userProfileData.name || 'User') + '!', ` <p>Select an option from the sidebar to get started.</p>`, '/user/dashboard');
-        });
-    async function initializeDashboard(){
-          const userData = await fetchAndPopulateData()
-          userProfileData = userData
-     loadContent('Welcome, ' + (userProfileData.name || 'User') + '!', ` <p>Select an option from the sidebar to get started.</p>`, '/user/dashboard');
+    document.addEventListener('submit', async function (event) {
+        await handleFormSubmission(event)
+        const userData = await fetchAndPopulateData();
+        userProfileData = userData
+        loadContent('Welcome, ' + (userProfileData.name || 'User') + '!', ` <p>Select an option from the sidebar to get started.</p>`, '/user/dashboard');
+    });
+
+    async function initializeDashboard() {
+        const userData = await fetchAndPopulateData()
+        userProfileData = userData
+        loadContent('Welcome, ' + (userProfileData.name || 'User') + '!', ` <p>Select an option from the sidebar to get started.</p>`, '/user/dashboard');
     }
-      initializeDashboard()
+    initializeDashboard()
 });

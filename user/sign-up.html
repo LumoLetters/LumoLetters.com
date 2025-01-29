@@ -8,16 +8,16 @@ permalink: /user/sign-up/
   <div class="container">
     <h1>Sign Up</h1>
     <p>Fill out the information below to get started with LumoLetters.</p>
-    <form id="signup-form">
+    <form id="signupForm">
 
       <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
       </div>
-      <div class="form-group">
-        <label for="dob">Date of Birth (optional):</label>
-        <input type="text" id="dob" name="dob">
-      </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth (optional):</label>
+            <input type="text" id="dob" name="dob">
+        </div>
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
@@ -237,21 +237,19 @@ permalink: /user/sign-up/
     </div>
     <!--Payment plan place holder-->
       <h3>Connection Plan</h3>
-      <div class="form-group">
-        <label for="payment-plan">Select a Plan:</label>
-        <select id="payment-plan" name="payment-plan" required>
-          <option value="basic">Basic Plan $35/Month</option>
-          <option value="premium">Premium Plan $59/Month</option>
-          <option value="deluxe">Deluxe Plan $119/Month</option>
-        </select>
+       <div class="form-group">
+             <label for="paymentPlan">Select a Plan:</label>
+            <select id="paymentPlan" name="paymentPlan">
+                <option value="price_1N1gD54o5v1sTq9hH7rC8L00">Basic Plan $35/Month</option> <!-- Replace with your actual price ID -->
+                <option value="price_1N1gD54o5v1sTq9hH7rC8L01">Premium Plan $59/Month</option> <!-- Replace with your actual price ID -->
+                <option value="price_1N1gD54o5v1sTq9hH7rC8L02">Deluxe Plan $119/Month</option> <!-- Replace with your actual price ID -->
+            </select>
+         </div>
+     <div class="form-group" >
+         <div id="card-element"></div>
+          <div id="payment-result" role="alert"></div>
       </div>
-      <div class="form-group">
-        <label for="payment-method">Payment Method:</label>
-        <select id="payment-method" name="payment-method" required>
-          <option value="credit-card">Credit Card</option>
-          <option value="paypal">PayPal</option>
-        </select>
-      </div>
+    
       
       <div class="form-group authorization">
         <h3 style="margin-bottom: 10px;">Authorization</h3>
@@ -271,88 +269,5 @@ permalink: /user/sign-up/
 
 
 <!--sign-up.html script-->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      const signupForm = document.getElementById('signup-form');
-      signupForm.addEventListener('submit', function(event) {
-          event.preventDefault();  // Prevent form submission
-
-          // Collect the form data
-          const formData = new FormData(signupForm);
-          const formObject = {};
-          formData.forEach((value, key) => {
-            if (key === 'interests' || key === 'topics') {
-                if (formObject[key]) {
-                formObject[key].push(value); // Store multiple checkbox values
-                } else {
-                formObject[key] = [value];
-                }
-            } else {
-                formObject[key] = value;
-            }
-          });
-
-          console.log(formObject);  // Log the form data to ensure it's collected correctly
-
-          // Validate form fields before submitting
-          if (!formObject.name || !formObject.email || !formObject.agreement) {
-            alert('Please fill in all required fields.');
-            return;
-          }
-
-          // Ensure Netlify Identity is available
-          const netlifyIdentity = window.netlifyIdentity;
-          const currentUser = netlifyIdentity.currentUser();
-
-          if (currentUser) {
-              // Update user metadata to indicate onboarding is complete
-              currentUser.update({
-                user_metadata: {
-                    name: formObject.name,  // Use the name from the form input
-                    onboardingComplete: true,  // Set onboardingComplete to true upon submission
-                }
-              }).then(() => {
-                  console.log('User metadata updated');
-
-                  // Send updated user data to Netlify function to save to MongoDB
-                  fetch('/.netlify/functions/save-user-profile', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        user_id: currentUser.id,
-                        name: formObject.name,
-                        email: formObject.email,
-                        agreement: formObject.agreement,
-                        onboardingComplete: true,
-                        paymentPlan: formObject['payment-plan'],
-                         paymentMethod: formObject['payment-method'],
-                        address: {
-                            street: formObject.address,
-                            city: formObject.city,
-                            state: formObject.state,
-                            zip: formObject.zip
-                        },
-                          interests: formObject.interests || [], // Send empty array if no interests
-                         topics: formObject.topics || [], // Send empty array if no topics
-                    })
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                    console.log('User data saved:', data);
-                    window.location.href = '/user/dashboard';  // Redirect to dashboard after success
-                  })
-                  .catch((error) => {
-                    console.error('Error saving user data:', error);
-                  });
-              }).catch((error) => {
-                  console.error('Error updating user metadata:', error);
-              });
-          } else {
-              console.error('User is not logged in');
-          }
-      });
-  });
-</script>d
-  <!--before GPT-->
+<script src="{{ '/assets/js/components/signup-payment.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/components/auth.js' | relative_url }}" defer></script>
