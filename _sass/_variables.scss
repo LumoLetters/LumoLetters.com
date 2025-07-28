@@ -1,0 +1,161 @@
+// _sass/_variables.scss
+@use 'sass:map';
+@use 'sass:color';
+
+// ======================
+// 1. COLOR SYSTEM
+// ======================
+$color-primary: #274472;
+$color-secondary: #91b0dd;
+$color-accent: #BCC6D9;
+$color-white: #FFFFFF;
+$color-black: #121212;
+
+// Modern RGB Helper Function
+@function get-rgb($color) {
+  @return (
+    color.channel($color, 'red'), 
+    color.channel($color, 'green'), 
+    color.channel($color, 'blue')
+  );
+}
+
+$colors: (
+  neutral: (
+    100: #F8F9FA,
+    200: #E9ECEF,
+    300: #DEE2E6,
+    400: #CED4DA,
+    500: #ADB5BD,
+    600: #6C757D,
+    700: #495057,
+    800: #343A40,
+    900: #212529
+  ),
+  status: (
+    primary: $color-primary,
+    secondary: $color-secondary,
+    success: #28A745,
+    warning: #FFC107,
+    error: #DC3545,
+    info: #17A2B8,
+    success-rgb: get-rgb(#28A745),
+    error-rgb: get-rgb(#DC3545),
+    primary-rgb: get-rgb($color-primary),
+    secondary-rgb: get-rgb($color-secondary)
+  )
+);
+
+$alpha-levels: (
+  10: 0.1,
+  20: 0.2,
+  30: 0.3,
+  40: 0.4,
+  50: 0.5
+);
+
+// ======================
+// 2. TYPOGRAPHY
+// ======================
+$font-families: (
+  base: "'Inter', -apple-system, sans-serif",
+  headings: "'Georgia', serif"
+);
+
+$type-scale: (
+  100: (0.75rem, 1.2),
+  200: (0.875rem, 1.3),
+  300: (1rem, 1.5),
+  400: (1.125rem, 1.5),
+  500: (1.25rem, 1.4)
+);
+
+// ======================
+// 3. SPACING & SIZING
+// ======================
+$space-unit: 0.25rem;
+
+$spacing: (
+  0: 0,
+  1: $space-unit * 1,
+  2: $space-unit * 2,
+  3: $space-unit * 4,
+  4: $space-unit * 6
+);
+
+$sizes: (
+  max-width: 1200px,
+  radius: (
+    sm: 2px,
+    md: 4px
+  )
+);
+
+// ======================
+// 4. BREAKPOINTS
+// ======================
+$breakpoints: (
+  sm: 480px,
+  md: 768px,
+  lg: 1024px
+);
+
+// ======================
+// 5. MOTION & TRANSITIONS
+// ======================
+$transitions-duration: (
+  fast: 100ms,
+  normal: 200ms
+);
+
+$transitions-easing: (
+  in-out: cubic-bezier(0.4, 0, 0.2, 1)
+);
+
+$transitions: (
+  presets: (
+    fade: (
+      property: opacity,
+      duration: map.get($transitions-duration, 'normal'),
+      easing: map.get($transitions-easing, 'in-out'),
+      init: 0.9
+    ),
+    slide: (
+      property: transform,
+      duration: map.get($transitions-duration, 'fast'),
+      easing: map.get($transitions-easing, 'in-out'),
+      init: translateY(10px)
+    )
+  )
+);
+
+// ======================
+// 6. ELEVATION SYSTEM
+// ======================
+$elevations: (
+  1: 0 1px 3px rgba(map.get($colors, neutral, 900), 0.12),
+  2: 0 4px 6px -1px rgba(map.get($colors, neutral, 900), 0.1)
+);
+
+// ======================
+// 7. Z-INDEX LAYERS
+// ======================
+$z-layers: (
+  modal: 1300,
+  toast: 1500
+);
+
+// ======================
+// 8. UTILITY GENERATORS
+// ======================
+$utility-properties: (
+  m: margin,
+  p: padding
+);
+
+$directions: (
+  t: top,
+  r: right,
+  b: bottom,
+  l: left
+);

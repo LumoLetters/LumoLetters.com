@@ -1,0 +1,237 @@
+// _sass/_components.scss
+@use 'sass:map';
+@use 'sass:list';
+@use 'sass:color';
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+// ======================
+// BUTTON COMPONENT
+// ======================
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: map.get(vars.$spacing, 2) map.get(vars.$spacing, 3);
+  border-radius: map.get(map.get(vars.$sizes, 'radius'), 'md');
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  min-width: 100px;
+
+  // Default button style
+  background-color: white;
+  color: map.get(vars.$colors, 'neutral', '900');
+  border-color: map.get(vars.$colors, 'neutral', '300');
+
+  &:hover {
+    background-color: map.get(vars.$colors, 'neutral', '100');
+    border-color: map.get(vars.$colors, 'neutral', '400');
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(map.get(vars.$colors, 'status', 'primary'), 0.3);
+  }
+
+  // Primary button
+  &--primary {
+    background-color: map.get(vars.$colors, 'status', 'primary');
+    color: white;
+    border-color: transparent;
+
+    &:hover {
+      background-color: color.adjust(
+        map.get(vars.$colors, 'status', 'primary'),
+        $lightness: -8%
+      );
+    }
+  }
+
+  // Secondary button
+  &--secondary {
+    background-color: map.get(vars.$colors, 'status', 'secondary');
+    color: white;
+    border-color: transparent;
+
+    &:hover {
+      background-color: color.adjust(
+        map.get(vars.$colors, 'status', 'secondary'),
+        $lightness: -5%
+      );
+    }
+  }
+
+  // Outline button
+  &--outline {
+    background-color: transparent;
+    border-color: currentColor;
+    color: map.get(vars.$colors, 'status', 'primary');
+
+    &:hover {
+      background-color: rgba(map.get(vars.$colors, 'status', 'primary'), 0.05);
+    }
+  }
+
+  // Button sizes
+  &--sm {
+    padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+    font-size: 0.875rem;
+    min-width: 80px;
+  }
+
+  &--lg {
+    padding: map.get(vars.$spacing, 3) map.get(vars.$spacing, 4);
+    font-size: 1.125rem;
+    min-width: 120px;
+  }
+
+  // Loading state
+  &--loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 1em;
+      height: 1em;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      border-right-color: transparent;
+      animation: spin 0.75s linear infinite;
+    }
+  }
+
+  // Disabled state
+  &:disabled,
+  &--disabled {
+    opacity: 0.65;
+    pointer-events: none;
+  }
+}
+
+// ======================
+// CARD COMPONENT
+// ======================
+.card {
+  padding: map.get(vars.$spacing, 3);
+  background-color: white;
+  transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+  @include mix.card(1);
+
+  &:hover {
+    @include mix.elevation(2);
+  }
+
+  &--elevated {
+    @include mix.elevation(2);
+  }
+
+  &__title {
+    margin-bottom: map.get(vars.$spacing, 2);
+    color: map.get(vars.$colors, 'neutral', '900');
+    @include mix.text-style(500);
+  }
+
+  &__content {
+    margin-bottom: map.get(vars.$spacing, 3);
+    color: map.get(vars.$colors, 'neutral', '600');
+  }
+
+  &__footer {
+    display: flex;
+    gap: map.get(vars.$spacing, 2);
+    justify-content: flex-end;
+    border-top: 1px solid map.get(vars.$colors, 'neutral', '300');
+    padding-top: map.get(vars.$spacing, 3);
+    margin-top: map.get(vars.$spacing, 3);
+  }
+}
+
+// ======================
+// ALERT COMPONENT
+// ======================
+.alert {
+  padding: map.get(vars.$spacing, 3);
+  border-radius: map.get(map.get(vars.$sizes, 'radius'), 'md');
+  border-left: 4px solid transparent;
+
+  @include mix.text-style(300);
+
+  &--success {
+    background-color: rgba(map.get(vars.$colors, 'status', 'success'), 0.12);
+    border-color: map.get(vars.$colors, 'status', 'success');
+    color: map.get(vars.$colors, 'status', 'success');
+  }
+
+  &--warning {
+    background-color: rgba(map.get(vars.$colors, 'status', 'warning'), 0.12);
+    border-color: map.get(vars.$colors, 'status', 'warning');
+    color: map.get(vars.$colors, 'status', 'warning');
+  }
+
+  &--error {
+    background-color: rgba(map.get(vars.$colors, 'status', 'error'), 0.12);
+    border-color: map.get(vars.$colors, 'status', 'error');
+    color: map.get(vars.$colors, 'status', 'error');
+  }
+
+  &__title {
+    margin-bottom: map.get(vars.$spacing, 1);
+    @include mix.text-style(500);
+  }
+}
+
+// ======================
+// HEADER COMPONENT
+// ======================
+.site-header {
+  background-color: white;
+  border-bottom: 1px solid map.get(vars.$colors, 'neutral', '200');
+  padding: map.get(vars.$spacing, 2) 0;
+  position: relative;
+  z-index: 100;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .main-nav {
+    ul {
+      display: flex;
+      gap: map.get(vars.$spacing, 3);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      color: map.get(vars.$colors, 'neutral', '700');
+      text-decoration: none;
+      
+      &:hover {
+        color: map.get(vars.$colors, 'status', 'primary');
+      }
+    }
+  }
+
+  .auth-buttons {
+    display: flex;
+    gap: map.get(vars.$spacing, 2);
+  }
+}
+
+// Utility Classes
+.hidden {
+  display: none !important;
+}

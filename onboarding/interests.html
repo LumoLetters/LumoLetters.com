@@ -1,0 +1,46 @@
+<!--/onboarding/interests.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Interests</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+</head>
+<body>
+  <body data-onboarding-step="interests"></body>
+  <div id="onboarding-header"></div>
+
+  <main class="onboarding-content">
+    <h1>What are you interested in?</h1>
+    <p>Select at least 3 topics</p>
+    
+    <form id="onboarding-form" novalidate>
+      <div class="interests-grid">
+        <!-- Example interests -->
+        <label class="interest-option">
+          <input type="checkbox" name="interests" value="technology" />
+          <span>Technology</span>
+        </label>
+        <label class="interest-option">
+          <input type="checkbox" name="interests" value="arts" />
+          <span>Arts</span>
+        </label>
+        <label class="interest-option">
+          <input type="checkbox" name="interests" value="literature" />
+          <span>Literature</span>
+        </label>
+        <!-- Add more interests as needed -->
+      </div>
+
+      <div id="onboarding-error" style="display:none; color: red; margin-bottom: 1em;"></div>
+      
+      <button type="submit" class="btn-primary" id="submit-btn">
+        Continue →
+      </button>
+    </form>
+  </main>
+
+  <script type="module" src="/assets/js/lib/onboarding.mjs"></script>
+</body>
+</html>

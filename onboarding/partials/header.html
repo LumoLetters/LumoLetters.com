@@ -1,0 +1,13 @@
+<!--onboarding/partials/header.html-->
+<!-- Progress Bar -->
+<div class="progress-container">
+    <div class="progress-steps">
+      <div class="step ${step === 'welcome' ? 'active' : ''}">1. Welcome</div>
+      <div class="step ${step === 'address' ? 'active' : ''}">2. Address</div>
+      <div class="step ${step === 'interests' ? 'active' : ''}">3. Interests</div>
+      <div class="step ${step === 'complete' ? 'active' : ''}">4. Complete</div>
+    </div>
+  </div>
+  
+  <!-- Error Display -->
+  <div id="onboarding-error" class="error-message" style="display: none;"></div>

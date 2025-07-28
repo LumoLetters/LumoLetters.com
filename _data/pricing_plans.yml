@@ -1,0 +1,40 @@
+plans:
+  - id: "basic"
+    name: "Basic Connection"
+    price: 35
+    price_id: "price_basic_monthly" # Replace with actual Stripe Price ID
+    interval: "month"
+    description: "Perfect for staying connected"
+    features:
+      - "1 Personalized letter/month"
+      - "Return envelope & stamp"
+      - "Letter history tracking"
+    popular: false
+    
+  - id: "premium"
+    name: "Premium Connection"
+    price: 59
+    price_id: "price_premium_monthly" # Replace with actual Stripe Price ID
+    interval: "month"
+    description: "Enhanced connection experience"
+    features:
+      - "2 Personalized letters/month"
+      - "Return envelopes & stamps"
+      - "Priority Queue"
+      - "Letter history tracking"
+    popular: true
+    
+  - id: "deluxe"
+    name: "Deluxe Connection"
+    price: 119
+    price_id: "price_deluxe_monthly" # Replace with actual Stripe Price ID
+    interval: "month"
+    description: "Premium storytelling experience"
+    features:
+      - "4 Personalized letters/month"
+      - "Return envelopes & stamps"
+      - "Priority Queue"
+      - "Higher personalization"
+      - "Letter history tracking"
+      - "Keepsake book (every 6 months)"
+    popular: false

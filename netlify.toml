@@ -1,0 +1,63 @@
+[build]
+  command = "npm run build"
+  publish = "_site"
+  functions = "netlify/functions"
+
+[build.environment]
+  JEKYLL_ENV = "production"
+  NODE_VERSION = "20"
+  STRIPE_SECRET_KEY = "@stripe_secret_key"
+  STRIPE_WEBHOOK_SECRET = "@stripe_webhook_secret"
+
+[dev]
+  command = "npm run start"
+  port = 8888
+  targetPort = 4001
+  publish = "_site"
+  autoLaunch = true
+  framework = "#custom"
+
+[[redirects]]
+  from = "/.well-known/appspecific/*"
+  to = "/404.html"
+  status = 404
+  force = true
+  log_level = "silent"
+
+[[redirects]]
+  from = "/error"
+  to = "/error.html"
+  status = 200
+
+[[redirects]]
+  from = "/api/webhooks/stripe"
+  to = "/.netlify/functions/stripe-webhooks"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com http://localhost:35729; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.stripe.com; object-src 'none'; connect-src 'self' https://dev-rfi7yfcndb5e8ycp.us.auth0.com https://api.stripe.com ws://localhost:35729; frame-src 'self' https://js.stripe.com https://hooks.stripe.com;"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/onboarding/welcome"
+  to = "/welcome"
+  status = 301
+
+[[redirects]]
+  from = "/app/dashboard"
+  to = "/app/dashboard/"
+  status = 301
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/app/dashboard/"
+  status = 200
+  force = true

@@ -1,0 +1,41 @@
+<!--/onboarding/welcome.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome Onboarding - LumoLetters</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body data-onboarding-step="welcome">
+  <div id="onboarding-header"></div>
+
+  <main class="onboarding-content">
+    <h1>Welcome to LumoLetters!</h1>
+    <p>Let's set up your account</p>
+    
+    <form id="onboarding-form" novalidate>
+      <div class="form-group">
+        <label for="name">Full Name<span aria-hidden="true">*</span></label>
+        <input type="text" id="name" name="name" required autocomplete="name" />
+      </div>
+      
+      <div class="form-group">
+        <label for="newsletter">
+          <input type="checkbox" id="newsletter" name="subscribeNewsletter" />
+          Send me monthly newsletters
+        </label>
+      </div>
+
+      <div id="onboarding-error" style="display:none; color: red; margin-bottom: 1em;" role="alert" aria-live="assertive"></div>
+      
+      <button type="submit" class="btn-primary" id="submit-btn" aria-label="Continue to next step">
+        Continue →
+      </button>
+    </form>
+  </main>
+
+  <script type="module" src="/assets/js/lib/onboarding.mjs"></script>
+</body>
+</html>

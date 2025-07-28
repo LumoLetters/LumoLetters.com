@@ -1,0 +1,248 @@
+// netlify/functions/subscription.mjs
+
+import Stripe from 'stripe';
+import { connectToDatabase, User } from './db-connect.mjs';
+import { verifyTokenAndGetSub } from './lib/auth-utils.mjs';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// CORS Headers
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+};
+
+export const handler = async (event) => {
+  // Handle CORS preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: CORS_HEADERS };
+  }
+
+  try {
+    await connectToDatabase();
+    const auth0Sub = await verifyTokenAndGetSub(event);
+    const user = await User.findOne({ auth0Id: auth0Sub });
+
+    if (!user) {
+      return { 
+        statusCode: 404, 
+        headers: CORS_HEADERS,
+        body: JSON.stringify({ error: 'User not found' }) 
+      };
+    }
+
+    const pathParts = event.path.split('/');
+    const action = pathParts[pathParts.length - 1];
+
+    if (event.httpMethod === 'GET') {
+      return handleGet(action, user, CORS_HEADERS);
+    } else if (event.httpMethod === 'POST') {
+      const data = JSON.parse(event.body || '{}');
+      return handlePost(action, data, user, CORS_HEADERS);
+    } else {
+      return {
+        statusCode: 405,
+        headers: CORS_HEADERS,
+        body: JSON.stringify({ error: 'Method not allowed' })
+      };
+    }
+  } catch (error) {
+    console.error('Subscription handler error:', error);
+    const statusCode = error.statusCode || 500;
+    return {
+      statusCode,
+      headers: CORS_HEADERS,
+      body: JSON.stringify({ 
+        error: error.message || 'An internal server error occurred' 
+      })
+    };
+  }
+};
+
+async function handleGet(action, user, headers) {
+  switch (action) {
+    case 'status':
+      return getSubscriptionStatus(user, headers);
+    case 'portal':
+      return createCustomerPortal(user, headers);
+    default:
+      return {
+        statusCode: 404,
+        headers,
+        body: JSON.stringify({ error: `Endpoint not found: ${action}` })
+      };
+  }
+}
+
+async function handlePost(action, data, user, headers) {
+  switch (action) {
+    case 'create-checkout':
+      return createCheckoutSession(data, user, headers);
+    default:
+      return {
+        statusCode: 404,
+        headers,
+        body: JSON.stringify({ error: `Endpoint not found: ${action}` })
+      };
+  }
+}
+
+async function getSubscriptionStatus(user, headers) {
+  try {
+    if (!user.stripeCustomerId) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ 
+          status: 'no_subscription',
+          subscription: null 
+        })
+      };
+    }
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: user.stripeCustomerId,
+      status: 'all',
+      limit: 1
+    });
+
+    const statusMap = {
+      active: 'active',
+      past_due: 'past_due',
+      unpaid: 'unpaid',
+      canceled: 'canceled',
+      incomplete: 'incomplete',
+      incomplete_expired: 'expired',
+      trialing: 'trial'
+    };
+
+    if (subscriptions.data.length === 0) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ 
+          status: 'no_subscription',
+          subscription: null 
+        })
+      };
+    }
+
+    const subscription = subscriptions.data[0];
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        status: statusMap[subscription.status] || subscription.status,
+        subscription: {
+          id: subscription.id,
+          status: subscription.status,
+          current_period_end: subscription.current_period_end,
+          plan: subscription.items.data[0]?.price.nickname || 
+                subscription.items.data[0]?.price.id || 
+                'unknown'
+        }
+      })
+    };
+  } catch (error) {
+    console.error('Subscription status error:', error);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: 'Failed to get subscription status' })
+    };
+  }
+}
+
+async function createCheckoutSession(data, user, headers) {
+  try {
+    const { priceId, successUrl, cancelUrl } = data;
+    
+    if (!priceId) {
+      return { 
+        statusCode: 400, 
+        headers, 
+        body: JSON.stringify({ error: 'Price ID is required' }) 
+      };
+    }
+
+    let stripeCustomerId = user.stripeCustomerId;
+    
+    // Create customer if needed
+    if (!stripeCustomerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.name,
+        metadata: { auth0Id: user.auth0Id, userId: user._id.toString() },
+        address: {
+          line1: user.address?.street,
+          city: user.address?.city,
+          state: user.address?.state,
+          postal_code: user.address?.zip,
+          country: 'US'
+        }
+      });
+      
+      stripeCustomerId = customer.id;
+      user.stripeCustomerId = stripeCustomerId;
+      await user.save();
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      customer: stripeCustomerId,
+      line_items: [{ price: priceId, quantity: 1 }],
+      mode: 'subscription',
+      success_url: successUrl || `${process.env.URL}/onboarding/complete?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${process.env.URL}/onboarding/experience`,
+      metadata: { auth0Id: user.auth0Id },
+      consent_collection: { terms_of_service: 'required' },
+      client_reference_id: user._id.toString() // For CSRF protection
+    });
+
+    return { 
+      statusCode: 200, 
+      headers, 
+      body: JSON.stringify({ sessionId: session.id }) 
+    };
+  } catch (error) {
+    console.error('Checkout session error:', error);
+    return { 
+      statusCode: 500, 
+      headers, 
+      body: JSON.stringify({ 
+        error: 'Failed to create checkout session',
+        code: error.code
+      }) 
+    };
+  }
+}
+
+async function createCustomerPortal(user, headers) {
+  try {
+    if (!user.stripeCustomerId) {
+      return { 
+        statusCode: 400, 
+        headers, 
+        body: JSON.stringify({ error: 'No subscription found' }) 
+      };
+    }
+
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: user.stripeCustomerId,
+      return_url: `${process.env.URL}/app/account.html`
+    });
+
+    return { 
+      statusCode: 200, 
+      headers, 
+      body: JSON.stringify({ url: portalSession.url }) 
+    };
+  } catch (error) {
+    console.error('Customer portal error:', error);
+    return { 
+      statusCode: 500, 
+      headers, 
+      body: JSON.stringify({ error: 'Failed to create billing portal' }) 
+    };
+  }
+}

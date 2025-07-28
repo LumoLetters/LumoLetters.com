@@ -1,0 +1,32 @@
+# Header Navigation
+header:
+  - title: Home
+    url: /
+  - title: About
+    url: /pages/about.html
+  - title: Pricing
+    url: /pages/pricing.html
+  - title: FAQ
+    url: /pages/faq.html
+
+# Footer Navigation
+footer:
+  company:
+    - title: About
+      url: /pages/about.html
+    - title: Team
+      url: /pages/team.html
+    - title: Testimonials
+      url: /pages/testimonials.html
+  
+  legal:
+    - title: Terms
+      url: /pages/terms.html
+    - title: Privacy
+      url: /pages/privacy.html
+  
+  support:
+    - title: FAQ
+      url: /pages/faq.html
+    - title: Contact
+      url: /pages/contact.html

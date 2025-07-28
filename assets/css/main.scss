@@ -1,0 +1,19 @@
+---
+---
+
+// Reset styles
+@use 'reset' as reset; 
+
+// Core settings and utilities
+@use 'variables' as vars;
+@use 'mixins' as mixins; 
+
+// Global base styles
+@use 'global' as global;
+
+// Component-specific styles
+@use 'components' as components; 
+
+
+@use 'onboarding' as onboarding;
+@use 'dashboard' as dashboard;

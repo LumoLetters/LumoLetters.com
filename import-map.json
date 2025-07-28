@@ -1,0 +1,5 @@
+{
+    "imports": {
+      "@auth0/auth0-spa-js": "./node_modules/@auth0/auth0-spa-js/dist/auth0-spa-js.production.js"
+    }
+  }

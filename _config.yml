@@ -1,0 +1,67 @@
+# Site settings
+title: LumoLetters
+description: >-
+  Rediscover the joy of a pen pal with letters crafted just for you and delivered to your door.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://lumoletters.com" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+
+
+# Exclude from processing
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
+  - netlify/
+  - README.md
+  - package.json
+  - package-lock.json
+  - netlify.toml
+  - .netlify/
+  - .git/
+  - .gitignore
+
+# Sass settings
+sass:
+  style: compressed
+  load_paths:
+    - _sass
+    - node_modules
+
+# Collections
+collections:
+  data:
+    output: false
+
+# Defaults
+defaults:
+  -
+    scope:
+      path: "app"
+    values:
+      layout: "dashboard"
+  -
+    scope:
+      path: "onboarding"
+    values:
+      layout: "default"
+  -
+    scope:
+      path: "pages"
+    values:
+      layout: "default"
+      
+# Include folders and auth0-spa
+include:
+  - _headers
+  - _redirects
+  - node_modules/@auth0/auth0-spa-js/dist/auth0-spa-js.production.esm.js
+  - 404.html
+redirectUri: window.location.origin + '/callback'

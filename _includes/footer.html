@@ -1,0 +1,43 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <span class="logo-text">LumoLetters</span>
+        <p class="tagline">Where Connection Finds You</p>
+      </div>
+      
+      <nav class="footer-nav">
+        <div class="footer-nav-column">
+          <h3>Company</h3>
+          <ul>
+            {% for item in site.data.navigation.footer.company %}
+            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <div class="footer-nav-column">
+          <h3>Legal</h3>
+          <ul>
+            {% for item in site.data.navigation.footer.legal %}
+            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <div class="footer-nav-column">
+          <h3>Support</h3>
+          <ul>
+            {% for item in site.data.navigation.footer.support %}
+            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </nav>
+    </div>
+    
+    <div class="footer-bottom">
+      <p class="copyright">&copy; {% assign current_year = 'now' | date: "%Y" %}{{ current_year }} LumoLetters. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

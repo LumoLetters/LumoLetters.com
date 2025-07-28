@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} | {% endif %}LumoLetters</title>
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; connect-src 'self' https://*.auth0.com; frame-src 'self' https://*.auth0.com;">
+</head>
+<body>
+  {% include header.html %}
+
+  <main role="main" class="container content">
+    {{ content }}
+  </main>
+
+  {% include footer.html %}
+
+  <!-- Main entry point -->
+  <script type="module" src="{{ '/assets/js/main.mjs' | relative_url }}" defer></script>
+
+  <div id="error-container" class="error-message" style="display: none;"></div>
+</body>
+</html>

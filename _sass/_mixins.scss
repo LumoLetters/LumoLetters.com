@@ -1,0 +1,187 @@
+// _sass/_mixins.scss
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:math';
+@use 'sass:list';
+@use 'sass:string';
+@use 'variables' as vars;
+
+// ======================
+// 1. MEDIA QUERY MIXINS
+// ======================
+@mixin respond-to($breakpoint, $logic: 'min', $feature: 'width') {
+  @if map.has-key(vars.$breakpoints, $breakpoint) {
+    $bp: map.get(vars.$breakpoints, $breakpoint);
+    $operator: if($logic == 'max', 'max-width', 'min-width');
+    
+    @if $feature != 'width' {
+      $operator: string.slice($operator, 0, string.index($operator, '-width') - 1) + '-' + $feature;
+    }
+    
+    @media (#{$operator}: if($logic == 'max', $bp - 0.02px, $bp)) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoint: #{$breakpoint}. Available: #{map.keys(vars.$breakpoints)}";
+  }
+}
+
+@mixin mq($breakpoint, $feature: 'width') {
+  @include respond-to($breakpoint, 'min', $feature) { @content; }
+}
+
+@mixin mq-down($breakpoint, $feature: 'width') {
+  @include respond-to($breakpoint, 'max', $feature) { @content; }
+}
+
+// ======================
+// 2. ELEVATION SYSTEM
+// ======================
+@mixin elevation($level) {
+  @if $level == 0 {
+    box-shadow: none;
+    transform: none;
+  } @else if map.has-key(vars.$elevations, $level) {
+    $elevation: map.get(vars.$elevations, $level);
+    box-shadow: list.nth($elevation, 1);
+    transform: list.nth($elevation, 2);
+    
+    @if $level > 0 {
+      transition: 
+        box-shadow map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out'),
+        transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+    }
+  } @else {
+    @error "Invalid elevation level: #{$level}. Use 0-#{list.length(vars.$elevations)}";
+  }
+}
+
+// ======================
+// 3. TRANSITION MIXINS
+// ======================
+@mixin transition-preset($preset) {
+  @if not map.has-key(vars.$transitions, 'presets') {
+    @error "Transition presets not defined in variables";
+  }
+  
+  $presets: map.get(vars.$transitions, 'presets');
+  
+  @if map.has-key($presets, $preset) {
+    $t: map.get($presets, $preset);
+    transition: #{map.get($t, 'property')} 
+                #{map.get($t, 'duration')} 
+                #{map.get($t, 'easing')};
+    
+    @if map.has-key($t, 'init') {
+      #{map.get($t, 'property')}: map.get($t, 'init');
+    }
+  } @else {
+    @warn "Invalid transition preset: #{$preset}. Using default";
+    transition: all 
+                map.get(vars.$transitions-duration, 'normal') 
+                map.get(vars.$transitions-easing, 'in-out');
+  }
+}
+
+// ======================
+// 4. TYPOGRAPHY MIXINS
+// ======================
+@mixin text-style($level, $responsive: true) {
+  @if not map.has-key(vars.$type-scale, $level) {
+    @error "Invalid type level: #{$level}";
+  }
+
+  $style: map.get(vars.$type-scale, $level);
+  $size: list.nth($style, 1);
+  $line-height: list.nth($style, 2);
+  $letter-spacing: if(list.length($style) > 2, list.nth($style, 3), 0);
+
+  font-size: $size;
+  line-height: $line-height;
+  letter-spacing: $letter-spacing;
+
+  @if $responsive and $level >= 500 {
+    @include mq('md') {
+      font-size: calc(#{$size} * 1.15);
+    }
+  }
+}
+
+// ======================
+// 5. LAYOUT MIXINS
+// ======================
+@mixin container($padding: true) {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+
+  @if $padding {
+    padding: 0 map.get(vars.$spacing, 3);
+  }
+}
+
+@mixin grid($columns: 12, $gap: map.get(vars.$spacing, 3)) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+// ======================
+// 6. COMPONENT MIXINS
+// ======================
+@mixin button-base($type: solid) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  
+  @if $type == solid {
+    background-color: map.get(vars.$colors, 'neutral', '100');
+    color: map.get(vars.$colors, 'neutral', '900');
+  } @else {
+    background-color: transparent;
+    border-color: currentColor;
+  }
+}
+
+@mixin card($elevation: 1) {
+  @include elevation($elevation);
+  background-color: map.get(vars.$colors, 'neutral', '100');
+  border-radius: map.get(map.get(vars.$sizes, 'radius'), 'md');
+  padding: map.get(vars.$spacing, 3);
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+  &:hover {
+    @if $elevation < list.length(vars.$elevations) {
+      @include elevation($elevation + 1);
+    }
+  }
+}
+
+// ======================
+// 7. UTILITY MIXINS
+// ======================
+@mixin focus-ring {
+  outline: 2px solid map.get(vars.$colors, 'status', 'info');
+  outline-offset: 2px;
+}
+
+@mixin list-reset {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+// ======================
+// 8. DEBUGGING MIXINS
+// ======================
+@mixin debug($color: rgba(255,0,0,0.1)) {
+  outline: 1px solid $color;
+  background: linear-gradient(45deg, $color 25%, transparent 25%);
+}
+
+@mixin debug-child($color: rgba(0,255,0,0.1)) {
+  * { @include debug($color); }
+}

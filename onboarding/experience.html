@@ -1,0 +1,31 @@
+<!--/onboarding/experience.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Choose Your Plan</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+</head>
+<body>
+<body data-onboarding-step="experience"></body>
+  <div id="onboarding-header"></div>
+
+  <main class="onboarding-content">
+    <h1>Choose Your Plan</h1>
+    <!-- Add your payment/plan form here -->
+    
+    <form id="onboarding-form" novalidate>
+      <!-- Plan options here -->
+      
+      <div id="onboarding-error" style="display:none; color: red; margin-bottom: 1em;"></div>
+      
+      <button type="submit" class="btn-primary" id="submit-btn">
+        Continue →
+      </button>
+    </form>
+  </main>
+
+  <script type="module" src="/assets/js/lib/onboarding.mjs"></script>
+</body>
+</html>

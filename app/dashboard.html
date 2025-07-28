@@ -1,0 +1,30 @@
+---
+layout: dashboard
+title: My Dashboard
+js: dashboard
+---
+
+<!--app/dashboard.html-->
+
+<div class="dashboard-welcome">
+  <div id="welcome-message">
+    <!-- Will be populated by JS when user is authenticated -->
+    <p>Loading your dashboard...</p>
+  </div>
+</div>
+
+<div class="dashboard-letters">
+  <h2>My Letters</h2>
+  <div id="letters-container" class="letters-grid">
+    <!-- Will be populated by JS when letters are loaded -->
+    <p>Loading your letters...</p>
+  </div>
+</div>
+
+<div id="profile-incomplete" style="display: none;">
+  <div class="notification warning">
+    <h3>Complete Your Profile</h3>
+    <p>To start receiving personalized letters, please complete your profile setup.</p>
+    <a href="/onboarding/address.html" class="btn btn-primary">Complete Profile</a>
+  </div>
+</div>

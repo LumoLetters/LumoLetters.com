@@ -1,0 +1,89 @@
+// _sass/_global.scss
+@use 'sass:meta';
+@use 'sass:map';
+@use 'sass:string';
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+// ======================
+// 1. CSS CUSTOM PROPERTIES
+// ======================
+:root {
+  --container-width: #{map.get(vars.$sizes, 'max-width')};
+  --transition-default: #{map.get(vars.$transitions-duration, normal)} #{map.get(vars.$transitions-easing, in-out)};
+}
+
+// ======================
+// 2. BASE TYPOGRAPHY
+// ======================
+body {
+  font-family: string.unquote(map.get(vars.$font-families, 'base'));
+  @include mix.text-style(300);
+  color: map.get(vars.$colors, 'neutral', '900');
+  background-color: white;
+}
+
+h1 { @include mix.text-style(500); }
+
+// ======================
+// 3. LAYOUT PRIMITIVES
+// ======================
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 map.get(vars.$spacing, 3);
+}
+
+.hidden { display: none !important; }
+
+// ======================
+// 4. COMPONENT STYLES
+// ======================
+.loading {
+  position: relative;
+  opacity: 0.5;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    border: 3px solid map.get(vars.$colors, 'neutral', '600');
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+.error-notification {
+  background: rgba(map.get(vars.$colors, 'status', 'error'), 0.12);
+  color: map.get(vars.$colors, 'status', 'error');
+  padding: map.get(vars.$spacing, 3);
+  border-radius: map.get(map.get(vars.$sizes, 'radius'), 'md');
+}
+
+// ======================
+// 5. UTILITY CLASSES
+// ======================
+@each $prop, $property in vars.$utility-properties {
+  @each $dir, $direction in vars.$directions {
+    @each $size, $value in vars.$spacing {
+      .#{$prop}#{$dir}-#{$size} {
+        #{$property}-#{$direction}: #{$value} !important;
+      }
+    }
+  }
+}
+
+// ======================
+// 6. ANIMATIONS
+// ======================
+@keyframes spin {
+  to { 
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+  }
+}

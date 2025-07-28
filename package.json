@@ -1,0 +1,39 @@
+{
+  "name": "lumoletters",
+  "version": "1.0.0",
+  "description": "AI-generated, human-curated physical letters service",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "bundle exec jekyll build",
+    "start": "bundle exec jekyll serve --port 4001 --livereload",
+    "netlify-build": "bundle exec jekyll build && netlify functions:build",
+    "postinstall": "cd netlify/functions && npm install"
+  },
+  "dependencies": {
+    "@auth0/auth0-spa-js": "^2.1.0",
+    "@stripe/stripe-js": "^4.0.0",
+    "mongoose": "^8.7.0"
+},
+  "devDependencies": {
+    "@netlify/functions": "4.0.0",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.2.0",
+    "netlify-cli": "^21.2.0",
+    "stripe": "^14.12.1"
+},
+
+  "overrides": {
+    "rimraf": "^5.0.5",
+    "glob": "^10.3.10",
+    "axios": "^1.6.7",
+    "protobufjs": "^7.2.6",
+    "follow-redirects": "^1.15.6",
+    "@grpc/grpc-js": "^1.10.8",
+    "braces": "^3.0.3",
+    "word-wrap": "^1.2.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

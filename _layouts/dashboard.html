@@ -1,0 +1,27 @@
+---
+layout: default
+---
+
+<!--_layouts/dashboard.html-->
+
+<div class="dashboard-container">
+  <aside class="dashboard-sidebar">
+    <nav class="dashboard-nav">
+      <ul>
+        <li><a href="/app/dashboard" {% if page.url == '/app/dashboard' %}class="active"{% endif %}>Dashboard</a></li>
+        <li><a href="/app/topics" {% if page.url == '/app/topics' %}class="active"{% endif %}>My Topics</a></li>
+        <li><a href="/app/account" {% if page.url == '/app/account' %}class="active"{% endif %}>Account</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="dashboard-content">
+    {% if page.title %}
+    <h1 class="dashboard-title">{{ page.title }}</h1>
+    {% endif %}
+
+    {{ content }}
+  </div>
+</div>
+
+<script type="module" src="/assets/js/app-init.mjs"></script>

@@ -1,0 +1,46 @@
+<!--/callback.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processing Login - LumoLetters</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script type="module" src="/assets/js/auth-callback.mjs"></script>
+  <style>
+    .callback-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid #3498db;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .error-message {
+      color: #dc3545;
+      max-width: 400px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="callback-container">
+    <div class="spinner"></div>
+    <p>Processing your login...</p>
+    <p id="error-message" class="error-message" style="display: none;"></p>
+  </div>
+</body>
+</html>
