@@ -1,0 +1,11 @@
+# Local Netlify folder
+.netlify/
+
+# Environment variables file with secrets
+.env
+
+# Jekyll build output folder
+_site/
+
+# Node modules
+node_modules/
