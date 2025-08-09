@@ -1,5 +1,6 @@
 {
     "imports": {
-      "@auth0/auth0-spa-js": "./node_modules/@auth0/auth0-spa-js/dist/auth0-spa-js.production.js"
+      "@auth0/auth0-spa-js": "./node_modules/@auth0/auth0-spa-js/dist/auth0-spa-js.production.js",
+       "@stripe/stripe-js": "https://esm.sh/@stripe/stripe-js@4"
     }
   }

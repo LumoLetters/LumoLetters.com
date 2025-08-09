@@ -44,9 +44,8 @@ export function removeItem(key) {
   }
 }
 
-/**
- * Clear all items with the application namespace
- */
+//Clear all items with the application namespace
+
 export function clearAll() {
   try {
     Object.keys(localStorage).forEach(key => {

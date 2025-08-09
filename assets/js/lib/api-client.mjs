@@ -67,3 +67,13 @@ export function put(endpoint, data = {}) {
 export function del(endpoint) {
   return apiRequest(endpoint, { method: 'DELETE' });
 }
+
+const apiClient = {
+  apiRequest,
+  get,
+  post,
+  put,
+  del
+};
+
+export default apiClient;

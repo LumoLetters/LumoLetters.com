@@ -55,9 +55,8 @@ export function handleError(error, options = {}) {
   return errorMessage;
 }
 
-/**
- * Initializes global error handlers
- */
+// Initializes global error handlers
+
 export function initErrorHandling() {
   // Handle uncaught errors
   window.addEventListener('error', (event) => {

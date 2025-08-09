@@ -1,30 +1,27 @@
-// /Assets/js/dashboard.mjs Dashboard functionality
-import { getUserProfile } from './authentication.mjs';
-import * as api from './lib/api-client.mjs';
-import { ENDPOINTS } from './lib/constants.mjs';
+// /assets/js/dashboard.mjs - Dashboard functionality
+import authentication from './authentication.mjs';
+import apiClient from './lib/api-client.mjs';
 
-/**
- * Initialize the dashboard page
- */
+// Initialize the dashboard page
 async function initDashboard() {
   try {
     // Check if user is authenticated
-    const userProfile = await getUserProfile();
+    const isAuthenticated = await authentication.checkAuthentication();
     
-    if (!userProfile) {
+    if (!isAuthenticated) {
       // Redirect to home if not authenticated
       window.location.href = '/';
       return;
     }
     
+    // Get user profile
+    const userProfile = await authentication.getOrCreateUserProfile();
+    
     // Update welcome message
     updateWelcomeMessage(userProfile);
     
-    // Get user data from our database
-    const userData = await getUserData();
-    
     // Check if profile is complete
-    checkProfileCompletion(userData);
+    checkProfileCompletion(userProfile);
     
     // Load user's letters
     await loadLetters();
@@ -36,30 +33,16 @@ async function initDashboard() {
 
 /**
  * Update the welcome message with the user's name
- * @param {Object} userProfile - The user's Auth0 profile
+ * @param {Object} userProfile - The user's profile
  */
 function updateWelcomeMessage(userProfile) {
   const welcomeMessage = document.getElementById('welcome-message');
   if (welcomeMessage) {
-    const name = userProfile.name || userProfile.nickname || 'there';
+    const name = userProfile.name || userProfile.email || 'there';
     welcomeMessage.innerHTML = `
       <h2>Welcome, ${name}!</h2>
       <p>Here's your LumoLetters dashboard where you can manage your letters and preferences.</p>
     `;
-  }
-}
-
-/**
- * Get user data from our database
- * @returns {Promise<Object>} - User data
- */
-async function getUserData() {
-  try {
-    const userData = await api.get(ENDPOINTS.AUTH);
-    return userData;
-  } catch (error) {
-    console.error('Error getting user data:', error);
-    throw error;
   }
 }
 
@@ -70,7 +53,7 @@ async function getUserData() {
 function checkProfileCompletion(userData) {
   const profileIncompleteElement = document.getElementById('profile-incomplete');
   
-  // Check if profile is complete (this logic will depend on your requirements)
+  // Check if profile is complete
   const isProfileComplete = userData && 
                           userData.address && 
                           userData.interests && 
@@ -79,16 +62,20 @@ function checkProfileCompletion(userData) {
   if (!isProfileComplete && profileIncompleteElement) {
     profileIncompleteElement.style.display = 'block';
   }
+  
+  // Redirect to onboarding if profile is incomplete
+  if (!isProfileComplete) {
+    // You can uncomment this if you want automatic redirect
+    // window.location.href = '/onboarding/welcome';
+  }
 }
 
-/**
- * Load the user's letters
- */
+// Load the user's letters
 async function loadLetters() {
   try {
     const lettersContainer = document.getElementById('letters-container');
     
-    const letters = await api.get(ENDPOINTS.LETTERS);
+    const letters = await apiClient.get('letters');
     
     if (!letters || letters.length === 0) {
       // No letters yet
@@ -164,11 +151,6 @@ function displayError(message) {
     }, 5000);
   }
 }
-
-if (userProfile && !userProfile.profileComplete) {
-  window.location.href = '/onboarding/' + (userProfile.profileStep || 'welcome');
-}
-
 
 // Initialize the dashboard when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initDashboard);

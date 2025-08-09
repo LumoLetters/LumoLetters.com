@@ -50,3 +50,6 @@ async function handleCallback() {
 
 // Initialize the callback handler when DOM is ready
 document.addEventListener('DOMContentLoaded', handleCallback);
+
+// Export the function so it can be imported if needed
+export { handleCallback };

@@ -1,0 +1,48 @@
+# A collection of topics and prompts to inspire letter writing.
+# Categories help users find the perfect starting point.
+
+topics:
+  - category: Personal Updates & News
+    prompts:
+      - "Share a recent success or accomplishment, no matter how small."
+      - "Describe a challenge you've overcome recently."
+      - "What's the best thing that happened to you this week?"
+      - "Talk about a new hobby or interest you've picked up."
+      - "Share a funny story or amusing moment from your day."
+      - "What new things have you learned lately?"
+      - "Give an update on a long-term project you're working on."
+
+  - category: Memories & Reflection
+    prompts:
+      - "Describe a favorite childhood memory in detail."
+      - "Write about a person who has had a major impact on your life."
+      - "What's a piece of advice you received that has always stuck with you?"
+      - "Think about a favorite holiday memory and what made it special."
+      - "Describe the best trip or vacation you've ever taken."
+      - "What's a song that instantly takes you back to a specific time or place?"
+      - "If you could re-live one day, which would it be and why?"
+
+  - category: Questions & Curiosity
+    prompts:
+      - "If you could ask your future self one question, what would it be?"
+      - "What is something you've always been curious about?"
+      - "Ask for advice on a decision you're currently facing."
+      - "What's a book, movie, or show you've enjoyed recently and why?"
+      - "What skill do you wish you could master instantly?"
+
+  - category: Gratitude & Appreciation
+    prompts:
+      - "Write about three things you are grateful for right now."
+      - "Describe a simple pleasure that always brings you joy."
+      - "Thank someone for their kindness or support."
+      - "What's a favorite place that always makes you feel peaceful?"
+      - "Appreciate something about the current season (spring, summer, etc.)."
+
+  - category: Creative & Imaginative Prompts
+    prompts:
+      - "Describe your perfect day, from morning to night."
+      - "If you had a superpower, what would it be and how would you use it?"
+      - "Write a short story starting with the line: 'The mysterious package arrived on a Tuesday...'"
+      - "Describe a dream you remember vividly."
+      - "Invent a new holiday and describe its traditions."
+      - "If you could have dinner with any three people (living or dead), who would you choose?"

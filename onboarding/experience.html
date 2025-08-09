@@ -1,31 +1,68 @@
-<!--/onboarding/experience.html-->
+---
+layout: default
+title: Choose Your Experience
+---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Choose Your Plan</title>
-  <link rel="stylesheet" href="/assets/css/main.css" />
-</head>
-<body>
-<body data-onboarding-step="experience"></body>
-  <div id="onboarding-header"></div>
+<body data-onboarding-step="experience">
+
+  <div id="onboarding-header">
+    <!-- The header partial will be loaded here by onboarding.mjs -->
+  </div>
 
   <main class="onboarding-content">
-    <h1>Choose Your Plan</h1>
-    <!-- Add your payment/plan form here -->
-    
+    <h1>Choose Your Experience</h1>
+    <p class="subtitle">Select the plan that best fits your desired connection.</p>
+
+    <!-- This form will be handled by onboarding.mjs -->
     <form id="onboarding-form" novalidate>
-      <!-- Plan options here -->
-      
-      <div id="onboarding-error" style="display:none; color: red; margin-bottom: 1em;"></div>
+
+      <div class="pricing-plans-container">
+        {% for plan in site.data.pricing_plans.plans %}
+          <div class="plan-card {% if plan.popular %}popular{% endif %}">
+            
+            {% if plan.popular %}
+              <div class="popular-banner">Most Popular</div>
+            {% endif %}
+
+            <input 
+              type="radio" 
+              name="plan" 
+              id="{{ plan.id }}" 
+              value="{{ plan.price_id }}"
+              required 
+              {% if plan.popular %}checked{% endif %}
+            >
+            <label for="{{ plan.id }}" class="plan-label">
+              <div class="plan-header">
+                <h2>{{ plan.name }}</h2>
+                <p class="description">{{ plan.description }}</p>
+              </div>
+
+              <div class="plan-price">
+                <span class="price-amount">${{ plan.price }}</span>
+                <span class="price-interval">/ {{ plan.interval }}</span>
+              </div>
+
+              <ul class="features-list">
+                {% for feature in plan.features %}
+                  <li>{{ feature }}</li>
+                {% endfor %}
+              </ul>
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div id="onboarding-error" class="onboarding-error" style="display:none;"></div>
       
       <button type="submit" class="btn-primary" id="submit-btn">
-        Continue →
+        Continue to Payment →
       </button>
+
     </form>
   </main>
 
+  <!-- This script contains the logic for this page -->
   <script type="module" src="/assets/js/lib/onboarding.mjs"></script>
+
 </body>
-</html>

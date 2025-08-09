@@ -74,9 +74,8 @@ export async function connectToDatabase() {
   }
 }
 
-/**
- * User Schema with Onboarding Support
- */
+// User Schema with Onboarding Support
+
 const userSchema = new mongoose.Schema({
   auth0Id: {
     type: String,
@@ -186,16 +185,14 @@ const userSchema = new mongoose.Schema({
   collection: 'lumoletters_userprofiles'
 });
 
-/**
- * Virtual for formatted address
- */
+// Virtual for formatted address
+ 
 userSchema.virtual('formattedAddress').get(function () {
   return `${this.address.street}, ${this.address.city}, ${this.address.state} ${this.address.zipCode}`;
 });
 
-/**
- * Middleware to sync onboarding address to top-level address & mark completion
- */
+// Middleware to sync onboarding address to top-level address & mark completion
+ 
 userSchema.pre('save', function (next) {
   // Sync onboarding.address to top-level address
   if (this.onboarding?.address) {
@@ -210,6 +207,10 @@ userSchema.pre('save', function (next) {
     };
   }
 
+  if (this.isModified('onboarding.interests') && this.onboarding.interests) {
+      this.interests = this.onboarding.interests;
+  }
+  
   // Ensure profileComplete gets set
   if (this.profileStep === 'complete' && !this.profileComplete) {
     this.profileComplete = true;
@@ -218,9 +219,8 @@ userSchema.pre('save', function (next) {
   next();
 });
 
-/**
- * Letter Schema
- */
+// Letter Schema
+
 const letterSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -276,15 +276,13 @@ const letterSchema = new mongoose.Schema({
   collection: 'lumoletters_userletters'
 });
 
-/**
- * Export models with proper error handling
- */
+// Export models with proper error handling
+ 
 export const User = mongoose.models.User || mongoose.model('User', userSchema);
 export const Letter = mongoose.models.Letter || mongoose.model('Letter', letterSchema);
 
-/**
- * Migration helper to patch onboarding structure
- */
+// Migration helper to patch onboarding structure
+ 
 export async function migrateExistingUsers() {
   try {
     console.log('🔄 Starting user migration...');
@@ -322,9 +320,8 @@ export async function migrateExistingUsers() {
   }
 }
 
-/**
- * Test database connection
- */
+// Test database connection
+
 export async function testConnection() {
   try {
     await connectToDatabase();
@@ -339,6 +336,7 @@ export async function testConnection() {
 }
 
 // Only run migration in development and only if connection succeeds
+
 if (process.env.NODE_ENV === 'development') {
   testConnection().then(success => {
     if (success) {

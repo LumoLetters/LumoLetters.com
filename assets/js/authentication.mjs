@@ -90,12 +90,16 @@ export async function login() {
 export async function handleAuthRedirect() {
   try {
     const params = new URLSearchParams(window.location.search);
+    console.debug('URL params:', params.toString());
+
     const code = params.get('code');
     const state = params.get('state');
     const error = params.get('error');
+    console.debug('code:', code, 'state:', state, 'error:', error);
 
     if (error) {
       const errorDesc = params.get('error_description') || 'Authentication failed';
+      console.error('Auth error:', errorDesc);
       throw new Error(errorDesc);
     }
 
@@ -104,16 +108,18 @@ export async function handleAuthRedirect() {
     }
 
     const savedState = getItem(AUTH.STATE_KEY);
+    console.debug('Saved state from storage:', savedState);
     if (state !== savedState) {
       throw new Error('Invalid state parameter');
     }
 
     const verifier = getItem(AUTH.CODE_VERIFIER);
+    console.debug('Code verifier from storage:', verifier);
     if (!verifier) {
       throw new Error('Missing code verifier');
     }
 
-    console.debug('Exchanging authorization code for tokens');
+    console.debug('Exchanging auth code for tokens...');
     const response = await fetch(`https://${config.auth0.domain}/oauth/token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -128,25 +134,26 @@ export async function handleAuthRedirect() {
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.error('Token exchange error response:', errorData);
       throw new Error(errorData.error_description || 'Token exchange failed');
     }
 
     const { access_token, id_token } = await response.json();
+    console.debug('Tokens received:', { access_token, id_token });
+
     setItem(AUTH.TOKEN_KEY, access_token);
     setItem(AUTH.ID_TOKEN_KEY, id_token);
 
     removeItem(AUTH.STATE_KEY);
     removeItem(AUTH.CODE_VERIFIER);
+
     window.history.replaceState({}, document.title, window.location.pathname);
 
     console.debug('Authentication flow completed successfully');
     return { access_token, id_token };
   } catch (error) {
     console.error('Authentication redirect failed:', error);
-    handleError(error, { 
-      type: 'auth',
-      redirect: false 
-    });
+    handleError(error, { type: 'auth', redirect: false });
     throw error;
   }
 }
@@ -250,3 +257,15 @@ export function updateAuthUI(isAuthenticated) {
     });
   }
 }
+
+const authentication = {
+  login,
+  logout,
+  checkAuthentication,
+  getOrCreateUserProfile,
+  updateAuthUI,
+  getToken,
+  handleAuthRedirect
+};
+
+export default authentication;

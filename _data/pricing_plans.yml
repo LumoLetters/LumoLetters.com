@@ -2,7 +2,7 @@ plans:
   - id: "basic"
     name: "Basic Connection"
     price: 35
-    price_id: "price_basic_monthly" # Replace with actual Stripe Price ID
+    price_id: "price_1RtMmdD17fmHGu2veSCvGDOa"
     interval: "month"
     description: "Perfect for staying connected"
     features:
@@ -14,7 +14,7 @@ plans:
   - id: "premium"
     name: "Premium Connection"
     price: 59
-    price_id: "price_premium_monthly" # Replace with actual Stripe Price ID
+    price_id: "price_1RtMoGD17fmHGu2vxCS1TPie" 
     interval: "month"
     description: "Enhanced connection experience"
     features:
@@ -27,7 +27,7 @@ plans:
   - id: "deluxe"
     name: "Deluxe Connection"
     price: 119
-    price_id: "price_deluxe_monthly" # Replace with actual Stripe Price ID
+    price_id: "price_1RtMoeD17fmHGu2vD9x9PTT0" 
     interval: "month"
     description: "Premium storytelling experience"
     features:
@@ -36,5 +36,5 @@ plans:
       - "Priority Queue"
       - "Higher personalization"
       - "Letter history tracking"
-      - "Keepsake book (every 6 months)"
+      - "Yearly Keepsake Book"
     popular: false

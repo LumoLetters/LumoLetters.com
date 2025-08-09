@@ -35,11 +35,6 @@ sass:
     - _sass
     - node_modules
 
-# Collections
-collections:
-  data:
-    output: false
-
 # Defaults
 defaults:
   -
@@ -57,11 +52,11 @@ defaults:
       path: "pages"
     values:
       layout: "default"
-      
+
 # Include folders and auth0-spa
 include:
   - _headers
   - _redirects
+  - import-map.json
   - node_modules/@auth0/auth0-spa-js/dist/auth0-spa-js.production.esm.js
   - 404.html
-redirectUri: window.location.origin + '/callback'

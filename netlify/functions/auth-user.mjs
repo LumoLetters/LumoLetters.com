@@ -1,8 +1,10 @@
 // netlify/functions/auth-user.mjs
+
 import { connectToDatabase, User } from './db-connect.mjs';
 import { verifyTokenAndGetSub } from './lib/auth-utils.mjs';
 
 // CORS headers
+
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': process.env.NODE_ENV === 'development' ? '*' : (process.env.URL || '*'),
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
@@ -11,6 +13,7 @@ const CORS_HEADERS = {
 };
 
 // GET: Retrieve user profile
+
 async function getProfile(event) {
   console.log('🔍 Getting user profile...');
   
@@ -38,6 +41,7 @@ async function getProfile(event) {
 }
 
 // POST: Find or create user profile
+
 async function findOrCreateProfile(event) {
   console.log('🔍 Finding or creating user profile...');
   
@@ -105,6 +109,7 @@ async function findOrCreateProfile(event) {
 }
 
 // PUT: Update user profile
+
 async function updateProfile(event) {
   console.log('🔄 Updating user profile...');
   
@@ -144,6 +149,7 @@ async function updateProfile(event) {
 }
 
 // Main handler
+
 export async function handler(event) {
   console.log('🚀 Function invoked:', {
     method: event.httpMethod,

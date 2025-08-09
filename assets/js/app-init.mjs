@@ -7,7 +7,14 @@ import * as ui from './lib/ui-handler.mjs';
 
 export async function initApp() {
   try {
-    if (window.location.pathname === '/callback') return;
+    if (window.location.pathname === '/callback') {
+      console.debug('Handling Auth0 login redirect...');
+      const { handleAuthRedirect } = await import('./authentication.mjs');
+      await handleAuthRedirect();
+
+      // Optionally: update UI here if callback page shows anything
+      return;
+    }
 
     console.log('Initializing app...');
     ui.initUIListeners();
@@ -15,10 +22,9 @@ export async function initApp() {
     const isAuthenticated = await checkAuthentication();
     console.log('Auth state:', isAuthenticated);
 
-    ui.updateAuthUI(isAuthenticated); // Shows or hides login/logout
+    ui.updateAuthUI(isAuthenticated);
     eventBus.emit(EVENTS.AUTH_LOGIN, { isAuthenticated });
 
-    // Optional: Only redirect if you're on a protected route
     const isProtectedPage = ['/app/dashboard.html', '/app/account.html', '/app/topics.html'].includes(window.location.pathname);
     if (isProtectedPage && !isAuthenticated) {
       window.location.href = '/';
@@ -30,9 +36,9 @@ export async function initApp() {
   }
 }
 
-
 // Global auth error listener
 eventBus.on(EVENTS.AUTH_ERROR, (data) => {
   console.error('Auth error event:', data);
   ui.showErrorMessage(data.message || 'Authentication error');
 });
+

@@ -2,13 +2,6 @@
 import { connectToDatabase, Letter, User } from './db-connect.mjs';
 import { verifyTokenAndGetSub } from './lib/auth-utils.mjs'; // IMPORT THE NEW UTILITY
 
-// CORS Headers (Consider making these common too, or use Netlify's global header rules)
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': process.env.NODE_ENV === 'development' ? '*' : (process.env.URL || '*'), // Restrict in prod
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS', // Specify allowed methods
-};
-
 
 /**
  * Get user's MongoDB _id from Auth0 sub

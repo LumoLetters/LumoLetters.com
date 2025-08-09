@@ -1,0 +1,104 @@
+---
+layout: dashboard
+title: Account
+---
+
+<main class="account-content">
+  <div class="account-container">
+    
+    <!-- Page Header -->
+    <header class="page-header">
+      <h1>Account Settings</h1>
+      <p class="subtitle">Manage your profile and subscription</p>
+    </header>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading account information...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="error-container" style="display: none;">
+      <div class="error-message">
+        <h3>Unable to load account information</h3>
+        <p id="error-details"></p>
+        <button id="retry-btn" class="btn-secondary">Try Again</button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" style="display: none;">
+      
+      <!-- Profile Section -->
+      <section class="account-section">
+        <h2>Profile Information</h2>
+        <div class="profile-card">
+          <div class="profile-field">
+            <label>Name</label>
+            <span id="user-name">-</span>
+          </div>
+          <div class="profile-field">
+            <label>Email</label>
+            <span id="user-email">-</span>
+          </div>
+          <div class="profile-field">
+            <label>Address</label>
+            <div id="user-address">
+              <div id="address-display" style="display: none;">
+                <span id="address-street">-</span><br>
+                <span id="address-city">-</span>, <span id="address-state">-</span> <span id="address-zip">-</span>
+              </div>
+              <span id="no-address" style="display: none;">No address on file</span>
+            </div>
+          </div>
+          <button id="edit-profile-btn" class="btn-secondary">Edit Profile</button>
+        </div>
+      </section>
+
+      <!-- Subscription Section -->
+      <section class="account-section">
+        <h2>Subscription</h2>
+        <div class="subscription-card">
+          <div class="subscription-status">
+            <div class="status-indicator">
+              <span id="status-badge" class="badge">-</span>
+            </div>
+            <div class="subscription-details">
+              <h3 id="current-plan">Loading...</h3>
+              <p id="subscription-info">-</p>
+              <p id="next-billing" style="display: none;">
+                Next billing: <span id="billing-date">-</span>
+              </p>
+            </div>
+          </div>
+          
+          <div class="subscription-actions">
+            <button id="manage-subscription-btn" class="btn-primary" style="display: none;">
+              Manage Subscription
+            </button>
+            <button id="start-subscription-btn" class="btn-primary" style="display: none;">
+              Start Subscription
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interests Section -->
+      <section class="account-section">
+        <h2>Letter Topics</h2>
+        <div class="interests-card">
+          <p>Your selected topics of interest:</p>
+          <div id="user-interests" class="interests-list">
+            Loading...
+          </div>
+          <button id="edit-interests-btn" class="btn-secondary">Update Topics</button>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+</main>
+
+<script type="module" src="/assets/js/account.mjs"></script>

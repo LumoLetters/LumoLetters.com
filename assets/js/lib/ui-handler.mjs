@@ -8,7 +8,7 @@ import * as auth from '../authentication.mjs';
          initAuthButtons();
          eventBus.on(EVENTS.AUTH_LOGIN, (data) => {
            console.log('AUTH_LOGIN event:', data);
-           updateAuthUI(data.isAuthenticated); // Fix: Use data.isAuthenticated
+           updateAuthUI(data.isAuthenticated); 
          });
          eventBus.on(EVENTS.AUTH_LOGOUT, () => {
            console.log('AUTH_LOGOUT event');
