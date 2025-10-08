@@ -3,7 +3,7 @@
 const config = {
   auth0: {
     domain: "dev-rfi7yfcndb5e8ycp.us.auth0.com",
-    clientId: "yFAETJSMSqlxpzKzYmvBgKOSF7657c9z",
+    clientId: "g4CJUvtN3ifDyuS7S4HYp8woUpJ3h16l",
     audience: "https://lumoletters.com",
     redirectUri: window.location.origin + '/callback',
     logoutRedirectUri: window.location.origin,
