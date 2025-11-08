@@ -1,8 +1,8 @@
-//assets.js/auth-callback.mjs
+//assets/js/auth-callback.mjs
 
-import { handleAuthRedirect } from './authentication.mjs';
-import { checkOnboardingStatus } from './lib/onboarding.mjs';
-import { handleError } from './error-handler.mjs';
+import { handleAuthRedirect } from '/assets/js/authentication.mjs';
+import { checkOnboardingStatus } from '/assets/js/lib/onboarding.mjs';
+import { handleError } from '/assets/js/error-handler.mjs';
   
 //Handles the Auth0 callback after authentication
 
