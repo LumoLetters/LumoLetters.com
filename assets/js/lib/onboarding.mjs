@@ -214,33 +214,30 @@ export async function runExperienceStep() {
   await checkAuthentication();
   await loadHeader(step);
 
-  let stripe;
-  try {
-    stripe = await loadStripe(config.stripe.publicKey);
-  } catch (error) {
-    console.error('Stripe.js initialization failed:', error);
-    const errorDiv = document.getElementById('onboarding-error');
-    if(errorDiv) {
-      errorDiv.textContent = 'Payment system could not be loaded. Please refresh the page.';
-      errorDiv.style.display = 'block';
-    }
-    return;
-  }
-
   const form = document.getElementById('onboarding-form');
   if (!form) return;
 
   const submitBtn = document.getElementById('submit-btn');
   const errorDiv = document.getElementById('onboarding-error');
 
+  // Lazy-load Stripe and ensure it's ready
+  let stripe;
+  try {
+    stripe = await loadStripe(config.stripe.publicKey);
+    if (!stripe) throw new Error('Stripe.js failed to initialize');
+  } catch (error) {
+    console.error('Stripe initialization error:', error);
+    if (errorDiv) {
+      errorDiv.textContent = 'Payment system could not be loaded. Please refresh the page.';
+      errorDiv.style.display = 'block';
+    }
+    return;
+  }
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!stripe) {
-      errorDiv.textContent = 'Payment system is not ready.';
-      errorDiv.style.display = 'block';
-      return;
-    }
-    
+    if (!stripe) return; // Just in case
+
     submitBtn.disabled = true;
     errorDiv.style.display = 'none';
     submitBtn.textContent = 'Processing...';
@@ -250,35 +247,40 @@ export async function runExperienceStep() {
       if (!selectedPlan) {
         throw new Error('Please select a plan to continue.');
       }
+
       const priceId = selectedPlan.value;
       const token = getToken();
+      if (!token) throw new Error('User is not authenticated');
 
+      // Call backend to create Checkout session
       const response = await fetch(`${config.api.baseUrl}/subscription/create-checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ priceId: priceId }),
+        body: JSON.stringify({ priceId }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Could not create payment session.');
       }
 
       const { sessionId } = await response.json();
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: sessionId,
-      });
 
-      if (error) {
-        throw new Error(error.message);
-      }
+      // Stripe redirect
+      const { error } = await stripe.redirectToCheckout({ sessionId });
+      if (error) throw new Error(error.message);
 
     } catch (error) {
-      errorDiv.textContent = error.message;
-      errorDiv.style.display = 'block';
+      console.error('Checkout error:', error);
+      if (errorDiv) {
+        errorDiv.textContent = error.message;
+        errorDiv.style.display = 'block';
+      } else {
+        alert(error.message);
+      }
       submitBtn.disabled = false;
       submitBtn.textContent = 'Continue to Payment →';
     }
