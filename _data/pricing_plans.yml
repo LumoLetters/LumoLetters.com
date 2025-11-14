@@ -2,7 +2,7 @@ plans:
   - id: "basic"
     name: "Basic Connection"
     price: 35
-    price_id: "price_1RtMmdD17fmHGu2veSCvGDOa"
+    price_id: "price_1Qmh54D17fmHGu2vVNdiuuKL"
     interval: "month"
     description: "Perfect for staying connected"
     features:
@@ -14,7 +14,7 @@ plans:
   - id: "premium"
     name: "Premium Connection"
     price: 59
-    price_id: "price_1RtMoGD17fmHGu2vxCS1TPie" 
+    price_id: "price_1Qmh6mD17fmHGu2vBFcMRbYC" 
     interval: "month"
     description: "Enhanced connection experience"
     features:
@@ -27,7 +27,7 @@ plans:
   - id: "deluxe"
     name: "Deluxe Connection"
     price: 119
-    price_id: "price_1RtMoeD17fmHGu2vD9x9PTT0" 
+    price_id: "price_1Qmh8qD17fmHGu2vXoF7m5o9" 
     interval: "month"
     description: "Premium storytelling experience"
     features:

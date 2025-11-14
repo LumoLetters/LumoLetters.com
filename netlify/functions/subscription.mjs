@@ -9,6 +9,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const handler = async (event) => {
 
   try {
+
+        // DEBUG LOGGING: check if Authorization header exists
+    const authHeader = event.headers.authorization || event.headers.Authorization;
+    if (!authHeader) {
+      console.warn('⚠️ No Authorization header found in request');
+    } else {
+      console.log('✅ Authorization header received, first 20 chars:', authHeader.slice(0, 20));
+    }
+    
     await connectToDatabase();
     const auth0Sub = await verifyTokenAndGetSub(event);
     const user = await User.findOne({ auth0Id: auth0Sub });
