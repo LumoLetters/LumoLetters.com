@@ -30,14 +30,23 @@ export async function apiRequest(endpoint, options = {}) {
     }
     
     const url = `${config.api.baseUrl}/${endpoint}`;
+    console.log('📍 API Request URL:', url); // ADD THIS
+    console.log('📍 Token present:', !!token); // ADD THIS
+    console.log('📍 Request options:', fetchOptions); // ADD THIS
+    
     const response = await fetch(url, fetchOptions);
+    
+    console.log('📍 Response status:', response.status); // ADD THIS
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      console.log('📍 Error response:', errorData); // ADD THIS
       throw new Error(errorData.message || `API request failed with status ${response.status}`);
     }
     
-    return await response.json();
+    const data = await response.json();
+    console.log('📍 Response data:', data); // ADD THIS
+    return data;
   } catch (error) {
     console.error(`API request error for ${endpoint}:`, error);
     throw error;

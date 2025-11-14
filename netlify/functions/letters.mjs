@@ -2,6 +2,13 @@
 import { connectToDatabase, Letter, User } from './db-connect.mjs';
 import { verifyTokenAndGetSub } from './lib/auth-utils.mjs'; // IMPORT THE NEW UTILITY
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Content-Type': 'application/json'
+};
+
 
 /**
  * Get user's MongoDB _id from Auth0 sub

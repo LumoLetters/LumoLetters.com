@@ -4,6 +4,7 @@ import { checkAuthentication } from './authentication.mjs';
 import { EVENTS } from './lib/constants.mjs';
 import eventBus from './lib/event-bus.mjs';
 import * as ui from './lib/ui-handler.mjs';
+// REMOVED: import './dashboard.mjs'; ← This was causing dashboard to load on all pages
 
 export async function initApp() {
   try {
@@ -11,8 +12,6 @@ export async function initApp() {
       console.debug('Handling Auth0 login redirect...');
       const { handleAuthRedirect } = await import('./authentication.mjs');
       await handleAuthRedirect();
-
-      // Optionally: update UI here if callback page shows anything
       return;
     }
 
@@ -32,13 +31,26 @@ export async function initApp() {
 
   } catch (error) {
     console.error('App initialization error:', error);
-    ui.showErrorMessage('Failed to initialize application');
+    // Only show error UI if error container exists (not on dashboard pages)
+    const errorContainer = document.getElementById('error-container');
+    if (errorContainer) {
+      ui.showErrorMessage('Failed to initialize application');
+    }
   }
 }
 
 // Global auth error listener
 eventBus.on(EVENTS.AUTH_ERROR, (data) => {
   console.error('Auth error event:', data);
-  ui.showErrorMessage(data.message || 'Authentication error');
+  // Only show error UI if error container exists
+  const errorContainer = document.getElementById('error-container');
+  if (errorContainer) {
+    ui.showErrorMessage(data.message || 'Authentication error');
+  }
 });
 
+// CRITICAL: Actually call initApp when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('📌 DOM ready — initializing app...');
+  initApp();
+});

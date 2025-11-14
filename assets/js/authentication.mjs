@@ -161,7 +161,6 @@ export async function handleAuthRedirect() {
 export function logout() {
   try {
     clearAll();
-    localStorage.removeItem('auth_token');
     eventBus.emit(EVENTS.AUTH_LOGOUT);
 
     const logoutUrl = new URL(`https://${config.auth0.domain}/v2/logout`);
@@ -205,20 +204,34 @@ export async function getOrCreateUserProfile() {
     if (!token) throw new Error('No access token available');
 
     const idToken = getItem(AUTH.ID_TOKEN_KEY);
+    console.debug('🆔 ID Token:', idToken ? 'exists' : 'missing');
+    
     const userInfo = parseJwt(idToken);
+    console.debug('👤 Parsed user info:', userInfo);
+    console.debug('📧 Email from token:', userInfo?.email);
 
     if (!userInfo?.email) {
-      throw new Error('User information not available in token');
+      // Fallback: try to get email from access token
+      console.warn('⚠️ No email in ID token, trying access token...');
+      const accessTokenInfo = parseJwt(token);
+      console.debug('🔑 Access token info:', accessTokenInfo);
+      
+      if (!accessTokenInfo?.email) {
+        throw new Error('User information not available in token');
+      }
+      
+      userInfo.email = accessTokenInfo.email;
     }
 
-    console.debug('Fetching or creating user profile');
+    console.debug('Fetching or creating user profile for:', userInfo.email);
+    
+    // FIXED: Removed third parameter - Authorization header is added automatically
     const response = await post('auth-user', {
       email: userInfo.email,
       name: userInfo.name || userInfo.email.split('@')[0]
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
     });
 
+    console.debug('Profile response:', response);
     return response.user || response;
   } catch (error) {
     console.error('Profile handling failed:', error);

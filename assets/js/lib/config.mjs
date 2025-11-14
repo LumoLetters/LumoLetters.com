@@ -11,8 +11,8 @@ const config = {
   },
   api: {
     baseUrl: window.location.hostname === 'localhost' 
-      ? '/.netlify/functions'
-      : '/.netlify/functions'
+      ? '/api'
+      : '/api'
   },
   onboarding: {
     steps: ['welcome', 'address', 'interests', 'complete'],

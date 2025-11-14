@@ -8,220 +8,58 @@
   }
 }
 </script>
-
-<div class="dashboard-container">
-  <aside class="dashboard-sidebar">
-    <div class="sidebar-header">
+  <link rel="stylesheet" href="/assets/css/main.css">
+<div class="dashboard">
+  <aside class="dashboard__sidebar">
+    <div class="dashboard__sidebar-header">
       <h2>LumoLetters</h2>
     </div>
-    <nav class="dashboard-nav">
+
+    <nav class="dashboard__nav">
       <ul>
-        <li><a href="/app/dashboard" {% if page.url contains '/app/dashboard' %}class="active"{% endif %}>
-          <span class="nav-icon">📊</span>Dashboard
-        </a></li>
-        <li><a href="/app/topics" {% if page.url contains '/app/topics' %}class="active"{% endif %}>
-          <span class="nav-icon">🏷️</span>My Topics
-        </a></li>
-        <li><a href="/app/account" {% if page.url contains '/app/account' %}class="active"{% endif %}>
-          <span class="nav-icon">⚙️</span>Account
-        </a></li>
+        <li>
+          <a href="/app/dashboard" {% if page.url contains '/app/dashboard' %}class="active"{% endif %}>
+            📊 Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="/app/topics" {% if page.url contains '/app/topics' %}class="active"{% endif %}>
+            🏷️ My Topics
+          </a>
+        </li>
+        <li>
+          <a href="/app/account" {% if page.url contains '/app/account' %}class="active"{% endif %}>
+            ⚙️ Account
+          </a>
+        </li>
       </ul>
     </nav>
-    
-    <div class="sidebar-footer">
-      <button id="logout-btn" class="logout-btn">
-        <span class="nav-icon">🚪</span>Logout
-      </button>
+
+    <div class="dashboard__sidebar-footer">
+      <button id="logout-btn" class="logout-btn">🚪 Logout</button>
     </div>
   </aside>
 
-  <main class="dashboard-content">
+  <main class="dashboard__content">
     {% if page.title %}
-    <header class="dashboard-header">
-      <h1 class="dashboard-title">{{ page.title }}</h1>
+    <header class="dashboard__header">
+      <h1 class="dashboard__title">{{ page.title }}</h1>
       <div class="user-info">
         <span id="user-name-display">Loading...</span>
       </div>
     </header>
     {% endif %}
 
-    <div class="content-wrapper">
-      {{ content }}
-    </div>
+    <section class="dashboard__body">
+      <div id="dashboard-data" class="dashboard__grid">
+        {{ content }}
+      </div>
+    </section>
   </main>
 </div>
 
-<style>
-.dashboard-container {
-  display: flex;
-  min-height: 100vh;
-  background: #f8f9fa;
-}
-
-.dashboard-sidebar {
-  width: 250px;
-  background: white;
-  border-right: 1px solid #e0e0e0;
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  height: 100vh;
-  overflow-y: auto;
-}
-
-.sidebar-header {
-  padding: 1.5rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-.sidebar-header h2 {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.dashboard-nav {
-  flex: 1;
-  padding: 1rem 0;
-}
-
-.dashboard-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.dashboard-nav li {
-  margin: 0;
-}
-
-.dashboard-nav a {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1.5rem;
-  color: #555;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border-left: 3px solid transparent;
-}
-
-.dashboard-nav a:hover {
-  background: #f8f9fa;
-  color: #333;
-}
-
-.dashboard-nav a.active {
-  background: #e3f2fd;
-  color: #1976d2;
-  border-left-color: #1976d2;
-  font-weight: 600;
-}
-
-.nav-icon {
-  margin-right: 0.75rem;
-  font-size: 1.1rem;
-}
-
-.sidebar-footer {
-  padding: 1rem;
-  border-top: 1px solid #e0e0e0;
-}
-
-.logout-btn {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 0.75rem;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.logout-btn:hover {
-  background: #fee;
-  border-color: #fcc;
-  color: #c33;
-}
-
-.dashboard-content {
-  flex: 1;
-  margin-left: 250px;
-  padding: 0;
-  overflow-x: auto;
-}
-
-.dashboard-header {
-  background: white;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.dashboard-title {
-  margin: 0;
-  font-size: 1.8rem;
-  color: #333;
-}
-
-.user-info {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.content-wrapper {
-  padding: 2rem;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .dashboard-sidebar {
-    width: 100%;
-    position: relative;
-    height: auto;
-  }
-  
-  .dashboard-content {
-    margin-left: 0;
-  }
-  
-  .dashboard-header {
-    padding: 1rem;
-  }
-  
-  .content-wrapper {
-    padding: 1rem;
-  }
-  
-  .dashboard-nav a {
-    padding: 1rem 1.5rem;
-  }
-}
-
-/* Tablet */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .dashboard-sidebar {
-    width: 200px;
-  }
-  
-  .dashboard-content {
-    margin-left: 200px;
-  }
-}
-</style>
-
-
-
-// Initialize dashboard layout
-document.addEventListener('DOMContentLoaded', () => {
-  new DashboardLayout();
-});
-</script>
-
 <script type="module" src="/assets/js/app-init.mjs"></script>
+<script type="module" src="/assets/js/dashboard.mjs"></script>
+{% if page.js and page.js != 'dashboard' %}
+<script type="module" src="/assets/js/{{ page.js }}.mjs"></script>
+{% endif %}

@@ -9,60 +9,120 @@ class AccountPage {
     this.init();
   }
 
-  async init() {
-    try {
-      await this.loadAccountData();
-      this.setupEventListeners();
-    } catch (error) {
-      this.showError('Failed to load account information', error.message);
+async init() {
+  try {
+    console.log('🚀 Initializing account page...');
+    
+    // Check authentication
+    const token = localStorage.getItem('lumoletters_lumo_token');
+    console.log('🔑 Token exists:', !!token);
+    
+    if (!token) {
+      console.log('❌ No token found, redirecting to home...');
+      window.location.href = '/';
+      return;
     }
-  }
-
-  async loadAccountData() {
-    try {
-      // Load user profile - API returns user data directly
-      const userData = await apiClient.get('auth-user');
-      
-      // Load subscription status
-      const subResponse = await apiClient.get('subscription/status');
-      
-      this.displayUserData(userData);
-      this.displaySubscriptionData(subResponse);
-      
-      this.hideLoading();
-      this.showMainContent();
-      
-    } catch (error) {
-      console.error('Error loading account data:', error);
-      throw error;
+    
+    // Verify critical elements exist
+    const mainContent = document.getElementById('main-content');
+    if (!mainContent) {
+      console.error('❌ Main content container not found!');
+      console.log('Available elements:', document.body.innerHTML.substring(0, 500));
+      return;
     }
+    
+    await this.loadAccountData();
+    this.setupEventListeners();
+  } catch (error) {
+    console.error('❌ Init error:', error);
+    this.showError('Failed to load account information', error.message);
   }
+}
 
-  displayUserData(user) {
-    document.getElementById('user-name').textContent = user.name || 'Not provided';
-    document.getElementById('user-email').textContent = user.email || 'Not provided';
+async loadAccountData() {
+  try {
+    console.log('🔧 Loading account data...');
+    
+    // Use the existing authentication function that already handles this
+    const authentication = await import('./authentication.mjs');
+    const userData = await authentication.default.getOrCreateUserProfile();
+    console.log('✅ User data received:', userData);
+    
+    // Load subscription status
+    console.log('📡 Calling subscription/status endpoint...');
+    const subResponse = await apiClient.get('subscription/status');
+    console.log('✅ Subscription data received:', subResponse);
+    
+    this.displayUserData(userData);
+    this.displaySubscriptionData(subResponse);
+    
+    this.hideLoading();
+    this.showMainContent();
+    
+  } catch (error) {
+    console.error('❌ Error loading account data:', error);
+    throw error;
+  }
+}
+displayUserData(user) {
+  console.log('📝 Displaying user data:', user);
+  
+  // Debug: Log what elements exist
+  console.log('🔍 Checking for elements...');
+  console.log('  - main-content:', !!document.getElementById('main-content'));
+  console.log('  - user-name:', !!document.getElementById('user-name'));
+  console.log('  - user-email:', !!document.getElementById('user-email'));
+  console.log('  - loading-state:', !!document.getElementById('loading-state'));
+  
+  // Name
+  const nameEl = document.getElementById('user-name');
+  if (nameEl) {
+    nameEl.textContent = user.name || 'Not provided';
+  } else {
+    console.error('❌ user-name element not found');
+  }
+    
+    // Email
+    const emailEl = document.getElementById('user-email');
+    if (emailEl) {
+      emailEl.textContent = user.email || 'Not provided';
+    } else {
+      console.error('❌ user-email element not found');
+    }
     
     // Display address
+    const addressDisplay = document.getElementById('address-display');
+    const noAddress = document.getElementById('no-address');
+    
     if (user.address && user.address.street) {
-      document.getElementById('address-street').textContent = user.address.street;
-      document.getElementById('address-city').textContent = user.address.city || '';
-      document.getElementById('address-state').textContent = user.address.state || '';
-      document.getElementById('address-zip').textContent = user.address.zip || '';
-      document.getElementById('address-display').style.display = 'block';
-      document.getElementById('no-address').style.display = 'none';
+      const streetEl = document.getElementById('address-street');
+      const cityEl = document.getElementById('address-city');
+      const stateEl = document.getElementById('address-state');
+      const zipEl = document.getElementById('address-zip');
+      
+      if (streetEl) streetEl.textContent = user.address.street;
+      if (cityEl) cityEl.textContent = user.address.city || '';
+      if (stateEl) stateEl.textContent = user.address.state || '';
+      if (zipEl) zipEl.textContent = user.address.zip || '';
+      
+      if (addressDisplay) addressDisplay.style.display = 'block';
+      if (noAddress) noAddress.style.display = 'none';
     } else {
-      document.getElementById('address-display').style.display = 'none';
-      document.getElementById('no-address').style.display = 'block';
+      if (addressDisplay) addressDisplay.style.display = 'none';
+      if (noAddress) noAddress.style.display = 'block';
     }
     
     // Display interests
-    if (user.interests && user.interests.length > 0) {
-      const interestsHtml = user.interests.map(interest => 
-        `<span class="interest-tag">${interest}</span>`
-      ).join('');
-      document.getElementById('user-interests').innerHTML = interestsHtml;
-    } else {
-      document.getElementById('user-interests').innerHTML = '<em>No topics selected</em>';
+    const interestsEl = document.getElementById('user-interests');
+    if (interestsEl) {
+      if (user.interests && user.interests.length > 0) {
+        const interestsHtml = user.interests.map(interest => 
+          `<span class="interest-tag">${interest}</span>`
+        ).join('');
+        interestsEl.innerHTML = interestsHtml;
+      } else {
+        interestsEl.innerHTML = '<em>No topics selected</em>';
+      }
     }
   }
 
@@ -75,6 +135,11 @@ class AccountPage {
     const manageBtn = document.getElementById('manage-subscription-btn');
     const startBtn = document.getElementById('start-subscription-btn');
 
+    if (!statusBadge || !currentPlan || !subscriptionInfo) {
+      console.error('❌ Subscription elements not found');
+      return;
+    }
+
     // Set status badge
     statusBadge.className = `badge ${subData.status}`;
     
@@ -82,22 +147,22 @@ class AccountPage {
       statusBadge.textContent = 'No Subscription';
       currentPlan.textContent = 'No active subscription';
       subscriptionInfo.textContent = 'You currently don\'t have an active subscription.';
-      nextBilling.style.display = 'none';
-      manageBtn.style.display = 'none';
-      startBtn.style.display = 'inline-block';
+      if (nextBilling) nextBilling.style.display = 'none';
+      if (manageBtn) manageBtn.style.display = 'none';
+      if (startBtn) startBtn.style.display = 'inline-block';
     } else {
       statusBadge.textContent = subData.status.replace('_', ' ').toUpperCase();
       currentPlan.textContent = this.formatPlanName(subData.subscription.plan);
       subscriptionInfo.textContent = `Status: ${subData.subscription.status}`;
       
-      if (subData.subscription.current_period_end) {
+      if (subData.subscription.current_period_end && billingDate && nextBilling) {
         const endDate = new Date(subData.subscription.current_period_end * 1000);
         billingDate.textContent = endDate.toLocaleDateString();
         nextBilling.style.display = 'block';
       }
       
-      manageBtn.style.display = 'inline-block';
-      startBtn.style.display = 'none';
+      if (manageBtn) manageBtn.style.display = 'inline-block';
+      if (startBtn) startBtn.style.display = 'none';
     }
   }
 
@@ -114,65 +179,83 @@ class AccountPage {
 
   setupEventListeners() {
     // Manage subscription button
-    document.getElementById('manage-subscription-btn').addEventListener('click', async () => {
-      try {
-        const response = await apiClient.get('subscription/portal');
-        window.location.href = response.url;
-      } catch (error) {
-        alert('Failed to open billing portal. Please try again.');
-      }
-    });
+    const manageBtn = document.getElementById('manage-subscription-btn');
+    if (manageBtn) {
+      manageBtn.addEventListener('click', async () => {
+        try {
+          const response = await apiClient.get('subscription/portal');
+          window.location.href = response.url;
+        } catch (error) {
+          alert('Failed to open billing portal. Please try again.');
+        }
+      });
+    }
 
     // Start subscription button
-    document.getElementById('start-subscription-btn').addEventListener('click', () => {
-      window.location.href = '/onboarding/experience';
-    });
+    const startBtn = document.getElementById('start-subscription-btn');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        window.location.href = '/onboarding/experience';
+      });
+    }
 
     // Edit profile button
-    document.getElementById('edit-profile-btn').addEventListener('click', () => {
-      // You can implement a modal or redirect to edit page
-      alert('Profile editing coming soon!');
-    });
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    if (editProfileBtn) {
+      editProfileBtn.addEventListener('click', () => {
+        // You can implement a modal or redirect to edit page
+        alert('Profile editing coming soon!');
+      });
+    }
 
     // Edit interests button
-    document.getElementById('edit-interests-btn').addEventListener('click', () => {
-      window.location.href = '/app/topics';
-    });
+    const editInterestsBtn = document.getElementById('edit-interests-btn');
+    if (editInterestsBtn) {
+      editInterestsBtn.addEventListener('click', () => {
+        window.location.href = '/app/topics';
+      });
+    }
 
     // Retry button
-    document.getElementById('retry-btn').addEventListener('click', () => {
-      this.showLoading();
-      this.hideError();
-      this.hideMainContent();
-      this.loadAccountData();
-    });
+    const retryBtn = document.getElementById('retry-btn');
+    if (retryBtn) {
+      retryBtn.addEventListener('click', () => {
+        this.showLoading();
+        this.hideError();
+        this.hideMainContent();
+        this.loadAccountData();
+      });
+    }
   }
 
   showLoading() {
-    this.loadingState.style.display = 'block';
+    if (this.loadingState) this.loadingState.style.display = 'block';
   }
 
   hideLoading() {
-    this.loadingState.style.display = 'none';
+    if (this.loadingState) this.loadingState.style.display = 'none';
   }
 
   showError(title, message) {
-    document.querySelector('#error-state h3').textContent = title;
-    document.getElementById('error-details').textContent = message;
-    this.errorState.style.display = 'block';
+    const errorTitle = document.querySelector('#error-state h3');
+    const errorDetails = document.getElementById('error-details');
+    
+    if (errorTitle) errorTitle.textContent = title;
+    if (errorDetails) errorDetails.textContent = message;
+    if (this.errorState) this.errorState.style.display = 'block';
     this.hideLoading();
   }
 
   hideError() {
-    this.errorState.style.display = 'none';
+    if (this.errorState) this.errorState.style.display = 'none';
   }
 
   showMainContent() {
-    this.mainContent.style.display = 'block';
+    if (this.mainContent) this.mainContent.style.display = 'block';
   }
 
   hideMainContent() {
-    this.mainContent.style.display = 'none';
+    if (this.mainContent) this.mainContent.style.display = 'none';
   }
 }
 

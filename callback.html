@@ -11,9 +11,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processing Login - LumoLetters</title>
     
-<script type="importmap">
-{% include_relative import-map.json %}
-</script>
+    <!-- Import map must be inline, not external -->
+    <script type="importmap">
+    {
+      "imports": {
+        "@auth0/auth0-spa-js": "/node_modules/@auth0/auth0-spa-js/dist/auth0-spa-js.production.esm.js",
+        "@stripe/stripe-js": "https://esm.sh/@stripe/stripe-js@4"
+      }
+    }
+    </script>
     
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
     
@@ -54,7 +60,7 @@
     <p id="error-message" class="error-message" style="display: none;"></p>
   </div>
 
-  <!-- This module script should be the last thing before the closing body tag -->
+  <!-- Load auth-callback module -->
   <script type="module" src="{{ '/assets/js/auth-callback.mjs' | relative_url }}"></script>
 
 </body>
