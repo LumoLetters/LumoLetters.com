@@ -21,7 +21,7 @@ export const handler = async (event) => {
     }
 
     const pathParts = event.path.split('/');
-    const action = pathParts[pathParts.length - 1];
+    const action = pathParts[pathParts.length - 1].toLowerCase();
 
     if (event.httpMethod === 'GET') {
       return handleGet(action, user);
@@ -166,12 +166,14 @@ async function createCheckoutSession(data, user) {
       await user.save();
     }
 
+  const baseUrl = process.env.SITE_URL;
+
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: successUrl || `${process.env.URL}/onboarding/complete?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${process.env.URL}/onboarding/experience.`,
+      success_url: successUrl || `${baseUrl}/onboarding/complete?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${baseUrl}/onboarding/experience`,
       metadata: { auth0Id: user.auth0Id },
       consent_collection: { terms_of_service: 'none' },
       client_reference_id: user._id.toString()
@@ -204,7 +206,7 @@ async function createCustomerPortal(user) {
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `${process.env.URL}/app/account.html`
+      return_url: `${process.env.SITE_URL}/app/account.html`
     });
 
     return { 

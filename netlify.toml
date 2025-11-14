@@ -14,7 +14,6 @@
   publish = "_site"
   autoLaunch = true
 
-# API redirect MUST come before the catch-all
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
@@ -48,7 +47,6 @@
   to = "/error.html"
   status = 200
 
-# Catch-all MUST be last
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -57,7 +55,7 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://cdn.auth0.com https://esm.sh http://localhost:35729; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.stripe.com https://cdn.auth0.com; object-src 'none'; connect-src 'self' https://dev-rfi7yfcndb5e8ycp.us.auth0.com https://cdn.auth0.com https://api.stripe.com https://lumoletters.com ws://localhost:35729; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://*.auth0.com;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://cdn.auth0.com https://esm.sh http://localhost:35729; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.stripe.com https://cdn.auth0.com; object-src 'none'; connect-src 'self' https://dev-rfi7yfcndb5e8ycp.us.auth0.com https://cdn.auth0.com https://api.stripe.com https://lumoletters.com https://esm.sh ws://localhost:35729; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://*.auth0.com;"
 
 [[headers]]
   for = "/api/*"
