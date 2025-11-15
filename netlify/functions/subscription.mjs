@@ -17,7 +17,7 @@ export const handler = async (event) => {
     } else {
       console.log('✅ Authorization header received, first 20 chars:', authHeader.slice(0, 20));
     }
-    
+
     await connectToDatabase();
     const auth0Sub = await verifyTokenAndGetSub(event);
     const user = await User.findOne({ auth0Id: auth0Sub });
@@ -146,60 +146,75 @@ async function getSubscriptionStatus(user) {
 async function createCheckoutSession(data, user) {
   try {
     const { priceId, successUrl, cancelUrl } = data;
-    
+
     if (!priceId) {
-      return { 
-        statusCode: 400, 
-        body: JSON.stringify({ error: 'Price ID is required' }) 
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Price ID is required' })
       };
     }
 
+    // --- 1. Ensure price → plan mapping
+    const plan = mapPriceToPlan(priceId);
+
+    // --- 2. Ensure customer exists
     let stripeCustomerId = user.stripeCustomerId;
-    
+
     if (!stripeCustomerId) {
       const customer = await stripe.customers.create({
         email: user.email,
         name: user.name,
-        metadata: { auth0Id: user.auth0Id, userId: user._id.toString() },
+        metadata: {
+          auth0Id: user.auth0Id,
+          userId: user._id.toString()
+        },
         address: {
           line1: user.address?.street,
           city: user.address?.city,
           state: user.address?.state,
-          postal_code: user.address?.zip,
+          postal_code: user.address?.zipCode,
           country: 'US'
         }
       });
-      
+
       stripeCustomerId = customer.id;
       user.stripeCustomerId = stripeCustomerId;
       await user.save();
     }
 
-  const baseUrl = process.env.SITE_URL;
+    const baseUrl = process.env.SITE_URL;
 
+    // --- 3. Create Checkout Session with full metadata
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
       success_url: successUrl || `${baseUrl}/onboarding/complete?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl || `${baseUrl}/onboarding/experience`,
-      metadata: { auth0Id: user.auth0Id },
+
+      metadata: {
+        auth0Id: user.auth0Id,
+        priceId: priceId,
+        plan: plan
+      },
+
       consent_collection: { terms_of_service: 'none' },
       client_reference_id: user._id.toString()
     });
 
-    return { 
-      statusCode: 200, 
-      body: JSON.stringify({ sessionId: session.id }) 
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ sessionId: session.id })
     };
+
   } catch (error) {
     console.error('Checkout session error:', error);
-    return { 
-      statusCode: 500, 
-      body: JSON.stringify({ 
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
         error: 'Failed to create checkout session',
         code: error.code
-      }) 
+      })
     };
   }
 }
@@ -229,4 +244,14 @@ async function createCustomerPortal(user) {
       body: JSON.stringify({ error: 'Failed to create billing portal' }) 
     };
   }
+}
+
+function mapPriceToPlan(priceId) {
+  const map = {
+    "price_1Qmh54D17fmHGu2vVNdiuuKL": "basic",
+    "price_1Qmh6mD17fmHGu2vBFcMRbYC": "premium",
+    "price_1Qmh8qD17fmHGu2vXoF7m5o9": "deluxe"
+  };
+
+  return map[priceId] || "unknown";
 }

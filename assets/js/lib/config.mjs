@@ -1,4 +1,5 @@
-// /assets/js/lib/config.mjs Configuration settings for different environments
+// /assets/js/lib/config.mjs 
+// Configuration settings for different environments
 
 const config = {
   auth0: {
