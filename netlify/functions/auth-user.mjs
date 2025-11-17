@@ -4,16 +4,14 @@ import { connectToDatabase, User } from './db-connect.mjs';
 import { verifyTokenAndGetSub } from './lib/auth-utils.mjs';
 
 // CORS headers
-
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': process.env.NODE_ENV === 'development' ? '*' : (process.env.URL || '*'),
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, OPTIONS',
   'Content-Type': 'application/json'
 };
 
 // GET: Retrieve user profile
-
 async function getProfile(event) {
   console.log('🔍 Getting user profile...');
   
@@ -41,7 +39,6 @@ async function getProfile(event) {
 }
 
 // POST: Find or create user profile
-
 async function findOrCreateProfile(event) {
   console.log('🔍 Finding or creating user profile...');
   
@@ -108,10 +105,9 @@ async function findOrCreateProfile(event) {
   };
 }
 
-// PUT: Update user profile
-
+// PUT: Update user profile (full replacement)
 async function updateProfile(event) {
-  console.log('🔄 Updating user profile...');
+  console.log('🔄 Updating user profile (PUT)...');
   
   const auth0Id = await verifyTokenAndGetSub(event);
   console.log('✅ Token verified for user:', auth0Id);
@@ -148,8 +144,80 @@ async function updateProfile(event) {
   };
 }
 
-// Main handler
+// PATCH: Partial update user profile (for topics, interests, etc.)
+async function patchProfile(event) {
+  console.log('🔄 Patching user profile (PATCH)...');
+  
+  const auth0Id = await verifyTokenAndGetSub(event);
+  console.log('✅ Token verified for user:', auth0Id);
 
+  if (!event.body) {
+    const error = new Error('Request body is missing for PATCH.');
+    error.statusCode = 400;
+    throw error;
+  }
+  
+  const updates = JSON.parse(event.body);
+  console.log('📝 Patch data:', Object.keys(updates));
+
+  console.log('🔌 Connecting to database...');
+  await connectToDatabase();
+  console.log('✅ Database connected');
+
+  // Build update object
+  const updateData = {};
+  
+  // Handle userInterests (topics)
+  if (updates.userInterests !== undefined) {
+    updateData.userInterests = updates.userInterests;
+    console.log('📚 Updating userInterests:', updates.userInterests);
+  }
+
+  // Handle address updates
+  if (updates.address) {
+    updateData.address = updates.address;
+    console.log('📍 Updating address');
+  }
+
+  // Handle name updates
+  if (updates.name) {
+    updateData.name = updates.name;
+    console.log('👤 Updating name');
+  }
+
+  // Handle subscription updates
+  if (updates.subscription) {
+    updateData.subscription = updates.subscription;
+    console.log('💳 Updating subscription');
+  }
+
+  // Handle any other field updates
+  Object.keys(updates).forEach(key => {
+    if (!updateData[key] && updates[key] !== undefined) {
+      updateData[key] = updates[key];
+    }
+  });
+
+  const profile = await User.findOneAndUpdate(
+    { auth0Id },
+    { $set: updateData },
+    { new: true, runValidators: true }
+  ).select('-__v');
+
+  if (!profile) {
+    const error = new Error('User profile not found for patch.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  console.log('✅ Profile patched successfully');
+  return {
+    statusCode: 200,
+    body: JSON.stringify(profile)
+  };
+}
+
+// Main handler
 export async function handler(event) {
   console.log('🚀 Function invoked:', {
     method: event.httpMethod,
@@ -173,6 +241,9 @@ export async function handler(event) {
         break;
       case 'PUT': 
         response = await updateProfile(event); 
+        break;
+      case 'PATCH': 
+        response = await patchProfile(event); 
         break;
       default:
         response = {

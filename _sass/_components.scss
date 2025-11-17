@@ -78,6 +78,22 @@
     }
   }
 
+  // Danger button (ADD THIS NEW VARIANT)
+  &--danger {
+    color: map.get(vars.$colors, 'status', 'error');
+    border-color: map.get(vars.$colors, 'status', 'error');
+
+    &:hover {
+      background-color: rgba(map.get(vars.$colors, 'status', 'error'), 0.05);
+      color: color.adjust(map.get(vars.$colors, 'status', 'error'), $lightness: -10%);
+      border-color: color.adjust(map.get(vars.$colors, 'status', 'error'), $lightness: -10%);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(map.get(vars.$colors, 'status', 'error'), 0.3);
+    }
+  }
+
   // Button sizes
   &--sm {
     padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
@@ -196,31 +212,104 @@
 .site-header {
   background-color: white;
   border-bottom: 1px solid map.get(vars.$colors, 'neutral', '200');
-  padding: map.get(vars.$spacing, 2) 0;
-  position: relative;
-  z-index: 100;
+  padding: map.get(vars.$spacing, 3) 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(33, 37, 41, 0.04);
 
   .header-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: map.get(vars.$spacing, 3);
+
+    @include mix.mq-down('md') {
+      gap: map.get(vars.$spacing, 2);
+    }
+  }
+
+  .logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: map.get(vars.$spacing, 2);
+    transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, map.get(vars.$colors, 'status', 'primary') 0%, map.get(vars.$colors, 'status', 'secondary') 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
   }
 
   .main-nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    @include mix.mq-down('md') {
+      display: none; // Hide on mobile, you can add a hamburger menu later
+    }
+
     ul {
       display: flex;
       gap: map.get(vars.$spacing, 3);
       list-style: none;
       margin: 0;
       padding: 0;
+      align-items: center;
     }
 
     a {
       color: map.get(vars.$colors, 'neutral', '700');
       text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9375rem;
+      padding: map.get(vars.$spacing, 2);
+      border-radius: map.get(map.get(vars.$sizes, 'radius'), 'sm');
+      transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%) scaleX(0);
+        width: 80%;
+        height: 2px;
+        background: linear-gradient(90deg, map.get(vars.$colors, 'status', 'primary'), map.get(vars.$colors, 'status', 'secondary'));
+        border-radius: 2px;
+        transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+      }
       
       &:hover {
         color: map.get(vars.$colors, 'status', 'primary');
+        background-color: rgba(map.get(vars.$colors, 'status', 'primary'), 0.05);
+
+        &::after {
+          transform: translateX(-50%) scaleX(1);
+        }
+      }
+
+      &.active {
+        color: map.get(vars.$colors, 'status', 'primary');
+        font-weight: 600;
+
+        &::after {
+          transform: translateX(-50%) scaleX(1);
+        }
       }
     }
   }
@@ -228,10 +317,217 @@
   .auth-buttons {
     display: flex;
     gap: map.get(vars.$spacing, 2);
+    align-items: center;
+
+    @include mix.mq-down('md') {
+      gap: map.get(vars.$spacing, 1);
+    }
+
+    .btn {
+      white-space: nowrap;
+      min-width: auto;
+      padding: map.get(vars.$spacing, 2) map.get(vars.$spacing, 3);
+
+      @include mix.mq-down('md') {
+        padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+// ======================
+// FOOTER COMPONENT
+// ======================
+.site-footer {
+  background: linear-gradient(180deg, white 0%, map.get(vars.$colors, 'neutral', '100') 100%);
+  border-top: 1px solid map.get(vars.$colors, 'neutral', '200');
+  padding: map.get(vars.$spacing, 4) * 2 0 map.get(vars.$spacing, 3);
+  margin-top: map.get(vars.$spacing, 4) * 2;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) 0 map.get(vars.$spacing, 3);
+    margin-top: map.get(vars.$spacing, 4);
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: map.get(vars.$spacing, 4) * 2;
+    margin-bottom: map.get(vars.$spacing, 4);
+
+    @include mix.mq-down('md') {
+      grid-template-columns: 1fr;
+      gap: map.get(vars.$spacing, 4);
+    }
+  }
+
+  .footer-logo {
+    .logo-text {
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, map.get(vars.$colors, 'status', 'primary') 0%, map.get(vars.$colors, 'status', 'secondary') 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+      display: block;
+      margin-bottom: map.get(vars.$spacing, 2);
+    }
+
+    .tagline {
+      margin: 0;
+      color: map.get(vars.$colors, 'neutral', '600');
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      max-width: 280px;
+      margin-bottom: map.get(vars.$spacing, 3);
+    }
+
+    // Optional social row
+    .social-icons {
+      display: flex;
+      gap: map.get(vars.$spacing, 2);
+
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: map.get(vars.$colors, 'neutral', '200');
+        color: map.get(vars.$colors, 'neutral', '700');
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          background: linear-gradient(135deg, map.get(vars.$colors, 'status', 'primary'), map.get(vars.$colors, 'status', 'secondary'));
+          color: white;
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  .footer-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: map.get(vars.$spacing, 4);
+
+    @include mix.mq-down('md') {
+      grid-template-columns: 1fr;
+      gap: map.get(vars.$spacing, 3);
+    }
+
+    .footer-nav-column {
+      h3 {
+        margin: 0 0 map.get(vars.$spacing, 2) 0;
+        color: map.get(vars.$colors, 'neutral', '900');
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 40px;
+          height: 2px;
+          background: linear-gradient(90deg, map.get(vars.$colors, 'status', 'primary'), map.get(vars.$colors, 'status', 'secondary'));
+          border-radius: 1px;
+          opacity: 0.5;
+        }
+      }
+
+      ul {
+        @include mix.list-reset;
+        display: flex;
+        flex-direction: column;
+        gap: map.get(vars.$spacing, 2);
+
+        a {
+          color: map.get(vars.$colors, 'neutral', '600');
+          text-decoration: none;
+          font-size: 0.9375rem;
+          transition: color map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out'), transform 0.2s ease-in-out;
+          display: inline-block;
+
+          &:hover {
+            color: map.get(vars.$colors, 'status', 'primary');
+            transform: translateX(2px);
+          }
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    padding-top: map.get(vars.$spacing, 3);
+    border-top: 1px solid map.get(vars.$colors, 'neutral', '200');
+    text-align: center;
+
+    .copyright {
+      margin: 0;
+      color: map.get(vars.$colors, 'neutral', '500');
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// ======================
+// ERROR CONTAINER
+// ======================
+#error-container {
+  position: fixed;
+  top: map.get(vars.$spacing, 3);
+  right: map.get(vars.$spacing, 3);
+  max-width: 400px;
+  z-index: 2000;
+  
+  .error-message {
+    background-color: rgba(map.get(vars.$colors, 'status', 'error'), 0.1);
+    border: 1px solid rgba(map.get(vars.$colors, 'status', 'error'), 0.3);
+    border-left: 4px solid map.get(vars.$colors, 'status', 'error');
+    color: color.adjust(map.get(vars.$colors, 'status', 'error'), $lightness: -15%);
+    padding: map.get(vars.$spacing, 3);
+    border-radius: map.get(map.get(vars.$sizes, 'radius'), 'md');
+    box-shadow: 0 4px 12px rgba(33, 37, 41, 0.15);
+    animation: slideInRight 0.3s ease-out;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
 // Utility Classes
 .hidden {
   display: none !important;
+}
+
+// ======================
+// FORCE HEADER/FOOTER LINK COLORS
+// ======================
+.site-header a,
+.site-header a:visited,
+.site-header a:active,
+.site-header a:hover,
+.site-header a:focus,
+.site-footer a,
+.site-footer a:visited,
+.site-footer a:active,
+.site-footer a:hover,
+.site-footer a:focus {
+  color: #333 !important;
+  font-weight: 500; // optional
 }

@@ -1,8 +1,26 @@
 // _sass/_dashboard.scss
+// Complete dashboard styling system - Enhanced Version
 
 @use 'sass:map';
+@use 'sass:color';
 @use 'variables' as vars;
 @use 'mixins' as mix;
+
+// ======================
+// DASHBOARD VARIABLES & HELPERS
+// ======================
+
+// Helper variables for frequently accessed values
+$radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
+$radius-sm: map.get(map.get(vars.$sizes, 'radius'), 'sm');
+$primary-color: map.get(vars.$colors, 'status', 'primary');
+$neutral-100: map.get(vars.$colors, 'neutral', 100);
+$neutral-200: map.get(vars.$colors, 'neutral', 200);
+$neutral-300: map.get(vars.$colors, 'neutral', 300);
+$neutral-500: map.get(vars.$colors, 'neutral', 500);
+$neutral-600: map.get(vars.$colors, 'neutral', 600);
+$neutral-700: map.get(vars.$colors, 'neutral', 700);
+$neutral-900: map.get(vars.$colors, 'neutral', 900);
 
 // ======================
 // DASHBOARD LAYOUT
@@ -11,8 +29,8 @@
 .dashboard {
   display: flex;
   min-height: 100vh;
-  background-color: map.get(vars.$colors, 'neutral', 100);
-  color: map.get(vars.$colors, 'neutral', 900);
+  background-color: $neutral-100;
+  color: $neutral-900;
 }
 
 // ======================
@@ -20,43 +38,55 @@
 // ======================
 
 .dashboard__sidebar {
-  width: 250px;
-  background-color: map.get(vars.$colors, 'neutral', 100);
-  border-right: 1px solid map.get(vars.$colors, 'neutral', 300);
+  width: 260px;
+  background-color: white;
+  border-right: 1px solid $neutral-200;
   display: flex;
   flex-direction: column;
   position: fixed;
   height: 100vh;
   overflow-y: auto;
+  z-index: map.get(vars.$z-layers, 'modal') - 100; // 1200
 
   @include mix.mq-down('md') {
-    position: relative;
-    width: 100%;
-    height: auto;
+    transform: translateX(-100%);
+    transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+    box-shadow: 2px 0 8px rgba($neutral-900, 0.1);
+    
+    &.is-open {
+      transform: translateX(0);
+    }
+  }
+
+  // Focus management for accessibility
+  &:focus-within {
+    z-index: map.get(vars.$z-layers, 'modal');
   }
 }
 
 .dashboard__sidebar-header {
-  padding: map.get(vars.$spacing, 3);
-  background: linear-gradient(
-    135deg,
-    map.get(vars.$colors, 'status', 'primary') 0%,
-    map.get(vars.$colors, 'status', 'secondary') 100%
-  );
-  color: white;
+  padding: map.get(vars.$spacing, 4);
+  border-bottom: 1px solid $neutral-200;
 
   h2 {
     margin: 0;
+    color: $primary-color;
     @include mix.text-style(500);
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 }
 
 .dashboard__nav {
   flex: 1;
-  padding: map.get(vars.$spacing, 2) 0;
+  padding: map.get(vars.$spacing, 3) 0;
 
   ul {
     @include mix.list-reset;
+  }
+
+  li {
+    margin-bottom: map.get(vars.$spacing, 1);
   }
 
   a {
@@ -64,45 +94,89 @@
     align-items: center;
     gap: map.get(vars.$spacing, 2);
     padding: map.get(vars.$spacing, 2) map.get(vars.$spacing, 3);
-    color: map.get(vars.$colors, 'neutral', 700);
+    color: $neutral-600;
     text-decoration: none;
     border-left: 3px solid transparent;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+    font-weight: 500;
+    border-radius: 0 $radius-sm $radius-sm 0;
 
     &:hover {
-      background-color: map.get(vars.$colors, 'neutral', 100);
-      color: map.get(vars.$colors, 'neutral', 900);
+      background-color: $neutral-100;
+      color: $neutral-900;
+      padding-left: calc(#{map.get(vars.$spacing, 3)} + 4px);
+    }
+
+    &:focus {
+      @include mix.focus-ring;
     }
 
     &.active {
-      background-color: rgba(map.get(vars.$colors, 'status', 'primary'), 0.08);
-      color: map.get(vars.$colors, 'status', 'primary');
-      border-left-color: map.get(vars.$colors, 'status', 'primary');
-      font-weight: 500;
+      background-color: rgba($primary-color, 0.08);
+      color: $primary-color;
+      border-left-color: $primary-color;
+      font-weight: 600;
     }
   }
 }
 
 .dashboard__sidebar-footer {
   padding: map.get(vars.$spacing, 3);
-  border-top: 1px solid map.get(vars.$colors, 'neutral', 300);
+  border-top: 1px solid $neutral-200;
 
   .logout-btn {
     @include mix.button-base(solid);
     width: 100%;
-    background-color: map.get(vars.$colors, 'neutral', 100);
-    color: map.get(vars.$colors, 'neutral', 700);
-    border: 1px solid map.get(vars.$colors, 'neutral', 300);
-    border-radius: map.get(map.get(vars.$sizes, 'radius'), 'md');
+    background-color: transparent;
+    color: $neutral-600;
+    border: 1px solid $neutral-300;
+    border-radius: $radius-md;
     padding: map.get(vars.$spacing, 2);
-    justify-content: flex-start;
+    justify-content: center;
     gap: map.get(vars.$spacing, 2);
+    font-weight: 500;
 
     &:hover {
       background-color: rgba(map.get(vars.$colors, 'status', 'error'), 0.05);
       color: map.get(vars.$colors, 'status', 'error');
       border-color: map.get(vars.$colors, 'status', 'error');
     }
+
+    &:focus {
+      @include mix.focus-ring;
+    }
+  }
+}
+
+// ======================
+// MOBILE MENU TOGGLE
+// ======================
+
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: map.get(vars.$spacing, 3);
+  left: map.get(vars.$spacing, 3);
+  z-index: map.get(vars.$z-layers, 'modal') + 100; // 1400
+  background-color: white;
+  border: 1px solid $neutral-300;
+  border-radius: $radius-sm;
+  padding: map.get(vars.$spacing, 2);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba($neutral-900, 0.1);
+
+  @include mix.mq-down('md') {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:hover {
+    background-color: $neutral-100;
+  }
+
+  &:focus {
+    @include mix.focus-ring;
   }
 }
 
@@ -112,11 +186,11 @@
 
 .dashboard__content {
   flex: 1;
-  margin-left: 250px;
+  margin-left: 260px;
   display: flex;
   flex-direction: column;
-  background-color: white;
-  transition: margin 0.3s ease;
+  background-color: $neutral-100;
+  min-height: 100vh;
 
   @include mix.mq-down('md') {
     margin-left: 0;
@@ -127,41 +201,814 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: map.get(vars.$spacing, 3);
-  border-bottom: 1px solid map.get(vars.$colors, 'neutral', 200);
+  padding: map.get(vars.$spacing, 4);
   background-color: white;
+  border-bottom: 1px solid $neutral-200;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 
   h1 {
     margin: 0;
-    color: map.get(vars.$colors, 'neutral', 900);
+    color: $neutral-900;
     @include mix.text-style(500);
+    font-weight: 600;
   }
 
   .user-info {
-    color: map.get(vars.$colors, 'neutral', 600);
+    display: flex;
+    align-items: center;
+    gap: map.get(vars.$spacing, 2);
+    color: $neutral-600;
     font-size: 0.9rem;
+    font-weight: 500;
+
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: map.get(vars.$colors, 'status', 'success');
+    }
   }
 }
 
 .dashboard__body {
   flex: 1;
   padding: map.get(vars.$spacing, 4);
-  background-color: map.get(vars.$colors, 'neutral', 100);
   overflow-x: auto;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 3);
+  }
 }
 
 // ======================
-// CARD GRID (optional)
+// DASHBOARD WELCOME
 // ======================
 
-.dashboard__grid {
-  @include mix.grid(3, map.get(vars.$spacing, 3));
+.dashboard-welcome {
+  background: linear-gradient(
+    135deg,
+    rgba($primary-color, 0.08) 0%,
+    rgba(map.get(vars.$colors, 'status', 'secondary'), 0.08) 100%
+  );
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 4);
+  margin-bottom: map.get(vars.$spacing, 4);
+  border: 1px solid $neutral-200;
 
-  @include mix.mq-down('lg') {
-    @include mix.grid(2, map.get(vars.$spacing, 2));
+  h2 {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    color: $neutral-900;
+    @include mix.text-style(500);
+    font-weight: 600;
   }
 
+  p {
+    margin: 0;
+    color: $neutral-600;
+    line-height: 1.6;
+  }
+}
+
+// ======================
+// STATS CARDS
+// ======================
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: map.get(vars.$spacing, 3);
+  margin-bottom: map.get(vars.$spacing, 4);
+
   @include mix.mq-down('md') {
-    @include mix.grid(1, map.get(vars.$spacing, 2));
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 3);
+  border: 1px solid $neutral-200;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  position: relative;
+
+  &:hover {
+    @include mix.elevation(1);
+    transform: translateY(-2px);
+  }
+
+  &:focus-within {
+    @include mix.focus-ring;
+  }
+
+  &__label {
+    color: $neutral-600;
+    font-size: 0.875rem;
+    margin-bottom: map.get(vars.$spacing, 1);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__value {
+    color: $neutral-900;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &--primary {
+    background: linear-gradient(
+      135deg,
+      rgba($primary-color, 0.1) 0%,
+      rgba($primary-color, 0.05) 100%
+    );
+    border-color: rgba($primary-color, 0.2);
+
+    .stat-card__value {
+      color: $primary-color;
+    }
+  }
+
+  &--success {
+    background: linear-gradient(
+      135deg,
+      rgba(map.get(vars.$colors, 'status', 'success'), 0.1) 0%,
+      rgba(map.get(vars.$colors, 'status', 'success'), 0.05) 100%
+    );
+    border-color: rgba(map.get(vars.$colors, 'status', 'success'), 0.2);
+
+    .stat-card__value {
+      color: map.get(vars.$colors, 'status', 'success');
+    }
+  }
+}
+
+// ======================
+// LETTERS SECTION
+// ======================
+
+.dashboard-letters {
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  h2 {
+    margin: 0 0 map.get(vars.$spacing, 3) 0;
+    color: $neutral-900;
+    @include mix.text-style(500);
+    font-weight: 600;
+  }
+}
+
+.letters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: map.get(vars.$spacing, 3);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.letter-card {
+  background-color: white;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 3);
+  border: 1px solid $neutral-200;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: $primary-color;
+    transform: scaleY(0);
+    transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+    transform-origin: top;
+  }
+
+  &:hover {
+    @include mix.elevation(2);
+    transform: translateY(-4px);
+
+    &::before {
+      transform: scaleY(1);
+    }
+  }
+
+  &:focus-within {
+    @include mix.focus-ring;
+  }
+
+  &.unread {
+    border-left: 3px solid $primary-color;
+    background: linear-gradient(
+      to right,
+      rgba($primary-color, 0.03) 0%,
+      white 100%
+    );
+  }
+
+  &.read {
+    opacity: 0.85;
+  }
+
+  .letter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: map.get(vars.$spacing, 2);
+    gap: map.get(vars.$spacing, 2);
+
+    h3 {
+      margin: 0;
+      color: $neutral-900;
+      @include mix.text-style(400);
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .letter-date {
+      color: $neutral-500;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+  }
+
+  .letter-topic {
+    display: inline-block;
+    padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+    background-color: $neutral-100;
+    color: $neutral-700;
+    border-radius: $radius-sm;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: map.get(vars.$spacing, 2);
+  }
+
+  .letter-preview {
+    color: $neutral-600;
+    line-height: 1.6;
+    margin-bottom: map.get(vars.$spacing, 3);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .letter-actions {
+    display: flex;
+    gap: map.get(vars.$spacing, 2);
+  }
+
+  .btn-read {
+    flex: 1;
+    @include mix.button-base(solid);
+    background-color: $primary-color;
+    color: white;
+    padding: map.get(vars.$spacing, 2);
+    border-radius: $radius-md;
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    &:hover {
+      background-color: color.adjust($primary-color, $lightness: -8%);
+    }
+
+    &:focus {
+      @include mix.focus-ring;
+    }
+  }
+}
+
+// ======================
+// EMPTY STATE
+// ======================
+
+.empty-state {
+  background-color: white;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 4) map.get(vars.$spacing, 3);
+  text-align: center;
+  border: 2px dashed $neutral-300;
+
+  h3 {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    color: $neutral-700;
+    @include mix.text-style(400);
+  }
+
+  p {
+    margin: 0;
+    color: $neutral-500;
+  }
+}
+
+// ======================
+// NOTIFICATIONS
+// ======================
+
+.notification {
+  padding: map.get(vars.$spacing, 3);
+  border-radius: $radius-md;
+  margin-bottom: map.get(vars.$spacing, 3);
+  border-left: 4px solid transparent;
+  position: relative;
+
+  h3 {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    line-height: 1.6;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &.warning {
+    background-color: rgba(map.get(vars.$colors, 'status', 'warning'), 0.1);
+    border-left-color: map.get(vars.$colors, 'status', 'warning');
+    color: color.adjust(map.get(vars.$colors, 'status', 'warning'), $lightness: -30%);
+  }
+
+  &.error {
+    background-color: rgba(map.get(vars.$colors, 'status', 'error'), 0.1);
+    border-left-color: map.get(vars.$colors, 'status', 'error');
+    color: color.adjust(map.get(vars.$colors, 'status', 'error'), $lightness: -15%);
+  }
+
+  &.success {
+    background-color: rgba(map.get(vars.$colors, 'status', 'success'), 0.1);
+    border-left-color: map.get(vars.$colors, 'status', 'success');
+    color: color.adjust(map.get(vars.$colors, 'status', 'success'), $lightness: -30%);
+  }
+
+  &.info {
+    background-color: rgba(map.get(vars.$colors, 'status', 'info'), 0.1);
+    border-left-color: map.get(vars.$colors, 'status', 'info');
+    color: color.adjust(map.get(vars.$colors, 'status', 'info'), $lightness: -30%);
+  }
+}
+
+// ======================
+// SUBSCRIPTION STATUS
+// ======================
+
+.subscription-status {
+  background-color: white;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 3);
+  border: 1px solid $neutral-200;
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: map.get(vars.$spacing, 2);
+
+    h3 {
+      margin: 0;
+      color: $neutral-900;
+      font-weight: 600;
+    }
+  }
+
+  &__badge {
+    padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+    border-radius: $radius-sm;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &--active {
+      background-color: rgba(map.get(vars.$colors, 'status', 'success'), 0.15);
+      color: color.adjust(map.get(vars.$colors, 'status', 'success'), $lightness: -20%);
+    }
+
+    &--inactive {
+      background-color: rgba($neutral-500, 0.15);
+      color: $neutral-700;
+    }
+  }
+
+  &__details {
+    color: $neutral-600;
+    line-height: 1.6;
+    margin-bottom: map.get(vars.$spacing, 2);
+  }
+}
+
+// ======================
+// ACCOUNT FORMS
+// ======================
+
+.account-section {
+  background-color: white;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 4);
+  border: 1px solid $neutral-200;
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  h3 {
+    margin: 0 0 map.get(vars.$spacing, 3) 0;
+    color: $neutral-900;
+    font-weight: 600;
+    @include mix.text-style(400);
+    padding-bottom: map.get(vars.$spacing, 2);
+    border-bottom: 1px solid $neutral-200;
+  }
+
+  p {
+    color: $neutral-600;
+    line-height: 1.6;
+    margin-bottom: map.get(vars.$spacing, 3);
+  }
+}
+
+.form-group {
+  margin-bottom: map.get(vars.$spacing, 3);
+
+  label {
+    display: block;
+    margin-bottom: map.get(vars.$spacing, 1);
+    color: $neutral-700;
+    font-weight: 500;
+    font-size: 0.9rem;
+
+    .required {
+      color: map.get(vars.$colors, 'status', 'error');
+      margin-left: 2px;
+    }
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: map.get(vars.$spacing, 2);
+    border: 1px solid $neutral-300;
+    border-radius: $radius-md;
+    background-color: white;
+    color: $neutral-900;
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+    font-size: 1rem;
+
+    &:hover:not(:disabled) {
+      border-color: $neutral-500;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+
+    &:disabled {
+      background-color: $neutral-100;
+      cursor: not-allowed;
+      opacity: 0.6;
+      color: $neutral-600;
+    }
+
+    &::placeholder {
+      color: $neutral-500;
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  .form-help {
+    display: block;
+    margin-top: map.get(vars.$spacing, 1);
+    color: $neutral-500;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  &.has-error {
+    input,
+    select,
+    textarea {
+      border-color: map.get(vars.$colors, 'status', 'error');
+    }
+
+    .form-error {
+      display: block;
+      margin-top: map.get(vars.$spacing, 1);
+      color: map.get(vars.$colors, 'status', 'error');
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: map.get(vars.$spacing, 2);
+  justify-content: flex-end;
+  margin-top: map.get(vars.$spacing, 4);
+  padding-top: map.get(vars.$spacing, 3);
+  border-top: 1px solid $neutral-200;
+
+  @include mix.mq-down('md') {
+    flex-direction: column-reverse;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+// ======================
+// TOPICS SELECTION
+// ======================
+
+.topics-selection-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: map.get(vars.$spacing, 3);
+  background-color: $neutral-100;
+  border-radius: $radius-sm;
+  margin-top: map.get(vars.$spacing, 3);
+
+  @include mix.mq-down('md') {
+    flex-direction: column;
+    gap: map.get(vars.$spacing, 2);
+    text-align: center;
+  }
+
+  .topics-count {
+    color: $neutral-900;
+    font-size: 1rem;
+
+    strong {
+      font-size: 1.5rem;
+      color: $primary-color;
+    }
+  }
+
+  .topics-recommendation {
+    color: $neutral-600;
+    font-size: 0.875rem;
+  }
+}
+
+.topics-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: map.get(vars.$spacing, 2);
+  margin-bottom: map.get(vars.$spacing, 4);
+  padding: map.get(vars.$spacing, 3);
+  background-color: white;
+  border-radius: $radius-md;
+  border: 1px solid $neutral-200;
+
+  @include mix.mq-down('md') {
+    justify-content: center;
+  }
+}
+
+.filter-btn {
+  @include mix.button-base(solid);
+  padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+  background-color: transparent;
+  color: $neutral-600;
+  border: 1px solid $neutral-300;
+  border-radius: $radius-md;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+  &:hover {
+    background-color: $neutral-100;
+    border-color: $neutral-500;
+  }
+
+  &.active {
+    background-color: $primary-color;
+    color: white;
+    border-color: $primary-color;
+  }
+
+  &:focus {
+    @include mix.focus-ring;
+  }
+}
+
+.topics-category-header {
+  grid-column: 1 / -1;
+  margin-top: map.get(vars.$spacing, 3);
+  margin-bottom: map.get(vars.$spacing, 2);
+  padding-bottom: map.get(vars.$spacing, 2);
+  border-bottom: 2px solid $neutral-200;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  h3 {
+    margin: 0;
+    color: $neutral-900;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+}
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: map.get(vars.$spacing, 3);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.topic-card {
+  background-color: white;
+  border: 2px solid $neutral-200;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 3);
+  cursor: pointer;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  position: relative;
+
+  &:hover {
+    border-color: $primary-color;
+    @include mix.elevation(1);
+  }
+
+  &:focus {
+    @include mix.focus-ring;
+  }
+
+  &.selected {
+    border-color: $primary-color;
+    background: linear-gradient(
+      135deg,
+      rgba($primary-color, 0.08) 0%,
+      rgba($primary-color, 0.03) 100%
+    );
+    
+    .topic-card__check {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  &__check {
+    position: absolute;
+    top: map.get(vars.$spacing, 2);
+    right: map.get(vars.$spacing, 2);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: $primary-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    &::after {
+      content: '✓';
+      font-size: 14px;
+    }
+  }
+
+  &__category {
+    display: inline-block;
+    padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+    background-color: $neutral-100;
+    color: $neutral-600;
+    border-radius: $radius-sm;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: map.get(vars.$spacing, 2);
+  }
+
+  &__name {
+    margin: 0 0 map.get(vars.$spacing, 1) 0;
+    color: $neutral-900;
+    font-weight: 600;
+    @include mix.text-style(400);
+  }
+
+  &__description {
+    margin: 0;
+    color: $neutral-600;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+.topics-actions {
+  display: flex;
+  gap: map.get(vars.$spacing, 2);
+  justify-content: flex-end;
+  margin-top: map.get(vars.$spacing, 4);
+  padding-top: map.get(vars.$spacing, 4);
+  border-top: 1px solid $neutral-200;
+
+  @include mix.mq-down('md') {
+    flex-direction: column-reverse;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+// ======================
+// LOADING STATES
+// ======================
+
+.dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  gap: map.get(vars.$spacing, 3);
+  
+  &__spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid $neutral-200;
+    border-top-color: $primary-color;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__text {
+    color: $neutral-600;
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ======================
+// ACCESSIBILITY ENHANCEMENTS
+// ======================
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .dashboard__nav a {
+    border-left-width: 4px;
+  }
+  
+  .stat-card,
+  .letter-card,
+  .topic-card,
+  .account-section {
+    border-width: 2px;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .dashboard__sidebar,
+  .stat-card,
+  .letter-card,
+  .topic-card {
+    transition: none;
+    animation: none;
+  }
+  
+  .dashboard-loading__spinner {
+    animation-duration: 2s;
+  }
+  
+  .letter-card::before {
+    transition: none;
   }
 }

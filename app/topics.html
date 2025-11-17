@@ -1,0 +1,120 @@
+---
+layout: dashboard
+title: My Topics
+js: topics
+---
+
+<!-- /app/topics.html -->
+
+<!-- Hidden topic data for JavaScript (Jekyll renders this) -->
+<div style="display: none;">
+  {% for topic in site.data.letter_topics.topics %}
+    {% if topic.id %}
+      <div data-topic-data='{"id":"{{ topic.id }}","name":"{{ topic.name }}","category":"{{ topic.category }}","description":"{{ topic.description }}"}'></div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<!-- Page Header -->
+<div class="account-section">
+  <h3>Manage Your Letter Topics</h3>
+  <p>Select the topics you're interested in. We'll personalize your letters based on your selections. You can change these anytime.</p>
+  
+  <div class="topics-selection-info">
+    <span class="topics-count">
+      <strong id="selected-count">0</strong> topics selected
+    </span>
+    <span class="topics-recommendation">
+      Recommended: 3-8 topics for the best experience
+    </span>
+  </div>
+</div>
+
+<!-- Filter by Category -->
+<div class="topics-filters">
+  <button class="filter-btn active" data-filter="all">
+    All Topics
+  </button>
+  <button class="filter-btn" data-filter="Arts & Creativity">
+    Arts & Creativity
+  </button>
+  <button class="filter-btn" data-filter="Science & Nature">
+    Science & Nature
+  </button>
+  <button class="filter-btn" data-filter="History & Culture">
+    History & Culture
+  </button>
+  <button class="filter-btn" data-filter="Philosophy & Ideas">
+    Philosophy & Ideas
+  </button>
+  <button class="filter-btn" data-filter="Technology & Innovation">
+    Technology & Innovation
+  </button>
+  <button class="filter-btn" data-filter="Health & Wellness">
+    Health & Wellness
+  </button>
+  <button class="filter-btn" data-filter="Literature & Language">
+    Literature & Language
+  </button>
+  <button class="filter-btn" data-filter="Business & Economics">
+    Business & Economics
+  </button>
+  <button class="filter-btn" data-filter="Travel & Geography">
+    Travel & Geography
+  </button>
+  <button class="filter-btn" data-filter="Food & Culinary Arts">
+    Food & Culinary Arts
+  </button>
+  <button class="filter-btn" data-filter="Sports & Recreation">
+    Sports & Recreation
+  </button>
+  <button class="filter-btn" data-filter="Personal Development">
+    Personal Development
+  </button>
+</div>
+
+<!-- Loading State -->
+<div id="topics-loading" class="dashboard-loading">
+  <div class="dashboard-loading__spinner"></div>
+  <div class="dashboard-loading__text">Loading topics...</div>
+</div>
+
+<!-- Topics Grid -->
+<div id="topics-container" class="topics-grid hidden">
+  <!-- Will be populated by JavaScript -->
+</div>
+
+<!-- Error State -->
+<div id="topics-error" class="notification error hidden">
+  <h3>Unable to Load Topics</h3>
+  <p>We couldn't load the topics right now. Please try refreshing the page.</p>
+  <button class="btn btn--outline" onclick="window.location.reload()">
+    Refresh Page
+  </button>
+</div>
+
+<!-- Save Actions -->
+<div class="topics-actions hidden" id="topics-actions">
+  <button class="btn btn--outline" id="cancel-btn">
+    Cancel Changes
+  </button>
+  <button class="btn btn--primary" id="save-topics-btn">
+    Save Topics
+  </button>
+</div>
+
+<!-- Success Notification (Hidden by default) -->
+<div id="save-success" class="notification success hidden">
+  <h3>Topics Saved!</h3>
+  <p>Your topic preferences have been updated successfully.</p>
+</div>
+
+<!-- Topic Card Template -->
+<template id="topic-card-template">
+  <div class="topic-card" tabindex="0" role="checkbox" aria-checked="false">
+    <div class="topic-card__check"></div>
+    <span class="topic-card__category"></span>
+    <h4 class="topic-card__name"></h4>
+    <p class="topic-card__description"></p>
+  </div>
+</template>

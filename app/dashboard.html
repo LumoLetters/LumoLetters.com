@@ -4,27 +4,105 @@ title: My Dashboard
 js: dashboard
 ---
 
-<!--app/dashboard.html-->
+<!-- /app/dashboard.hrml -->
 
+<!-- Profile Incomplete Warning -->
+<div id="profile-incomplete" class="hidden">
+  <div class="notification warning">
+    <h3>Complete Your Profile</h3>
+    <p>To start receiving personalized letters, please complete your profile setup.</p>
+    <a href="/onboarding/address" class="btn btn--primary">Complete Profile</a>
+  </div>
+</div>
+
+<!-- Welcome Section -->
 <div class="dashboard-welcome">
   <div id="welcome-message">
-    <!-- Will be populated by JS when user is authenticated -->
+    <h2>Welcome back!</h2>
     <p>Loading your dashboard...</p>
   </div>
 </div>
 
-<div class="dashboard-letters">
-  <h2>My Letters</h2>
-  <div id="letters-container" class="letters-grid">
-    <!-- Will be populated by JS when letters are loaded -->
-    <p>Loading your letters...</p>
+<!-- Stats Cards -->
+<div class="dashboard-stats" id="dashboard-stats">
+  <!-- Will be populated by JS -->
+  <div class="stat-card stat-card--primary">
+    <div class="stat-card__label">Unread Letters</div>
+    <div class="stat-card__value" data-stat="unread">—</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-card__label">Total Letters</div>
+    <div class="stat-card__value" data-stat="total">—</div>
+  </div>
+  
+  <div class="stat-card stat-card--success">
+    <div class="stat-card__label">This Month</div>
+    <div class="stat-card__value" data-stat="month">—</div>
   </div>
 </div>
 
-<div id="profile-incomplete" style="display: none;">
-  <div class="notification warning">
-    <h3>Complete Your Profile</h3>
-    <p>To start receiving personalized letters, please complete your profile setup.</p>
-    <a href="/onboarding/address" class="btn btn-primary">Complete Profile</a>
+<!-- Subscription Status -->
+<div class="subscription-status" id="subscription-status">
+  <div class="subscription-status__header">
+    <h3>Subscription Status</h3>
+    <span class="subscription-status__badge subscription-status__badge--inactive" data-subscription-badge>
+      Loading...
+    </span>
+  </div>
+  <div class="subscription-status__details" data-subscription-details>
+    Checking your subscription status...
+  </div>
+  <button 
+    class="btn btn--outline hidden" 
+    data-manage-subscription
+    aria-label="Manage your subscription">
+    Manage Subscription
+  </button>
+</div>
+
+<!-- Letters Section -->
+<div class="dashboard-letters">
+  <h2>Recent Letters</h2>
+  
+  <!-- Loading State -->
+  <div id="letters-loading" class="dashboard-loading">
+    <div class="dashboard-loading__spinner"></div>
+    <div class="dashboard-loading__text">Loading your letters...</div>
+  </div>
+  
+  <!-- Letters Grid -->
+  <div id="letters-container" class="letters-grid hidden">
+    <!-- Will be populated by JS when letters are loaded -->
+  </div>
+  
+  <!-- Empty State -->
+  <div id="letters-empty" class="empty-state hidden">
+    <h3>No Letters Yet</h3>
+    <p>Your personalized letters will appear here. Check back soon!</p>
+  </div>
+  
+  <!-- Error State -->
+  <div id="letters-error" class="notification error hidden">
+    <h3>Unable to Load Letters</h3>
+    <p>We couldn't load your letters right now. Please try refreshing the page.</p>
+    <button class="btn btn--outline" onclick="window.location.reload()">
+      Refresh Page
+    </button>
   </div>
 </div>
+
+<!-- Letter Card Template (Hidden, cloned by JS) -->
+<template id="letter-card-template">
+  <div class="letter-card" data-letter-id="">
+    <div class="letter-header">
+      <h3 class="letter-title"></h3>
+      <span class="letter-date"></span>
+    </div>
+    <span class="letter-topic"></span>
+    <p class="letter-preview"></p>
+    <div class="letter-actions">
+      <a href="#" class="btn-read">Read Letter</a>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,500 @@
+// _sass/_pages.scss
+// Styling for content pages (About, FAQ, etc.)
+
+@use 'sass:map';
+@use 'sass:color';
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+$primary: map.get(vars.$colors, 'status', 'primary');
+$secondary: map.get(vars.$colors, 'status', 'secondary');
+$neutral-100: map.get(vars.$colors, 'neutral', 100);
+$neutral-200: map.get(vars.$colors, 'neutral', 200);
+$neutral-300: map.get(vars.$colors, 'neutral', 300);
+$neutral-500: map.get(vars.$colors, 'neutral', 500);
+$neutral-600: map.get(vars.$colors, 'neutral', 600);
+$neutral-700: map.get(vars.$colors, 'neutral', 700);
+$neutral-900: map.get(vars.$colors, 'neutral', 900);
+$radius-sm: map.get(map.get(vars.$sizes, 'radius'), 'sm');
+$radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
+
+// ======================
+// PAGE HERO
+// ======================
+
+.page-hero {
+  padding: map.get(vars.$spacing, 4) * 3 0 map.get(vars.$spacing, 4) * 2;
+  background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($secondary, 0.03) 100%);
+  border-bottom: 1px solid $neutral-200;
+  text-align: center;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) * 2 0 map.get(vars.$spacing, 4);
+  }
+
+  &--compact {
+    padding: map.get(vars.$spacing, 4) * 2 0 map.get(vars.$spacing, 4);
+
+    @include mix.mq-down('md') {
+      padding: map.get(vars.$spacing, 4) 0 map.get(vars.$spacing, 3);
+    }
+  }
+
+  &__content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &__title {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    color: $neutral-900;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: $neutral-600;
+    font-size: clamp(1.125rem, 2vw, 1.25rem);
+    line-height: 1.6;
+  }
+}
+
+// ======================
+// CONTENT SECTIONS
+// ======================
+
+.content-section {
+  padding: map.get(vars.$spacing, 4) * 3 0;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) * 2 0;
+  }
+
+  &--alt {
+    background-color: $neutral-100;
+  }
+}
+
+.content-badge {
+  display: inline-block;
+  padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+  background-color: rgba($primary, 0.1);
+  color: $primary;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: map.get(vars.$spacing, 2);
+}
+
+.content-heading {
+  margin: 0 0 map.get(vars.$spacing, 3) 0;
+  color: $neutral-900;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.content-text {
+  margin: 0 0 map.get(vars.$spacing, 3) 0;
+  color: $neutral-600;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid rgba($primary, 0.3);
+    transition: border-color map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    &:hover {
+      border-bottom-color: $primary;
+    }
+  }
+}
+
+.content-grid {
+  display: grid;
+  gap: map.get(vars.$spacing, 4) * 2;
+
+  &--centered {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  &--two-column {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+
+    @include mix.mq-down('md') {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.content-block {
+  // Base block styles
+}
+
+// ======================
+// HIGHLIGHT BOX
+// ======================
+
+.highlight-box {
+  padding: map.get(vars.$spacing, 3);
+  background: linear-gradient(135deg, rgba($primary, 0.08) 0%, rgba($secondary, 0.05) 100%);
+  border-left: 4px solid $primary;
+  border-radius: $radius-md;
+  margin-top: map.get(vars.$spacing, 3);
+}
+
+.highlight-text {
+  margin: 0;
+  color: $neutral-700;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+
+  strong {
+    color: $primary;
+    font-weight: 600;
+  }
+}
+
+// ======================
+// FEATURES GRID
+// ======================
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: map.get(vars.$spacing, 3);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-card {
+  padding: map.get(vars.$spacing, 4);
+  background-color: white;
+  border: 1px solid $neutral-200;
+  border-radius: $radius-md;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(33, 37, 41, 0.1);
+    border-color: rgba($primary, 0.3);
+  }
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba($primary, 0.1), rgba($secondary, 0.05));
+    border-radius: $radius-md;
+    color: $primary;
+    margin-bottom: map.get(vars.$spacing, 3);
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__title {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    color: $neutral-900;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  &__description {
+    margin: 0;
+    color: $neutral-600;
+    line-height: 1.6;
+  }
+}
+
+// ======================
+// VALUES LIST
+// ======================
+
+.values-list {
+  display: flex;
+  flex-direction: column;
+  gap: map.get(vars.$spacing, 3);
+  margin-top: map.get(vars.$spacing, 3);
+}
+
+.value-item {
+  display: flex;
+  gap: map.get(vars.$spacing, 3);
+  padding: map.get(vars.$spacing, 3);
+  background-color: white;
+  border: 1px solid $neutral-200;
+  border-radius: $radius-md;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(33, 37, 41, 0.08);
+    border-color: rgba($primary, 0.2);
+  }
+
+  &__icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__title {
+    margin: 0 0 map.get(vars.$spacing, 1) 0;
+    color: $neutral-900;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  &__text {
+    margin: 0;
+    color: $neutral-600;
+    line-height: 1.6;
+  }
+}
+
+// ======================
+// IMAGE PLACEHOLDER
+// ======================
+
+.content-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+
+  @include mix.mq-down('md') {
+    min-height: 200px;
+  }
+}
+
+.image-box {
+  width: 100%;
+  height: 100%;
+  background-color: $neutral-100;
+  border-radius: $radius-md;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ======================
+// CTA SECTION
+// ======================
+
+.cta-section {
+  padding: map.get(vars.$spacing, 4) * 3 0;
+  background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($secondary, 0.03) 100%);
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) * 2 0;
+  }
+}
+
+.cta-box {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding: map.get(vars.$spacing, 4) * 2;
+  background-color: white;
+  border-radius: $radius-md;
+  box-shadow: 0 8px 24px rgba(33, 37, 41, 0.08);
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4);
+  }
+
+  &--compact {
+    padding: map.get(vars.$spacing, 4);
+  }
+
+  &__title {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    color: $neutral-900;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+  }
+
+  &__text {
+    margin: 0 0 map.get(vars.$spacing, 4) 0;
+    color: $neutral-600;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  &__note {
+    margin-top: map.get(vars.$spacing, 2);
+    color: $neutral-500;
+    font-size: 0.875rem;
+
+    a {
+      color: $primary;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// ======================
+// FAQ SECTION
+// ======================
+
+.faq-section {
+  padding: map.get(vars.$spacing, 4) * 2 0;
+  max-width: 900px;
+  margin: 0 auto;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) 0;
+  }
+}
+
+.faq-category {
+  margin-bottom: map.get(vars.$spacing, 4) * 2;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &__title {
+    margin: 0 0 map.get(vars.$spacing, 3) 0;
+    color: $neutral-900;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding-bottom: map.get(vars.$spacing, 2);
+    border-bottom: 2px solid $neutral-200;
+  }
+}
+
+.faq-item {
+  border: 1px solid $neutral-200;
+  border-radius: $radius-md;
+  margin-bottom: map.get(vars.$spacing, 2);
+  overflow: hidden;
+  background-color: white;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+  &:hover {
+    border-color: rgba($primary, 0.3);
+    box-shadow: 0 2px 8px rgba(33, 37, 41, 0.06);
+  }
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: map.get(vars.$spacing, 3);
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: $neutral-900;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+  &:hover {
+    color: $primary;
+  }
+
+  &.active {
+    color: $primary;
+
+    .faq-icon {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.faq-icon {
+  flex-shrink: 0;
+  color: $primary;
+  transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  padding: 0 map.get(vars.$spacing, 3);
+  color: $neutral-600;
+  font-size: 1rem;
+  line-height: 1.7;
+
+  p {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+
+    &:last-child {
+      margin-bottom: map.get(vars.$spacing, 3);
+    }
+  }
+
+  ul, ol {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    padding-left: map.get(vars.$spacing, 3);
+
+    &:last-child {
+      margin-bottom: map.get(vars.$spacing, 3);
+    }
+  }
+
+  li {
+    margin-bottom: map.get(vars.$spacing, 1);
+  }
+
+  strong {
+    color: $neutral-700;
+    font-weight: 600;
+  }
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ======================
+// ACCESSIBILITY
+// ======================
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-card,
+  .value-item,
+  .faq-item,
+  .faq-icon {
+    transition: none;
+  }
+}

@@ -4,100 +4,162 @@ title: Account
 js: account
 ---
 
-<div id="error-container" style="display: none; padding: 1rem; background: #fee; border: 1px solid #fcc; margin: 1rem 0; border-radius: 4px;"></div>
+<!-- Page Header -->
+<div class="account-section">
+  <h1>Account Settings</h1>
+  <p>Manage your profile information and subscription preferences.</p>
+</div>
 
-<div class="account-container">
+<!-- Loading State -->
+<div id="account-loading" class="dashboard-loading">
+  <div class="dashboard-loading__spinner"></div>
+  <div class="dashboard-loading__text">Loading account information...</div>
+</div>
+
+<!-- Error State -->
+<div id="account-error" class="notification error hidden">
+  <h3>Unable to Load Account Information</h3>
+  <p>We couldn't load your account details right now. Please try refreshing the page.</p>
+  <button class="btn btn--outline" onclick="window.location.reload()">
+    Refresh Page
+  </button>
+</div>
+
+<!-- Main Content -->
+<div id="account-content" class="hidden">
   
-  <!-- Page Header -->
-  <header class="page-header">
-    <h1>Account Settings</h1>
-    <p class="subtitle">Manage your profile and subscription</p>
-  </header>
-
-  <!-- Loading State -->
-  <div id="loading-state" class="loading-container">
-    <div class="spinner"></div>
-    <p>Loading account information...</p>
-  </div>
-
-  <!-- Error State -->
-  <div id="error-state" class="error-container" style="display: none;">
-    <div class="error-message">
-      <h3>Unable to load account information</h3>
-      <p id="error-details"></p>
-      <button id="retry-btn" class="btn-secondary">Try Again</button>
+  <!-- Profile Information -->
+  <div class="account-section">
+    <h2>Profile Information</h2>
+    
+    <div class="subscription-status">
+      <div class="subscription-status__header">
+        <h3>Personal Details</h3>
+        <button class="btn btn--outline btn--sm" id="edit-profile-btn">
+          Edit Profile
+        </button>
+      </div>
+      
+      <div class="profile-details">
+        <div class="profile-field">
+          <label>Name</label>
+          <span id="user-name" class="profile-value">Loading...</span>
+        </div>
+        
+        <div class="profile-field">
+          <label>Email</label>
+          <span id="user-email" class="profile-value">Loading...</span>
+        </div>
+        
+        <div class="profile-field">
+          <label>Member Since</label>
+          <span id="user-joined" class="profile-value">Loading...</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Main Content -->
-  <div id="main-content" style="display: none;">
+  <!-- Subscription Status -->
+  <div class="account-section">
+    <h2>Subscription</h2>
     
-    <!-- Profile Section -->
-    <section class="account-section">
-      <h2>Profile Information</h2>
-      <div class="profile-card">
-        <div class="profile-field">
-          <label>Name</label>
-          <span id="user-name">-</span>
-        </div>
-        <div class="profile-field">
-          <label>Email</label>
-          <span id="user-email">-</span>
-        </div>
-        <div class="profile-field">
-          <label>Address</label>
-          <div id="user-address">
-            <div id="address-display" style="display: none;">
-              <span id="address-street">-</span><br>
-              <span id="address-city">-</span>, <span id="address-state">-</span> <span id="address-zip">-</span>
-            </div>
-            <span id="no-address" style="display: none;">No address on file</span>
-          </div>
-        </div>
-        <button id="edit-profile-btn" class="btn-secondary">Edit Profile</button>
-      </div>
-    </section>
-
-    <!-- Subscription Section -->
-    <section class="account-section">
-      <h2>Subscription</h2>
-      <div class="subscription-card">
-        <div class="subscription-status">
-          <div class="status-indicator">
-            <span id="status-badge" class="badge">-</span>
-          </div>
-          <div class="subscription-details">
-            <h3 id="current-plan">Loading...</h3>
-            <p id="subscription-info">-</p>
-            <p id="next-billing" style="display: none;">
-              Next billing: <span id="billing-date">-</span>
-            </p>
-          </div>
-        </div>
-        
-        <div class="subscription-actions">
-          <button id="manage-subscription-btn" class="btn-primary" style="display: none;">
-            Manage Subscription
-          </button>
-          <button id="start-subscription-btn" class="btn-primary" style="display: none;">
-            Start Subscription
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Interests Section -->
-    <section class="account-section">
-      <h2>Letter Topics</h2>
-      <div class="interests-card">
-        <p>Your selected topics of interest:</p>
-        <div id="user-interests" class="interests-list">
+    <div class="subscription-status">
+      <div class="subscription-status__header">
+        <h3>Current Plan</h3>
+        <span id="subscription-badge" class="subscription-status__badge subscription-status__badge--inactive">
           Loading...
-        </div>
-        <button id="edit-interests-btn" class="btn-secondary">Update Topics</button>
+        </span>
       </div>
-    </section>
-
+      
+      <div class="subscription-status__details">
+        <p id="subscription-description">Loading subscription details...</p>
+        <p id="billing-info" class="hidden">
+          Next billing date: <strong id="billing-date">-</strong>
+        </p>
+      </div>
+      
+      <div class="subscription-actions">
+        <button id="manage-subscription-btn" class="btn btn--primary hidden">
+          Manage Subscription
+        </button>
+        <button id="start-subscription-btn" class="btn btn--primary hidden">
+          Start Free Trial
+        </button>
+      </div>
+    </div>
   </div>
 
+  <!-- Letter Topics -->
+  <div class="account-section">
+    <h2>Letter Topics</h2>
+    
+    <div class="subscription-status">
+      <div class="subscription-status__header">
+        <h3>Your Interests</h3>
+        <a href="/app/topics.html" class="btn btn--outline btn--sm">
+          Manage Topics
+        </a>
+      </div>
+      
+      <div class="subscription-status__details">
+        <p>You have selected <strong id="topics-count">0</strong> topics of interest.</p>
+        <div id="topics-preview" class="topics-preview">
+          <!-- Topics will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Actions -->
+  <div class="account-section">
+    <h2>Account Actions</h2>
+    
+    <div class="account-actions">
+      <button id="logout-btn" class="btn btn--outline">
+        Sign Out
+      </button>
+        <button id="delete-account-btn" class="btn btn--outline btn--danger">
+          Delete Account
+        </button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Profile Modal (Hidden by default) -->
+<div id="edit-profile-modal" class="modal hidden">
+  <div class="modal__content">
+    <div class="modal__header">
+      <h3>Edit Profile</h3>
+      <button class="modal__close" id="close-profile-modal">&times;</button>
+    </div>
+    
+    <div class="modal__body">
+      <form id="profile-form">
+        <div class="form-group">
+          <label for="edit-name">Name</label>
+          <input type="text" id="edit-name" class="form-input" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="edit-email">Email</label>
+          <input type="email" id="edit-email" class="form-input" required>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn--outline" id="cancel-profile-edit">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn--primary">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Success Notification -->
+<div id="profile-update-success" class="notification success hidden">
+  <h3>Profile Updated!</h3>
+  <p>Your profile information has been updated successfully.</p>
 </div>

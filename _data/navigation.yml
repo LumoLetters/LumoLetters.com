@@ -1,32 +1,41 @@
+#/navigation.yml
+
+
 # Header Navigation
 header:
   - title: Home
     url: /
   - title: About
-    url: /pages/about.html
+    url: /about
   - title: Pricing
-    url: /pages/pricing.html
+    url: /pricing
   - title: FAQ
-    url: /pages/faq.html
+    url: /faq
+  - title: Contact
+    url: /contact
 
 # Footer Navigation
 footer:
   company:
     - title: About
-      url: /pages/about.html
+      url: /about
     - title: Team
-      url: /pages/team.html
+      url: /team
     - title: Testimonials
-      url: /pages/testimonials.html
-  
+      url: /testimonials
+
   legal:
-    - title: Terms
-      url: /pages/terms.html
-    - title: Privacy
-      url: /pages/privacy.html
-  
+    - title: Terms of Service
+      url: /terms
+    - title: Privacy Policy
+      url: /privacy
+    - title: Cookie Policy
+      url: /cookies
+    - title: User Agreement
+      url: /user-agreement
+
   support:
     - title: FAQ
-      url: /pages/faq.html
+      url: /faq
     - title: Contact
-      url: /pages/contact.html
+      url: /contact

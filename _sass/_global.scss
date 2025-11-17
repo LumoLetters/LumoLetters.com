@@ -21,6 +21,8 @@ body {
   @include mix.text-style(300);
   color: map.get(vars.$colors, 'neutral', '900');
   background-color: white;
+  overflow-x: hidden; /* ADD THIS */
+  width: 100%; /* ADD THIS */
 }
 
 h1 { @include mix.text-style(500); }
@@ -33,6 +35,7 @@ h1 { @include mix.text-style(500); }
   max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 map.get(vars.$spacing, 3);
+  box-sizing: border-box; /* ADD THIS */
 }
 
 .hidden { display: none !important; }

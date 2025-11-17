@@ -4,47 +4,136 @@ layout: default
 
 <!--/onboarding/interests.html-->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Your Interests</title>
-  <link rel="stylesheet" href="/assets/css/main.css" />
-</head>
-<body>
-  <body data-onboarding-step="interests"></body>
+<body data-onboarding-step="interests">
   <div id="onboarding-header"></div>
 
   <main class="onboarding-content">
-    <h1>What are you interested in?</h1>
-    <p>Select at least 3 topics</p>
+    <h1>What sparks your curiosity?</h1>
+    <p class="subtitle">Choose at least 3 topics that interest you. We'll curate personalized letters based on your selections.</p>
     
+    <!-- Selection Info -->
+    <div class="selection-info">
+      <div class="selection-count">
+        <strong id="selected-count">0</strong> topics selected
+      </div>
+      <div class="selection-recommendation">
+        Select 3-8 topics for the best personalized experience
+      </div>
+    </div>
+
     <form id="onboarding-form" novalidate>
-      <div class="interests-grid">
-        <!-- Example interests -->
-        <label class="interest-option">
-          <input type="checkbox" name="interests" value="technology" />
-          <span>Technology</span>
-        </label>
-        <label class="interest-option">
-          <input type="checkbox" name="interests" value="arts" />
-          <span>Arts</span>
-        </label>
-        <label class="interest-option">
-          <input type="checkbox" name="interests" value="literature" />
-          <span>Literature</span>
-        </label>
-        <!-- Add more interests as needed -->
+      
+      <!-- Topics Grid with Categories -->
+      <div class="topic-selection-grid">
+        {% for topic in site.data.letter_topics.topics %}
+          {% if topic.id %}
+            <div class="topic-selection-card" tabindex="0" role="checkbox" aria-checked="false" data-topic-id="{{ topic.id }}">
+              <input 
+                type="checkbox" 
+                name="interests" 
+                value="{{ topic.id }}"
+                data-category="{{ topic.category }}"
+                id="topic-{{ topic.id }}"
+              />
+              <div class="topic-selection-card__check"></div>
+              <span class="topic-selection-card__category">{{ topic.category }}</span>
+              <h4 class="topic-selection-card__name">{{ topic.name }}</h4>
+              <p class="topic-selection-card__description">{{ topic.description }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
 
-      <div id="onboarding-error" style="display:none; color: red; margin-bottom: 1em;"></div>
+      <!-- Error Display -->
+      <div id="onboarding-error" style="display:none;" role="alert" aria-live="assertive"></div>
       
+      <!-- Submit Button -->
       <button type="submit" class="btn-primary" id="submit-btn">
-        Continue →
+        Continue to Plans →
       </button>
     </form>
   </main>
 
+  <script type="module">
+    // Initialize topic selection before onboarding.mjs loads
+    function initTopicSelection() {
+      const cards = document.querySelectorAll('.topic-selection-card');
+      const countElement = document.getElementById('selected-count');
+
+      function updateCount() {
+        const selectedCount = document.querySelectorAll('input[name="interests"]:checked').length;
+        if (countElement) {
+          countElement.textContent = selectedCount;
+        }
+      }
+
+      cards.forEach(card => {
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        
+        // Card click handler
+        card.addEventListener('click', function(e) {
+          // Don't toggle if clicking the checkbox directly (it handles itself)
+          if (e.target === checkbox) {
+            return;
+          }
+          
+          // Toggle checkbox
+          checkbox.checked = !checkbox.checked;
+          
+          // Update visual state
+          if (checkbox.checked) {
+            card.classList.add('selected');
+            card.setAttribute('aria-checked', 'true');
+          } else {
+            card.classList.remove('selected');
+            card.setAttribute('aria-checked', 'false');
+          }
+          
+          updateCount();
+        });
+
+        // Checkbox change handler (for direct checkbox clicks)
+        checkbox.addEventListener('change', function() {
+          if (this.checked) {
+            card.classList.add('selected');
+            card.setAttribute('aria-checked', 'true');
+          } else {
+            card.classList.remove('selected');
+            card.setAttribute('aria-checked', 'false');
+          }
+          updateCount();
+        });
+
+        // Keyboard accessibility
+        card.addEventListener('keydown', function(e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+              card.classList.add('selected');
+              card.setAttribute('aria-checked', 'true');
+            } else {
+              card.classList.remove('selected');
+              card.setAttribute('aria-checked', 'false');
+            }
+            
+            updateCount();
+          }
+        });
+      });
+
+      // Initial count
+      updateCount();
+    }
+
+    // Run immediately
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTopicSelection);
+    } else {
+      initTopicSelection();
+    }
+  </script>
+  
   <script type="module" src="/assets/js/lib/onboarding.mjs"></script>
 </body>
-</html>

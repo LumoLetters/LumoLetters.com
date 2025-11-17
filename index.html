@@ -1,39 +1,287 @@
 ---
 layout: default
 title: Home
-description: Rediscover the joy of a pen pal with letters crafted just for you and delivered to your door
+description: Rediscover the joy of meaningful connection through personalized letters delivered to your door
 ---
-<!--index.html main page-->
+
+<!-- Hero Section -->
 <section class="hero">
+  <div class="hero__background"></div>
   <div class="container">
-    <h1>Where Connection Finds You</h1>
-    <p class="hero-text">Rediscover the joy of a pen pal with letters crafted just for you and delivered to your door with an open invitation to keep the conversation going by writing back.</p>
-    <div class="cta-buttons">
-      <button id="get-started-button" class="btn btn-primary btn-large">Let's Begin</button>
+    <div class="hero__content">
+      <span class="hero__badge">Where Thoughtful Connection Lives</span>
+      <h1 class="hero__title">
+        Rediscover the Lost Art of 
+        <span class="hero__title-highlight">Letter Writing</span>
+      </h1>
+      <p class="hero__subtitle">
+        Experience the warmth of personalized letters crafted just for you—delivered to your door with an open invitation to keep the conversation alive. No screens. No algorithms. Just genuine connection.
+      </p>
+      <div class="hero__actions">
+        <button id="get-started-button" class="btn btn--primary btn--large">
+          Start Your Journey
+          <svg class="btn__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <a href="/about" class="btn btn--outline btn--large">
+          Learn More
+        </a>
+      </div>
+      <div class="hero__social-proof">
+        <div class="social-proof__stats">
+          <div class="stat">
+            <span class="stat__number">2,000+</span>
+            <span class="stat__label">Letters Delivered</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">500+</span>
+            <span class="stat__label">Happy Members</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">4.9★</span>
+            <span class="stat__label">Average Rating</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <p class="social-proof">Join thousands finding moments of warmth.</p>
   </div>
 </section>
 
+<!-- How It Works Section -->
 <section class="how-it-works">
   <div class="container">
-    <h2>How LumoLetters Works</h2>
+    <div class="section-header">
+      <span class="section-badge">Simple & Meaningful</span>
+      <h2 class="section-title">Your Journey in Three Steps</h2>
+      <p class="section-description">
+        Getting started is effortless. We handle the details so you can focus on what matters—meaningful connection.
+      </p>
+    </div>
+    
     <div class="steps">
       <div class="step">
-        <div class="step-number">1</div>
-        <h3>Choose Your Topics</h3>
-        <p>Select interests that resonate with you, from thoughtful reflections to fascinating stories.</p>
+        <div class="step__icon-wrapper">
+          <div class="step__number">1</div>
+          <svg class="step__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="step__title">Choose Your Interests</h3>
+        <p class="step__description">
+          Select topics that spark your curiosity—from philosophy and science to art and travel. Every letter is tailored to what captivates you.
+        </p>
       </div>
+
       <div class="step">
-        <div class="step-number">2</div>
-        <h3>Receive Your Letters</h3>
-        <p>We craft and send physical letters tailored to your interests, delivered right to your mailbox.</p>
+        <div class="step__icon-wrapper">
+          <div class="step__number">2</div>
+          <svg class="step__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8L10.89 13.26C11.5656 13.6762 12.4344 13.6762 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="step__title">Receive Thoughtful Letters</h3>
+        <p class="step__description">
+          We craft personalized letters with care and send them directly to your mailbox. Each one arrives with a return envelope, ready for your reply.
+        </p>
       </div>
+
       <div class="step">
-        <div class="step-number">3</div>
-        <h3>Write Back (Optional)</h3>
-        <p>Continue the conversation by responding to prompts and questions in your letters.</p>
+        <div class="step__icon-wrapper">
+          <div class="step__number">3</div>
+          <svg class="step__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V14M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474 20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284 15H9L9 12.1716L17.5858 3.58579Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="step__title">Continue the Conversation</h3>
+        <p class="step__description">
+          Write back whenever inspiration strikes. Share your thoughts, answer prompts, or simply enjoy the experience—there's no pressure, just possibility.
+        </p>
+      </div>
+    </div>
+
+    <div class="how-it-works__cta">
+      <button id="how-it-works-cta" class="btn btn--primary btn--large">
+        Get Your First Letter
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Why LumoLetters Section -->
+<section class="why-lumoletters">
+  <div class="container">
+    <div class="why-lumoletters__grid">
+      <div class="why-lumoletters__content">
+        <span class="section-badge">Why Choose LumoLetters</span>
+        <h2 class="section-title">More Than Just Mail</h2>
+        <p class="section-description">
+          In a world of endless notifications and fleeting messages, we're bringing back something rare: the kind of connection that makes you pause, reflect, and truly engage.
+        </p>
+        
+        <div class="features-list">
+          <div class="feature">
+            <div class="feature__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature__text">
+              <h3 class="feature__title">Personalized to You</h3>
+              <p class="feature__description">Every letter reflects your unique interests and curiosities.</p>
+            </div>
+          </div>
+
+          <div class="feature">
+            <div class="feature__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature__text">
+              <h3 class="feature__title">No Rush, No Pressure</h3>
+              <p class="feature__description">Write back on your schedule, or simply enjoy receiving letters.</p>
+            </div>
+          </div>
+
+          <div class="feature">
+            <div class="feature__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4.318 6.318C5.86051 4.77548 7.91451 3.87213 10.0618 3.77863C12.2091 3.68514 14.3354 4.40781 16.0001 5.81802C17.6647 7.22823 18.7502 9.22824 19.0376 11.4089C19.3251 13.5895 18.7939 15.801 17.5523 17.6177L21.0001 21.0655L17.6001 21.0655C15.7966 22.2823 13.6001 22.8 11.4001 22.5001C9.2001 22.2001 7.2001 21.1001 5.8001 19.4001C4.4001 17.7001 3.7001 15.6001 3.8001 13.4001C3.9001 11.2001 4.8001 9.2001 6.3001 7.7001L4.318 6.318Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature__text">
+              <h3 class="feature__title">Thoughtfully Crafted</h3>
+              <p class="feature__description">Each letter is carefully written to inspire and engage.</p>
+            </div>
+          </div>
+
+          <div class="feature">
+            <div class="feature__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 15C15.866 15 19 11.866 19 8C19 4.13401 15.866 1 12 1C8.13401 1 5 4.13401 5 8C5 11.866 8.13401 15 12 15ZM12 15V23M8 23H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature__text">
+              <h3 class="feature__title">A Keepsake Collection</h3>
+              <p class="feature__description">Build a library of meaningful correspondence over time.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="why-lumoletters__cta">
+          <a href="/about" class="link-with-arrow">
+            Learn more about our story
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="why-lumoletters__image">
+        <div class="image-placeholder">
+          <svg width="400" height="500" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="500" rx="8" fill="#F8F9FA"/>
+            <path d="M120 180H280M120 220H240M120 260H280M120 300H260" stroke="#274472" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="200" cy="380" r="30" fill="#91B0DD"/>
+          </svg>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- Testimonials Section -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">What Our Members Say</span>
+      <h2 class="section-title">Stories from Real People</h2>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial__rating">★★★★★</div>
+        <p class="testimonial__text">
+          "In a world of instant messages, receiving a thoughtful letter in my mailbox feels like a gift. It's become my favorite part of the month."
+        </p>
+        <div class="testimonial__author">
+          <div class="author__avatar">SM</div>
+          <div class="author__info">
+            <div class="author__name">Sarah M.</div>
+            <div class="author__location">Seattle, WA</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial__rating">★★★★★</div>
+        <p class="testimonial__text">
+          "I never realized how much I missed the art of letter writing. LumoLetters brings that joy back without any of the pressure."
+        </p>
+        <div class="testimonial__author">
+          <div class="author__avatar">JD</div>
+          <div class="author__info">
+            <div class="author__name">James D.</div>
+            <div class="author__location">Austin, TX</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial__rating">★★★★★</div>
+        <p class="testimonial__text">
+          "Each letter feels personally written for me. The topics are fascinating, and I love having something tangible to hold and revisit."
+        </p>
+        <div class="testimonial__author">
+          <div class="author__avatar">EM</div>
+          <div class="author__info">
+            <div class="author__name">Emily R.</div>
+            <div class="author__location">Portland, OR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="final-cta">
+  <div class="container">
+    <div class="final-cta__content">
+      <h2 class="final-cta__title">Ready to Start Your Journey?</h2>
+      <p class="final-cta__subtitle">
+        Join hundreds of members rediscovering the joy of meaningful connection through personalized letters.
+      </p>
+      <button id="final-cta-button" class="btn btn--primary btn--large">
+        Begin Your First Letter
+      </button>
+      <p class="final-cta__note">No commitment required. Cancel anytime.</p>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  // Handle all CTA buttons
+  const ctaButtons = [
+    document.getElementById('get-started-button'),
+    document.getElementById('how-it-works-cta'),
+    document.getElementById('final-cta-button')
+  ];
+
+  ctaButtons.forEach(button => {
+    if (button) {
+      button.addEventListener('click', () => {
+        // Check if user is logged in by looking for auth token
+        const isLoggedIn = localStorage.getItem('lumoletters_isAuthenticated') === 'true';
+        
+        if (isLoggedIn) {
+          window.location.href = '/app/dashboard';
+        } else {
+          window.location.href = '/pricing';
+        }
+      });
+    }
+  });
+</script>

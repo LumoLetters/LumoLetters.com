@@ -46,3 +46,290 @@ topics:
       - "Describe a dream you remember vividly."
       - "Invent a new holiday and describe its traditions."
       - "If you could have dinner with any three people (living or dead), who would you choose?"
+
+
+topics:
+  # ARTS & CREATIVITY
+  - id: visual-arts
+    name: Visual Arts
+    category: Arts & Creativity
+    description: Painting, drawing, sculpture, and mixed media
+
+  - id: photography
+    name: Photography
+    category: Arts & Creativity
+    description: Camera techniques, composition, and visual storytelling
+
+  - id: creative-writing
+    name: Creative Writing
+    category: Arts & Creativity
+    description: Fiction, poetry, storytelling techniques
+
+  - id: music
+    name: Music
+    category: Arts & Creativity
+    description: Music theory, instruments, composition, and appreciation
+
+  - id: film-cinema
+    name: Film & Cinema
+    category: Arts & Creativity
+    description: Movies, cinematography, and film analysis
+
+  # SCIENCE & NATURE
+  - id: astronomy
+    name: Astronomy
+    category: Science & Nature
+    description: Stars, planets, cosmology, and space exploration
+
+  - id: biology
+    name: Biology
+    category: Science & Nature
+    description: Life sciences, evolution, and ecosystems
+
+  - id: environmental-science
+    name: Environmental Science
+    category: Science & Nature
+    description: Climate, conservation, and sustainability
+
+  - id: wildlife
+    name: Wildlife
+    category: Science & Nature
+    description: Animal behavior, habitats, and conservation
+
+  - id: botany
+    name: Botany & Gardening
+    category: Science & Nature
+    description: Plants, gardening techniques, and horticulture
+
+  # HISTORY & CULTURE
+  - id: world-history
+    name: World History
+    category: History & Culture
+    description: Historical events, figures, and civilizations
+
+  - id: archaeology
+    name: Archaeology
+    category: History & Culture
+    description: Ancient cultures, discoveries, and artifacts
+
+  - id: anthropology
+    name: Anthropology
+    category: History & Culture
+    description: Human societies, cultures, and traditions
+
+  - id: mythology
+    name: Mythology & Folklore
+    category: History & Culture
+    description: Myths, legends, and cultural stories
+
+  - id: architecture
+    name: Architecture
+    category: History & Culture
+    description: Building design, styles, and urban planning
+
+  # PHILOSOPHY & IDEAS
+  - id: philosophy
+    name: Philosophy
+    category: Philosophy & Ideas
+    description: Ethics, logic, metaphysics, and wisdom traditions
+
+  - id: psychology
+    name: Psychology
+    category: Philosophy & Ideas
+    description: Human behavior, cognition, and mental processes
+
+  - id: sociology
+    name: Sociology
+    category: Philosophy & Ideas
+    description: Social structures, movements, and human interaction
+
+  - id: critical-thinking
+    name: Critical Thinking
+    category: Philosophy & Ideas
+    description: Logic, reasoning, and analytical skills
+
+  # TECHNOLOGY & INNOVATION
+  - id: technology
+    name: Technology
+    category: Technology & Innovation
+    description: Tech trends, innovations, and digital culture
+
+  - id: artificial-intelligence
+    name: Artificial Intelligence
+    category: Technology & Innovation
+    description: AI, machine learning, and future technologies
+
+  - id: space-exploration
+    name: Space Exploration
+    category: Technology & Innovation
+    description: Rockets, missions, and the future of space travel
+
+  - id: engineering
+    name: Engineering
+    category: Technology & Innovation
+    description: Design, innovation, and problem-solving
+
+  # HEALTH & WELLNESS
+  - id: nutrition
+    name: Nutrition
+    category: Health & Wellness
+    description: Diet, food science, and healthy eating
+
+  - id: fitness
+    name: Fitness
+    category: Health & Wellness
+    description: Exercise, training, and physical health
+
+  - id: mindfulness
+    name: Mindfulness
+    category: Health & Wellness
+    description: Meditation, presence, and mental clarity
+
+  - id: neuroscience
+    name: Neuroscience
+    category: Health & Wellness
+    description: Brain science, cognition, and mental health
+
+  # LITERATURE & LANGUAGE
+  - id: classic-literature
+    name: Classic Literature
+    category: Literature & Language
+    description: Timeless books, authors, and literary movements
+
+  - id: contemporary-literature
+    name: Contemporary Literature
+    category: Literature & Language
+    description: Modern fiction, authors, and book discussions
+
+  - id: poetry
+    name: Poetry
+    category: Literature & Language
+    description: Poems, poets, and poetic forms
+
+  - id: linguistics
+    name: Linguistics
+    category: Literature & Language
+    description: Language structure, evolution, and communication
+
+  # BUSINESS & ECONOMICS
+  - id: entrepreneurship
+    name: Entrepreneurship
+    category: Business & Economics
+    description: Starting businesses, innovation, and growth
+
+  - id: economics
+    name: Economics
+    category: Business & Economics
+    description: Market systems, theory, and global economy
+
+  - id: personal-finance
+    name: Personal Finance
+    category: Business & Economics
+    description: Money management, investing, and financial planning
+
+  # TRAVEL & GEOGRAPHY
+  - id: world-travel
+    name: World Travel
+    category: Travel & Geography
+    description: Destinations, cultures, and travel experiences
+
+  - id: geography
+    name: Geography
+    category: Travel & Geography
+    description: Earth's landscapes, regions, and natural features
+
+  - id: cultural-exploration
+    name: Cultural Exploration
+    category: Travel & Geography
+    description: Traditions, customs, and global perspectives
+
+  # FOOD & CULINARY ARTS
+  - id: cooking
+    name: Cooking
+    category: Food & Culinary Arts
+    description: Recipes, techniques, and culinary traditions
+
+  - id: food-history
+    name: Food History
+    category: Food & Culinary Arts
+    description: Origins of dishes, food culture, and gastronomy
+
+  - id: wine-beverages
+    name: Wine & Beverages
+    category: Food & Culinary Arts
+    description: Wine, coffee, tea, and beverage culture
+
+  # SPORTS & RECREATION
+  - id: outdoor-adventure
+    name: Outdoor Adventure
+    category: Sports & Recreation
+    description: Hiking, camping, and wilderness exploration
+
+  - id: sports-history
+    name: Sports History
+    category: Sports & Recreation
+    description: Athletic achievements, legends, and sports culture
+
+  - id: games-strategy
+    name: Games & Strategy
+    category: Sports & Recreation
+    description: Chess, puzzles, and strategic thinking
+
+  # PERSONAL DEVELOPMENT
+  - id: productivity
+    name: Productivity
+    category: Personal Development
+    description: Time management, habits, and efficiency
+
+  - id: leadership
+    name: Leadership
+    category: Personal Development
+    description: Management, influence, and team building
+
+  - id: communication
+    name: Communication
+    category: Personal Development
+    description: Speaking, writing, and interpersonal skills
+
+  - id: creativity
+    name: Creativity
+    category: Personal Development
+    description: Innovation, imagination, and creative problem-solving
+
+# Category metadata for filtering and display
+categories:
+  - name: Arts & Creativity
+    color: "#E91E63"
+    
+  - name: Science & Nature
+    color: "#4CAF50"
+    
+  - name: History & Culture
+    color: "#FF9800"
+    
+  - name: Philosophy & Ideas
+    color: "#9C27B0"
+    
+  - name: Technology & Innovation
+    color: "#2196F3"
+    
+  - name: Health & Wellness
+    color: "#00BCD4"
+    
+  - name: Literature & Language
+    color: "#795548"
+    
+  - name: Business & Economics
+    color: "#607D8B"
+    
+  - name: Travel & Geography
+    color: "#009688"
+    
+  - name: Food & Culinary Arts
+    color: "#FF5722"
+    
+  - name: Sports & Recreation
+    color: "#8BC34A"
+    
+  - name: Personal Development
+    color: "#FFC107"

@@ -167,18 +167,19 @@ export async function runInterestsStep() {
       () => {
         const selectedInterests = Array.from(
           document.querySelectorAll('input[name="interests"]:checked')
-        ).map(el => el.value);
+        ).map(el => el.value); // This gets the topic IDs
 
         if (selectedInterests.length < 3) {
-          throw new Error('Please select at least 3 interests.');
+          throw new Error('Please select at least 3 topics to continue.');
         }
+        
+        // Return as interests array, not nested
         return { interests: selectedInterests };
       },
       `${config.onboarding.redirectPath}/experience`
     );
   });
 }
-
 export async function runCompleteStep() {
   const step = 'complete';
   const { checkAuthentication } = await import('../authentication.mjs');

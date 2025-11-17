@@ -1,0 +1,822 @@
+// _sass/_onboarding.scss
+// Complete onboarding flow styling system
+
+@use 'sass:map';
+@use 'sass:color';
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+// ======================
+// ONBOARDING VARIABLES
+// ======================
+
+$onboarding-primary: map.get(vars.$colors, 'status', 'primary');
+$onboarding-secondary: map.get(vars.$colors, 'status', 'secondary');
+$neutral-100: map.get(vars.$colors, 'neutral', 100);
+$neutral-200: map.get(vars.$colors, 'neutral', 200);
+$neutral-300: map.get(vars.$colors, 'neutral', 300);
+$neutral-500: map.get(vars.$colors, 'neutral', 500);
+$neutral-600: map.get(vars.$colors, 'neutral', 600);
+$neutral-700: map.get(vars.$colors, 'neutral', 700);
+$neutral-900: map.get(vars.$colors, 'neutral', 900);
+$radius-sm: map.get(map.get(vars.$sizes, 'radius'), 'sm');
+$radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
+
+// ======================
+// ONBOARDING LAYOUT
+// ======================
+
+.onboarding-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba($onboarding-primary, 0.05) 0%,
+    rgba($onboarding-secondary, 0.05) 100%
+  );
+  display: flex;
+  flex-direction: column;
+}
+
+// ======================
+// PROGRESS HEADER
+// ======================
+
+.progress-container {
+  background-color: white;
+  border-bottom: 1px solid $neutral-200;
+  padding: map.get(vars.$spacing, 3) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba($neutral-900, 0.05);
+}
+
+.progress-steps {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 map.get(vars.$spacing, 3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  // Progress line connecting steps
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: $neutral-200;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+
+  @include mix.mq-down('md') {
+    flex-wrap: wrap;
+    gap: map.get(vars.$spacing, 2);
+    
+    &::before {
+      display: none;
+    }
+  }
+}
+
+.step {
+  position: relative;
+  z-index: 2;
+  background-color: white;
+  padding: map.get(vars.$spacing, 2) map.get(vars.$spacing, 3);
+  border-radius: $radius-md;
+  border: 2px solid $neutral-300;
+  color: $neutral-600;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  white-space: nowrap;
+
+  @include mix.mq-down('md') {
+    font-size: 0.75rem;
+    padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+  }
+
+  &.active {
+    background-color: $onboarding-primary;
+    color: white;
+    border-color: $onboarding-primary;
+    box-shadow: 0 4px 12px rgba($onboarding-primary, 0.3);
+    transform: scale(1.05);
+  }
+
+  &.completed {
+    background-color: rgba(map.get(vars.$colors, 'status', 'success'), 0.1);
+    border-color: map.get(vars.$colors, 'status', 'success');
+    color: map.get(vars.$colors, 'status', 'success');
+
+    &::after {
+      content: '✓';
+      margin-left: map.get(vars.$spacing, 1);
+      font-weight: bold;
+    }
+  }
+}
+
+// ======================
+// MAIN CONTENT AREA
+// ======================
+
+.onboarding-content {
+  flex: 1;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: map.get(vars.$spacing, 4) map.get(vars.$spacing, 3);
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 3) map.get(vars.$spacing, 2);
+  }
+
+  h1 {
+    color: $neutral-900;
+    margin-bottom: map.get(vars.$spacing, 2);
+    @include mix.text-style(500);
+    font-weight: 700;
+    text-align: center;
+
+    @include mix.mq-down('md') {
+      font-size: 1.5rem;
+    }
+  }
+
+  .subtitle,
+  > p {
+    color: $neutral-600;
+    text-align: center;
+    margin-bottom: map.get(vars.$spacing, 4);
+    line-height: 1.6;
+    font-size: 1.125rem;
+
+    @include mix.mq-down('md') {
+      font-size: 1rem;
+    }
+  }
+}
+
+// ======================
+// FORM STYLING
+// ======================
+
+#onboarding-form {
+  background-color: white;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 4);
+  box-shadow: 0 4px 12px rgba($neutral-900, 0.08);
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 3);
+  }
+}
+
+.form-group {
+  margin-bottom: map.get(vars.$spacing, 3);
+
+  label {
+    display: block;
+    margin-bottom: map.get(vars.$spacing, 1);
+    color: $neutral-700;
+    font-weight: 600;
+    font-size: 0.95rem;
+
+    span[aria-hidden="true"] {
+      color: map.get(vars.$colors, 'status', 'error');
+      margin-left: 2px;
+    }
+  }
+
+  input[type="text"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100%;
+    padding: map.get(vars.$spacing, 2);
+    border: 2px solid $neutral-300;
+    border-radius: $radius-md;
+    font-size: 1rem;
+    color: $neutral-900;
+    background-color: white;
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    &:hover {
+      border-color: $neutral-500;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $onboarding-primary;
+      box-shadow: 0 0 0 3px rgba($onboarding-primary, 0.1);
+    }
+
+    &::placeholder {
+      color: $neutral-500;
+    }
+
+    &:disabled {
+      background-color: $neutral-100;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23495057' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right map.get(vars.$spacing, 2) center;
+    padding-right: map.get(vars.$spacing, 4);
+  }
+
+  input[type="checkbox"] {
+    width: auto;
+    margin-right: map.get(vars.$spacing, 1);
+    cursor: pointer;
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: map.get(vars.$spacing, 3);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ======================
+// INTERESTS GRID
+// ======================
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: map.get(vars.$spacing, 3);
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: map.get(vars.$spacing, 2);
+  }
+}
+
+.interest-option {
+  position: relative;
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+
+    &:checked + span {
+      background-color: $onboarding-primary;
+      color: white;
+      border-color: $onboarding-primary;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba($onboarding-primary, 0.3);
+
+      &::after {
+        content: '✓';
+        position: absolute;
+        top: map.get(vars.$spacing, 2);
+        right: map.get(vars.$spacing, 2);
+        width: 24px;
+        height: 24px;
+        background-color: white;
+        color: $onboarding-primary;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+      }
+    }
+
+    &:focus + span {
+      outline: 2px solid $onboarding-primary;
+      outline-offset: 2px;
+    }
+  }
+
+  span {
+    display: block;
+    padding: map.get(vars.$spacing, 3);
+    background-color: white;
+    border: 2px solid $neutral-300;
+    border-radius: $radius-md;
+    text-align: center;
+    font-weight: 500;
+    color: $neutral-700;
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+    position: relative;
+
+    &:hover {
+      border-color: $onboarding-primary;
+      background-color: rgba($onboarding-primary, 0.05);
+    }
+  }
+}
+
+// Enhanced topic cards for interests
+.topic-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: map.get(vars.$spacing, 3);
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.topic-selection-card {
+  background-color: white;
+  border: 2px solid $neutral-200;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 3);
+  cursor: pointer;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: $onboarding-primary;
+    transform: scaleY(0);
+    transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+    transform-origin: top;
+  }
+
+  &:hover {
+    border-color: $onboarding-primary;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba($neutral-900, 0.12);
+
+    &::before {
+      transform: scaleY(1);
+    }
+  }
+
+  &:focus-within {
+    outline: 2px solid $onboarding-primary;
+    outline-offset: 2px;
+  }
+
+  &.selected {
+    border-color: $onboarding-primary;
+    background: linear-gradient(
+      135deg,
+      rgba($onboarding-primary, 0.08) 0%,
+      rgba($onboarding-primary, 0.03) 100%
+    );
+
+    &::before {
+      transform: scaleY(1);
+    }
+
+    .topic-selection-card__check {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__check {
+    position: absolute;
+    top: map.get(vars.$spacing, 2);
+    right: map.get(vars.$spacing, 2);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: $onboarding-primary;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    &::after {
+      content: '✓';
+    }
+  }
+
+  &__category {
+    display: inline-block;
+    padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
+    background-color: rgba($onboarding-secondary, 0.15);
+    color: color.adjust($onboarding-primary, $lightness: -10%);
+    border-radius: $radius-sm;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: map.get(vars.$spacing, 2);
+  }
+
+  &__name {
+    margin: 0 0 map.get(vars.$spacing, 1) 0;
+    color: $neutral-900;
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+
+  &__description {
+    margin: 0;
+    color: $neutral-600;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+// Selection counter
+.selection-info {
+  background-color: white;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 3);
+  margin-bottom: map.get(vars.$spacing, 3);
+  border: 1px solid $neutral-200;
+  text-align: center;
+
+  .selection-count {
+    font-size: 1.25rem;
+    color: $neutral-900;
+    font-weight: 600;
+
+    strong {
+      color: $onboarding-primary;
+      font-size: 1.75rem;
+    }
+  }
+
+  .selection-recommendation {
+    color: $neutral-600;
+    font-size: 0.875rem;
+    margin-top: map.get(vars.$spacing, 1);
+  }
+}
+
+// ======================
+// PRICING PLANS
+// ======================
+
+.pricing-plans-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: map.get(vars.$spacing, 3);
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-card {
+  position: relative;
+  background-color: white;
+  border: 2px solid $neutral-300;
+  border-radius: $radius-md;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba($neutral-900, 0.15);
+  }
+
+  &.popular {
+    border-color: $onboarding-primary;
+    border-width: 3px;
+  }
+
+  input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+
+    &:checked + .plan-label {
+      background-color: rgba($onboarding-primary, 0.05);
+      border-color: $onboarding-primary;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: map.get(vars.$spacing, 2);
+        right: map.get(vars.$spacing, 2);
+        width: 28px;
+        height: 28px;
+        background-color: $onboarding-primary;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &::before {
+        content: '✓';
+        position: absolute;
+        top: map.get(vars.$spacing, 2);
+        right: map.get(vars.$spacing, 2);
+        width: 28px;
+        height: 28px;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+      }
+    }
+
+    &:focus + .plan-label {
+      outline: 2px solid $onboarding-primary;
+      outline-offset: 2px;
+    }
+  }
+
+  .plan-label {
+    display: block;
+    padding: map.get(vars.$spacing, 4);
+    cursor: pointer;
+    position: relative;
+    border-radius: $radius-md;
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    &:hover {
+      background-color: rgba($onboarding-primary, 0.03);
+    }
+  }
+}
+
+.popular-banner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(135deg, $onboarding-primary 0%, $onboarding-secondary 100%);
+  color: white;
+  padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 3);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom-left-radius: $radius-md;
+  box-shadow: 0 2px 8px rgba($onboarding-primary, 0.3);
+}
+
+.plan-header {
+  margin-bottom: map.get(vars.$spacing, 3);
+
+  h2 {
+    margin: 0 0 map.get(vars.$spacing, 1) 0;
+    color: $neutral-900;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .description {
+    margin: 0;
+    color: $neutral-600;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+}
+
+.plan-price {
+  margin-bottom: map.get(vars.$spacing, 3);
+  padding-bottom: map.get(vars.$spacing, 3);
+  border-bottom: 1px solid $neutral-200;
+
+  .price-amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $onboarding-primary;
+    line-height: 1;
+  }
+
+  .price-interval {
+    color: $neutral-600;
+    font-size: 1rem;
+    margin-left: map.get(vars.$spacing, 1);
+  }
+}
+
+.features-list {
+  @include mix.list-reset;
+  margin: 0;
+
+  li {
+    padding: map.get(vars.$spacing, 2) 0;
+    color: $neutral-700;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: map.get(vars.$spacing, 2);
+
+    &::before {
+      content: '✓';
+      color: map.get(vars.$colors, 'status', 'success');
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// ======================
+// BUTTONS
+// ======================
+
+.btn-primary {
+  @include mix.button-base(solid);
+  width: 100%;
+  background-color: $onboarding-primary;
+  color: white;
+  border: none;
+  padding: map.get(vars.$spacing, 3);
+  border-radius: $radius-md;
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-top: map.get(vars.$spacing, 3);
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+  &:hover:not(:disabled) {
+    background-color: color.adjust($onboarding-primary, $lightness: -8%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba($onboarding-primary, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($onboarding-primary, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// ======================
+// ERROR MESSAGES
+// ======================
+
+.onboarding-error,
+.error-message,
+#onboarding-error {
+  background-color: rgba(map.get(vars.$colors, 'status', 'error'), 0.1);
+  border: 1px solid rgba(map.get(vars.$colors, 'status', 'error'), 0.3);
+  border-left: 4px solid map.get(vars.$colors, 'status', 'error');
+  color: color.adjust(map.get(vars.$colors, 'status', 'error'), $lightness: -15%);
+  padding: map.get(vars.$spacing, 3);
+  border-radius: $radius-md;
+  margin-bottom: map.get(vars.$spacing, 3);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: map.get(vars.$spacing, 2);
+
+  &::before {
+    content: '⚠';
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+}
+
+// ======================
+// COMPLETION SCREEN
+// ======================
+
+.completion-animation {
+  text-align: center;
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  svg {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+// Success checkmark animation
+@keyframes checkmark {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes circle {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// ======================
+// LOADING STATES
+// ======================
+
+.onboarding-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: map.get(vars.$spacing, 4);
+  gap: map.get(vars.$spacing, 2);
+
+  &__spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid $neutral-200;
+    border-top-color: $onboarding-primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__text {
+    color: $neutral-600;
+    font-size: 0.95rem;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ======================
+// ACCESSIBILITY
+// ======================
+
+@media (prefers-reduced-motion: reduce) {
+  .step,
+  .plan-card,
+  .topic-selection-card,
+  .interest-option span {
+    transition: none;
+    animation: none;
+  }
+
+  .onboarding-loading__spinner {
+    animation-duration: 2s;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .step,
+  .plan-card,
+  .topic-selection-card {
+    border-width: 3px;
+  }
+}

@@ -7,10 +7,8 @@ import { verifyTokenAndGetSub } from './lib/auth-utils.mjs';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const handler = async (event) => {
-
   try {
-
-        // DEBUG LOGGING: check if Authorization header exists
+    // DEBUG LOGGING: check if Authorization header exists
     const authHeader = event.headers.authorization || event.headers.Authorization;
     if (!authHeader) {
       console.warn('⚠️ No Authorization header found in request');
@@ -145,7 +143,7 @@ async function getSubscriptionStatus(user) {
 
 async function createCheckoutSession(data, user) {
   try {
-    const { priceId, successUrl, cancelUrl } = data;
+    const { priceId } = data;
 
     if (!priceId) {
       return {
@@ -154,66 +152,118 @@ async function createCheckoutSession(data, user) {
       };
     }
 
-    // --- 1. Ensure price → plan mapping
-    const plan = mapPriceToPlan(priceId);
+    console.log('💰 Price ID received:', priceId);
 
-    // --- 2. Ensure customer exists
+    // Map price to plan name
+    const plan = mapPriceToPlan(priceId);
+    console.log('📋 Plan mapped:', plan);
+
+    // Ensure customer exists
     let stripeCustomerId = user.stripeCustomerId;
 
     if (!stripeCustomerId) {
-      const customer = await stripe.customers.create({
+      console.log('🆕 Creating new Stripe customer...');
+      
+      const customerData = {
         email: user.email,
         name: user.name,
         metadata: {
           auth0Id: user.auth0Id,
           userId: user._id.toString()
-        },
-        address: {
-          line1: user.address?.street,
-          city: user.address?.city,
-          state: user.address?.state,
-          postal_code: user.address?.zipCode,
-          country: 'US'
         }
-      });
+      };
+
+      // Only add address if it exists and has required fields
+      if (user.address && user.address.street && user.address.city) {
+        customerData.address = {
+          line1: user.address.street || '',
+          city: user.address.city || '',
+          state: user.address.state || '',
+          postal_code: user.address.zipCode || '',
+          country: user.address.country || 'US'
+        };
+      }
+
+      const customer = await stripe.customers.create(customerData);
 
       stripeCustomerId = customer.id;
       user.stripeCustomerId = stripeCustomerId;
       await user.save();
+      console.log('✅ Stripe customer created:', stripeCustomerId);
+    } else {
+      console.log('✅ Using existing Stripe customer:', stripeCustomerId);
     }
 
-    const baseUrl = process.env.SITE_URL;
+    // Determine base URL with fallbacks
+    const baseUrl = process.env.SITE_URL || process.env.URL || 'http://localhost:8888';
+    console.log('🔗 Base URL:', baseUrl);
 
-    // --- 3. Create Checkout Session with full metadata
+    const successUrl = data.successUrl || `${baseUrl}/onboarding/complete?session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = data.cancelUrl || `${baseUrl}/onboarding/experience`;
+
+    console.log('✅ Success URL:', successUrl);
+    console.log('🔙 Cancel URL:', cancelUrl);
+
+    // Create Checkout Session with all required fields
+    console.log('🛒 Creating Stripe checkout session...');
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
-      line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: successUrl || `${baseUrl}/onboarding/complete?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${baseUrl}/onboarding/experience`,
-
+      payment_method_types: ['card'], // IMPORTANT: Specify payment methods
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      subscription_data: {
+        metadata: {
+          auth0Id: user.auth0Id,
+          userId: user._id.toString(),
+          priceId: priceId,
+          plan: plan
+        }
+      },
       metadata: {
         auth0Id: user.auth0Id,
+        userId: user._id.toString(),
         priceId: priceId,
         plan: plan
       },
-
-      consent_collection: { terms_of_service: 'none' },
-      client_reference_id: user._id.toString()
+      client_reference_id: user._id.toString(),
+      allow_promotion_codes: true,
+      billing_address_collection: 'auto',
+      consent_collection: {
+        terms_of_service: 'none'
+      }
     });
+
+    console.log('✅ Checkout session created:', session.id);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ sessionId: session.id })
+      body: JSON.stringify({ 
+        sessionId: session.id,
+        url: session.url 
+      })
     };
 
   } catch (error) {
-    console.error('Checkout session error:', error);
+    console.error('❌ Checkout session error:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      statusCode: error.statusCode
+    });
+    
     return {
-      statusCode: 500,
+      statusCode: error.statusCode || 500,
       body: JSON.stringify({
-        error: 'Failed to create checkout session',
-        code: error.code
+        error: error.message || 'Failed to create checkout session',
+        code: error.code,
+        type: error.type
       })
     };
   }
@@ -228,9 +278,10 @@ async function createCustomerPortal(user) {
       };
     }
 
+    const baseUrl = process.env.SITE_URL || process.env.URL || 'http://localhost:8888';
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `${process.env.SITE_URL}/app/account.html`
+      return_url: `${baseUrl}/app/account`
     });
 
     return { 
