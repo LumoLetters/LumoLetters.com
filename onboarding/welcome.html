@@ -4,42 +4,62 @@ layout: default
 
 <!--/onboarding/welcome.html-->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Welcome Onboarding - LumoLetters</title>
-  <link rel="stylesheet" href="/assets/css/main.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
 <body data-onboarding-step="welcome">
   <div id="onboarding-header"></div>
 
   <main class="onboarding-content">
-    <h1>Welcome to LumoLetters!</h1>
-    <p>Let's set up your account</p>
+    <div class="onboarding-welcome-hero">
+      <div class="welcome-icon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 8L10.89 13.26C11.5656 13.6762 12.4344 13.6762 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1>Welcome to LumoLetters!</h1>
+      <p class="subtitle">Let's get to know you better so we can create the perfect letter experience.</p>
+    </div>
     
     <form id="onboarding-form" novalidate>
       <div class="form-group">
-        <label for="name">Full Name<span aria-hidden="true">*</span></label>
-        <input type="text" id="name" name="name" required autocomplete="name" />
+        <label for="name">What should we call you? <span aria-hidden="true">*</span></label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          required 
+          autocomplete="name"
+          placeholder="Enter your full name"
+        />
+        <span class="form-help">We'll use this to personalize your letters</span>
       </div>
       
-      <div class="form-group">
-        <label for="newsletter">
+      <div class="form-group form-group--checkbox">
+        <label class="checkbox-label">
           <input type="checkbox" id="newsletter" name="subscribeNewsletter" />
-          Send me monthly newsletters
+          <span class="checkbox-text">
+            <strong>Keep me updated</strong>
+            <span class="checkbox-description">Receive occasional updates about new topics and features (you can unsubscribe anytime)</span>
+          </span>
         </label>
       </div>
 
-      <div id="onboarding-error" style="display:none; color: red; margin-bottom: 1em;" role="alert" aria-live="assertive"></div>
+      <div id="onboarding-error" class="onboarding-error" style="display:none;" role="alert" aria-live="assertive"></div>
       
       <button type="submit" class="btn-primary" id="submit-btn" aria-label="Continue to next step">
-        Continue →
+        Continue to Address
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
     </form>
+
+    <div class="onboarding-assurance">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Takes less than 3 minutes to complete</span>
+    </div>
   </main>
 
   <script type="module" src="/assets/js/lib/onboarding.mjs"></script>
 </body>
-</html>

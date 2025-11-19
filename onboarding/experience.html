@@ -4,18 +4,20 @@ title: Choose Your Experience
 ---
 
 <body data-onboarding-step="experience">
+  <div id="onboarding-header"></div>
 
-  <div id="onboarding-header">
-    <!-- The header partial will be loaded here by onboarding.mjs -->
-  </div>
+  <main class="onboarding-content onboarding-content--wide">
+    <div class="onboarding-step-header">
+      <div class="step-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1>Choose Your Experience</h1>
+      <p class="subtitle">Select the plan that best fits your desired connection. You can change or cancel anytime.</p>
+    </div>
 
-  <main class="onboarding-content">
-    <h1>Choose Your Experience</h1>
-    <p class="subtitle">Select the plan that best fits your desired connection.</p>
-
-    <!-- This form will be handled by onboarding.mjs -->
     <form id="onboarding-form" novalidate>
-
       <div class="pricing-plans-container">
         {% for plan in site.data.pricing_plans.plans %}
           <div class="plan-card {% if plan.popular %}popular{% endif %}">
@@ -53,16 +55,26 @@ title: Choose Your Experience
         {% endfor %}
       </div>
 
+      <div class="pricing-assurance">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <strong>Secure payment powered by Stripe</strong>
+          <p>Cancel anytime. No long-term commitments. Your first letter ships within 3-5 business days.</p>
+        </div>
+      </div>
+
       <div id="onboarding-error" class="onboarding-error" style="display:none;"></div>
       
       <button type="submit" class="btn-primary" id="submit-btn">
-        Continue to Payment →
+        Continue to Payment
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
-
     </form>
   </main>
 
-  <!-- This script contains the logic for this page -->
   <script type="module" src="/assets/js/lib/onboarding.mjs"></script>
-
 </body>

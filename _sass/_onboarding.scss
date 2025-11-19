@@ -94,14 +94,41 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
   font-weight: 500;
   font-size: 0.875rem;
   transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: map.get(vars.$spacing, 1);
 
   @include mix.mq-down('md') {
     font-size: 0.75rem;
     padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 2);
     flex: 1;
     min-width: 0;
-    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: map.get(vars.$spacing, 1) / 2;
+  }
+
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: $neutral-300;
+    color: $neutral-600;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  }
+
+  .step-label {
+    white-space: nowrap;
+    
+    @include mix.mq-down('md') {
+      font-size: 0.7rem;
+    }
   }
 
   &.active {
@@ -110,6 +137,11 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
     border-color: $onboarding-primary;
     box-shadow: 0 4px 12px rgba($onboarding-primary, 0.3);
     transform: scale(1.05);
+
+    .step-number {
+      background-color: white;
+      color: $onboarding-primary;
+    }
   }
 
   &.completed {
@@ -117,10 +149,14 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
     border-color: map.get(vars.$colors, 'status', 'success');
     color: map.get(vars.$colors, 'status', 'success');
 
-    &::after {
-      content: '✓';
-      margin-left: map.get(vars.$spacing, 1);
-      font-weight: bold;
+    .step-number {
+      background-color: map.get(vars.$colors, 'status', 'success');
+      color: white;
+
+      &::after {
+        content: '✓';
+        position: absolute;
+      }
     }
   }
 }
@@ -138,6 +174,10 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
 
   @include mix.mq-down('md') {
     padding: map.get(vars.$spacing, 3) map.get(vars.$spacing, 2);
+  }
+
+  &--wide {
+    max-width: 1100px;
   }
 
   h1 {
@@ -163,6 +203,32 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
     @include mix.mq-down('md') {
       font-size: 1rem;
     }
+  }
+}
+
+// ======================
+// STEP HEADER
+// ======================
+
+.onboarding-step-header {
+  text-align: center;
+  margin-bottom: map.get(vars.$spacing, 4);
+}
+
+.step-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto map.get(vars.$spacing, 3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba($onboarding-primary, 0.1), rgba($onboarding-secondary, 0.05));
+  border-radius: 50%;
+  color: $onboarding-primary;
+
+  svg {
+    width: 40px;
+    height: 40px;
   }
 }
 
@@ -673,11 +739,24 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
   font-size: 1.125rem;
   margin-top: map.get(vars.$spacing, 3);
   transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: map.get(vars.$spacing, 2);
+
+  svg {
+    flex-shrink: 0;
+    transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  }
 
   &:hover:not(:disabled) {
     background-color: color.adjust($onboarding-primary, $lightness: -8%);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba($onboarding-primary, 0.3);
+
+    svg {
+      transform: translateX(4px);
+    }
   }
 
   &:active:not(:disabled) {
@@ -694,6 +773,47 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
     cursor: not-allowed;
     transform: none;
   }
+}
+
+// ======================
+// ADDRESS & INTERESTS HELPERS
+// ======================
+
+.address-assurance,
+.interests-tip {
+  display: flex;
+  gap: map.get(vars.$spacing, 2);
+  padding: map.get(vars.$spacing, 3);
+  background-color: rgba($onboarding-primary, 0.05);
+  border: 1px solid rgba($onboarding-primary, 0.2);
+  border-radius: $radius-md;
+  margin-top: map.get(vars.$spacing, 3);
+  margin-bottom: map.get(vars.$spacing, 3);
+
+  svg {
+    flex-shrink: 0;
+    color: $onboarding-primary;
+    margin-top: 2px;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: map.get(vars.$spacing, 1);
+    color: $neutral-900;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  p {
+    margin: 0;
+    color: $neutral-600;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+}
+
+.form-section {
+  margin-bottom: map.get(vars.$spacing, 3);
 }
 
 // ======================
@@ -726,6 +846,12 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
 // COMPLETION SCREEN
 // ======================
 
+.completion-container {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .completion-animation {
   text-align: center;
   margin-bottom: map.get(vars.$spacing, 4);
@@ -735,6 +861,244 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
     height: 120px;
     margin: 0 auto;
     display: block;
+  }
+}
+
+.completion-title {
+  margin-bottom: map.get(vars.$spacing, 2);
+  color: $neutral-900;
+  font-size: 2.5rem;
+  font-weight: 700;
+
+  @include mix.mq-down('md') {
+    font-size: 2rem;
+  }
+}
+
+.completion-subtitle {
+  margin-bottom: map.get(vars.$spacing, 4);
+  color: $neutral-600;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.completion-details {
+  display: flex;
+  flex-direction: column;
+  gap: map.get(vars.$spacing, 2);
+  margin-bottom: map.get(vars.$spacing, 4);
+  padding: map.get(vars.$spacing, 3);
+  background-color: white;
+  border-radius: $radius-md;
+  border: 1px solid $neutral-200;
+}
+
+.completion-detail {
+  display: flex;
+  align-items: center;
+  gap: map.get(vars.$spacing, 2);
+  color: map.get(vars.$colors, 'status', 'success');
+  font-weight: 500;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  span {
+    color: $neutral-700;
+  }
+}
+
+.completion-next-steps {
+  text-align: left;
+  padding: map.get(vars.$spacing, 4);
+  background-color: white;
+  border-radius: $radius-md;
+  border: 1px solid $neutral-200;
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  h2 {
+    margin: 0 0 map.get(vars.$spacing, 3) 0;
+    color: $neutral-900;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  ol {
+    margin: 0;
+    padding-left: map.get(vars.$spacing, 3);
+    list-style: none;
+    counter-reset: step-counter;
+  }
+
+  li {
+    counter-increment: step-counter;
+    position: relative;
+    padding-left: map.get(vars.$spacing, 4);
+    margin-bottom: map.get(vars.$spacing, 3);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, $onboarding-primary, $onboarding-secondary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    strong {
+      display: block;
+      margin-bottom: map.get(vars.$spacing, 1);
+      color: $neutral-900;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      color: $neutral-600;
+      line-height: 1.6;
+      font-size: 0.9375rem;
+    }
+  }
+}
+
+.completion-note {
+  margin-top: map.get(vars.$spacing, 3);
+  color: $neutral-500;
+  font-size: 0.875rem;
+
+  a {
+    color: $onboarding-primary;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ======================
+// WELCOME PAGE ENHANCEMENTS
+// ======================
+
+.onboarding-welcome-hero {
+  text-align: center;
+  margin-bottom: map.get(vars.$spacing, 4);
+}
+
+.welcome-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto map.get(vars.$spacing, 3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba($onboarding-primary, 0.1), rgba($onboarding-secondary, 0.05));
+  border-radius: 50%;
+  color: $onboarding-primary;
+
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.form-group--checkbox {
+  .checkbox-label {
+    display: flex;
+    gap: map.get(vars.$spacing, 2);
+    cursor: pointer;
+    padding: map.get(vars.$spacing, 3);
+    background-color: white;
+    border: 2px solid $neutral-300;
+    border-radius: $radius-md;
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    &:hover {
+      border-color: $onboarding-primary;
+      background-color: rgba($onboarding-primary, 0.02);
+    }
+
+    input[type="checkbox"] {
+      margin: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    input[type="checkbox"]:checked ~ .checkbox-text {
+      color: $onboarding-primary;
+    }
+  }
+
+  .checkbox-text {
+    display: flex;
+    flex-direction: column;
+    gap: map.get(vars.$spacing, 1);
+    text-align: left;
+    transition: color map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    strong {
+      font-weight: 600;
+      color: $neutral-900;
+    }
+  }
+
+  .checkbox-description {
+    font-size: 0.875rem;
+    color: $neutral-600;
+    line-height: 1.5;
+  }
+}
+
+.form-help {
+  display: block;
+  margin-top: map.get(vars.$spacing, 1);
+  color: $neutral-500;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.onboarding-assurance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: map.get(vars.$spacing, 1);
+  margin-top: map.get(vars.$spacing, 3);
+  padding: map.get(vars.$spacing, 2);
+  color: $neutral-600;
+  font-size: 0.875rem;
+
+  svg {
+    color: $onboarding-primary;
+    flex-shrink: 0;
+  }
+}
+
+.btn-primary--large {
+  padding: map.get(vars.$spacing, 3) map.get(vars.$spacing, 4);
+  font-size: 1.25rem;
+
+  svg {
+    margin-left: map.get(vars.$spacing, 2);
+    transition: transform map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  }
+
+  &:hover svg {
+    transform: translateX(4px);
   }
 }
 

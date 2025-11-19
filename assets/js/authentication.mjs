@@ -87,6 +87,9 @@ export async function login() {
   }
 }
 
+// Update your handleAuthRedirect function in authentication.mjs
+// Replace the existing function with this version:
+
 export async function handleAuthRedirect() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -139,22 +142,57 @@ export async function handleAuthRedirect() {
     }
 
     const { access_token, id_token } = await response.json();
-    console.debug('Tokens received:', { access_token, id_token });
+    console.debug('Tokens received successfully');
 
+    // Store tokens
     setItem(AUTH.TOKEN_KEY, access_token);
     setItem(AUTH.ID_TOKEN_KEY, id_token);
+    setItem(AUTH.IS_AUTHENTICATED, 'true'); 
 
+    // Clean up temporary storage
     removeItem(AUTH.STATE_KEY);
     removeItem(AUTH.CODE_VERIFIER);
 
+    // Clean URL
     window.history.replaceState({}, document.title, window.location.pathname);
 
     console.debug('Authentication flow completed successfully');
+    
+    // Emit auth success event
+    eventBus.emit(EVENTS.AUTH_SUCCESS, { access_token, id_token });
+    
     return { access_token, id_token };
   } catch (error) {
     console.error('Authentication redirect failed:', error);
+    
+    // Emit auth error event
+    eventBus.emit(EVENTS.AUTH_ERROR, { 
+      message: error.message,
+      error 
+    });
+    
     handleError(error, { type: 'auth', redirect: false });
     throw error;
+  }
+}
+
+// Also update checkAuthentication to check the flag:
+export async function checkAuthentication() {
+  try {
+    const isAuthenticated = getItem(AUTH.IS_AUTHENTICATED) === 'true';
+    const token = getToken();
+    const authenticated = isAuthenticated && !!token;
+    
+    console.debug('Authentication check:', authenticated);
+    
+    if (!authenticated) {
+      throw new Error('User is not authenticated');
+    }
+    
+    return authenticated;
+  } catch (error) {
+    console.debug('Authentication check failed:', error.message);
+    return false;
   }
 }
 

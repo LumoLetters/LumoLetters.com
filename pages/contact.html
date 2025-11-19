@@ -1,31 +1,275 @@
 ---
 layout: default
-title: Contact
+title: Contact Us
+description: Get in touch with LumoLetters - we're here to help answer your questions
 permalink: /contact/
 ---
 
-<!-- Contact Section  -->
-<section id="contact" class="contact">
-    <div class="container">
-      <h2>Contact Us</h2>
-      <p>Have any questions or want to get started with LumoLetters? Reach out to us! We're here to help.</p>
-      
-      <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="contact">
-        <div hidden>
-          <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
-        </div>
-        
-        <label for="name">Your Name:</label>
-        <input type="text" id="name" name="name" required>
-        
-        <label for="email">Your Email:</label>
-        <input type="email" id="email" name="email" required>
-        
-        <label for="message">Your Message:</label>
-        <textarea id="message" name="message" required></textarea>
-        
-        <button type="submit" class="button primary">Send Message</button>
-      </form>
+<!-- Hero Section -->
+<section class="page-hero page-hero--compact">
+  <div class="container">
+    <div class="page-hero__content">
+      <h1 class="page-hero__title">Get in Touch</h1>
+      <p class="page-hero__subtitle">
+        Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+      </p>
     </div>
-  </section>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section">
+  <div class="container">
+    <div class="contact-grid">
+      
+      <!-- Contact Information -->
+      <div class="contact-info">
+        <h2 class="contact-info__title">Let's Connect</h2>
+        <p class="contact-info__text">
+          Whether you have questions about our service, need help with your account, or just want to share feedback, we're here for you.
+        </p>
+
+        <div class="contact-methods">
+          <div class="contact-method">
+            <div class="contact-method__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 8L10.89 13.26C11.5656 13.6762 12.4344 13.6762 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-method__content">
+              <h3 class="contact-method__title">Email Us</h3>
+              <a href="mailto:info@lumoletters.com" class="contact-method__link">
+                info@lumoletters.com
+              </a>
+            </div>
+          </div>
+
+          <div class="contact-method">
+            <div class="contact-method__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-method__content">
+              <h3 class="contact-method__title">Response Time</h3>
+              <p class="contact-method__text">
+                We typically respond within 1 business day
+              </p>
+            </div>
+          </div>
+
+          <div class="contact-method">
+            <div class="contact-method__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.228 9C8.228 8.17 8.65 7.408 9.31 6.945C10.002 6.46 10.892 6.25 11.772 6.398C12.652 6.547 13.432 7.044 13.926 7.764C14.421 8.485 14.587 9.367 14.39 10.2L12.5 18H11.5L9.61 10.2C9.413 9.367 9.579 8.485 10.074 7.764C10.568 7.044 11.348 6.547 12.228 6.398M12 21C11.7348 21 11.4804 20.8946 11.2929 20.7071C11.1054 20.5196 11 20.2652 11 20C11 19.7348 11.1054 19.4804 11.2929 19.2929C11.4804 19.1054 11.7348 19 12 19C12.2652 19 12.5196 19.1054 12.7071 19.2929C12.8946 19.4804 13 19.7348 13 20C13 20.2652 12.8946 20.5196 12.7071 20.7071C12.5196 20.8946 12.2652 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-method__content">
+              <h3 class="contact-method__title">Need Help?</h3>
+              <p class="contact-method__text">
+                Check our <a href="/faq">FAQ page</a> for quick answers
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-info__note">
+          <p>
+            <strong>Already a member?</strong> Log in to your <a href="/app/dashboard">dashboard</a> to manage your account and access support.
+          </p>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form-wrapper">
+        <form 
+          name="contact" 
+          method="POST" 
+          data-netlify="true" 
+          netlify-honeypot="bot-field"
+          class="contact-form"
+          id="contact-form"
+        >
+          <input type="hidden" name="form-name" value="contact">
+          
+          <!-- Honeypot for spam protection -->
+          <div class="hidden">
+            <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1"></label>
+          </div>
+          
+          <div class="form-group">
+            <label for="name">Your Name <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              required 
+              placeholder="John Smith"
+              autocomplete="name"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required 
+              placeholder="john@example.com"
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject">
+              <option value="">Select a topic...</option>
+              <option value="general">General Inquiry</option>
+              <option value="subscription">Subscription Question</option>
+              <option value="technical">Technical Support</option>
+              <option value="billing">Billing Question</option>
+              <option value="feedback">Feedback</option>
+              <option value="partnership">Partnership Opportunity</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="message">Your Message <span class="required">*</span></label>
+            <textarea 
+              id="message" 
+              name="message" 
+              required 
+              rows="6"
+              placeholder="Tell us how we can help..."
+            ></textarea>
+            <span class="form-help">Please provide as much detail as possible</span>
+          </div>
+          
+          <button type="submit" class="btn btn--primary btn--large form-submit-btn">
+            <span class="btn-text">Send Message</span>
+            <span class="btn-loading hidden">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" stroke-dasharray="50" stroke-dashoffset="25"/>
+              </svg>
+              Sending...
+            </span>
+          </button>
+
+          <!-- Success Message -->
+          <div class="form-message form-message--success hidden" id="success-message">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <strong>Message sent successfully!</strong>
+              <p>Thank you for contacting us. We'll get back to you within 1 business day.</p>
+            </div>
+          </div>
+
+          <!-- Error Message -->
+          <div class="form-message form-message--error hidden" id="error-message">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <strong>Oops! Something went wrong.</strong>
+              <p>Please try again or email us directly at support@lumoletters.com</p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Additional Help Section -->
+<section class="help-section">
+  <div class="container">
+    <div class="help-grid">
+      <div class="help-card">
+        <h3 class="help-card__title">Looking for quick answers?</h3>
+        <p class="help-card__text">
+          Our FAQ page covers common questions about subscriptions, delivery, letters, and more.
+        </p>
+        <a href="/faq" class="btn btn--outline">
+          View FAQ
+        </a>
+      </div>
+
+      <div class="help-card">
+        <h3 class="help-card__title">Ready to get started?</h3>
+        <p class="help-card__text">
+          Join hundreds of people experiencing the joy of personalized letters delivered to their door.
+        </p>
+        <a href="/pricing" class="btn btn--primary">
+          View Pricing
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Enhanced form handling
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form');
+    const submitBtn = form.querySelector('.form-submit-btn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Show loading state
+      submitBtn.disabled = true;
+      btnText.classList.add('hidden');
+      btnLoading.classList.remove('hidden');
+      successMessage.classList.add('hidden');
+      errorMessage.classList.add('hidden');
+
+      try {
+        const formData = new FormData(form);
+        
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        });
+
+        if (response.ok) {
+          // Show success message
+          successMessage.classList.remove('hidden');
+          form.reset();
+          
+          // Scroll to success message
+          successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          throw new Error('Form submission failed');
+        }
+      } catch (error) {
+        // Show error message
+        errorMessage.classList.remove('hidden');
+        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        btnText.classList.remove('hidden');
+        btnLoading.classList.add('hidden');
+      }
+    });
+  });
+</script>
+
+<style>
+  .btn-loading svg {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>

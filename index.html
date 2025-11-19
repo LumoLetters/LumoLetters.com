@@ -263,6 +263,9 @@ description: Rediscover the joy of meaningful connection through personalized le
 </section>
 
 <script type="module">
+  import { checkAuthentication } from '/assets/js/authentication.mjs';
+  import { login } from '/assets/js/authentication.mjs';
+
   // Handle all CTA buttons
   const ctaButtons = [
     document.getElementById('get-started-button'),
@@ -272,14 +275,20 @@ description: Rediscover the joy of meaningful connection through personalized le
 
   ctaButtons.forEach(button => {
     if (button) {
-      button.addEventListener('click', () => {
-        // Check if user is logged in by looking for auth token
-        const isLoggedIn = localStorage.getItem('lumoletters_isAuthenticated') === 'true';
-        
-        if (isLoggedIn) {
-          window.location.href = '/app/dashboard';
-        } else {
-          window.location.href = '/pricing';
+      button.addEventListener('click', async () => {
+        try {
+          const isAuthenticated = await checkAuthentication();
+          
+          if (isAuthenticated) {
+            window.location.href = '/app/dashboard';
+          } else {
+            // Trigger Auth0 login flow
+            login();
+          }
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          // Fallback to login
+          login();
         }
       });
     }

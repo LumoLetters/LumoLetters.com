@@ -88,6 +88,7 @@ async function handleFormSubmit(
     await saveOnboardingStep(step, data);
     window.location.href = redirectUrl;
   } catch (error) {
+    console.error('Form submission error:', error);
     if (errorDiv) {
       errorDiv.textContent = error.message;
       errorDiv.style.display = 'block';
@@ -102,8 +103,22 @@ async function handleFormSubmit(
 //Onboarding step handlers.
 export async function runWelcomeStep() {
   const step = 'welcome';
+  
+  // Import authentication but don't block - just ensure user is set up
   const { checkAuthentication } = await import('../authentication.mjs');
-  checkAuthentication();
+  
+  try {
+    // Check if user is authenticated, if not this will handle the login
+    await checkAuthentication();
+  } catch (error) {
+    console.error('Authentication check failed:', error);
+    // If authentication fails, redirect to login
+    // Auth0 will redirect back to this page after login
+    const auth0 = await import('../authentication.mjs');
+    auth0.login();
+    return;
+  }
+  
   await loadHeader(step);
 
   const form = document.getElementById('onboarding-form');
@@ -125,7 +140,15 @@ export async function runWelcomeStep() {
 export async function runAddressStep() {
   const step = 'address';
   const { checkAuthentication } = await import('../authentication.mjs');
-  await checkAuthentication();
+  
+  try {
+    await checkAuthentication();
+  } catch (error) {
+    console.error('Authentication required:', error);
+    window.location.href = '/onboarding/welcome';
+    return;
+  }
+  
   await loadHeader(step);
 
   const form = document.getElementById('onboarding-form');
@@ -154,7 +177,15 @@ export async function runAddressStep() {
 export async function runInterestsStep() {
   const step = 'interests';
   const { checkAuthentication } = await import('../authentication.mjs');
-  await checkAuthentication();
+  
+  try {
+    await checkAuthentication();
+  } catch (error) {
+    console.error('Authentication required:', error);
+    window.location.href = '/onboarding/welcome';
+    return;
+  }
+  
   await loadHeader(step);
 
   const form = document.getElementById('onboarding-form');
@@ -167,23 +198,31 @@ export async function runInterestsStep() {
       () => {
         const selectedInterests = Array.from(
           document.querySelectorAll('input[name="interests"]:checked')
-        ).map(el => el.value); // This gets the topic IDs
+        ).map(el => el.value);
 
         if (selectedInterests.length < 3) {
           throw new Error('Please select at least 3 topics to continue.');
         }
         
-        // Return as interests array, not nested
         return { interests: selectedInterests };
       },
       `${config.onboarding.redirectPath}/experience`
     );
   });
 }
+
 export async function runCompleteStep() {
   const step = 'complete';
   const { checkAuthentication } = await import('../authentication.mjs');
-  await checkAuthentication();
+  
+  try {
+    await checkAuthentication();
+  } catch (error) {
+    console.error('Authentication required:', error);
+    window.location.href = '/onboarding/welcome';
+    return;
+  }
+  
   await loadHeader(step);
 
   const completeBtn = document.getElementById('complete-btn');
@@ -199,12 +238,13 @@ export async function runCompleteStep() {
     });
   }
 
+  // Auto-redirect after 5 seconds
   setTimeout(async () => {
     try {
       await saveOnboardingStep(step, { profileComplete: true });
       window.location.href = '/app/dashboard';
-    } catch {
-      // ignore error here
+    } catch (error) {
+      console.error('Auto-complete error:', error);
     }
   }, 5000);
 }
@@ -212,7 +252,15 @@ export async function runCompleteStep() {
 export async function runExperienceStep() {
   const step = 'experience';
   const { checkAuthentication } = await import('../authentication.mjs');
-  await checkAuthentication();
+  
+  try {
+    await checkAuthentication();
+  } catch (error) {
+    console.error('Authentication required:', error);
+    window.location.href = '/onboarding/welcome';
+    return;
+  }
+  
   await loadHeader(step);
 
   const form = document.getElementById('onboarding-form');
@@ -221,7 +269,7 @@ export async function runExperienceStep() {
   const submitBtn = document.getElementById('submit-btn');
   const errorDiv = document.getElementById('onboarding-error');
 
-  // Lazy-load Stripe and ensure it's ready
+  // Lazy-load Stripe
   let stripe;
   try {
     stripe = await loadStripe(config.stripe.publicKey);
@@ -237,7 +285,7 @@ export async function runExperienceStep() {
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!stripe) return; // Just in case
+    if (!stripe) return;
 
     submitBtn.disabled = true;
     errorDiv.style.display = 'none';
@@ -283,7 +331,7 @@ export async function runExperienceStep() {
         alert(error.message);
       }
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Continue to Payment →';
+      submitBtn.textContent = 'Continue to Payment';
     }
   });
 }

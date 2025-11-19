@@ -1,11 +1,11 @@
 // /Assets/js/lib/constants.mjs Application constants
 
 export const AUTH = {
-  STORAGE_KEY: 'lumo_auth',
-  TOKEN_KEY: 'lumo_token',
-  ID_TOKEN_KEY: 'lumo_id_token',
-  CODE_VERIFIER: 'lumo_code_verifier',
-  STATE_KEY: 'lumo_state'
+  TOKEN_KEY: 'auth_token',
+  ID_TOKEN_KEY: 'id_token',
+  STATE_KEY: 'auth_state',
+  CODE_VERIFIER: 'code_verifier',
+  IS_AUTHENTICATED: 'is_authenticated', // Add this line
 };
 
 export const EVENTS = {

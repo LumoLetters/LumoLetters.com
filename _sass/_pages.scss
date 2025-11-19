@@ -487,6 +487,640 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
 }
 
 // ======================
+// CONTACT SECTION
+// ======================
+
+.contact-section {
+  padding: map.get(vars.$spacing, 4) * 2 0;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) 0;
+  }
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: map.get(vars.$spacing, 4) * 2;
+  align-items: start;
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+    gap: map.get(vars.$spacing, 4);
+  }
+}
+
+// Contact Info
+.contact-info {
+  &__title {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    color: $neutral-900;
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  &__text {
+    margin: 0 0 map.get(vars.$spacing, 4) 0;
+    color: $neutral-600;
+    line-height: 1.7;
+  }
+
+  &__note {
+    margin-top: map.get(vars.$spacing, 4);
+    padding: map.get(vars.$spacing, 3);
+    background-color: $neutral-100;
+    border-radius: $radius-md;
+    border-left: 3px solid $primary;
+
+    p {
+      margin: 0;
+      color: $neutral-600;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    a {
+      color: $primary;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.contact-methods {
+  display: flex;
+  flex-direction: column;
+  gap: map.get(vars.$spacing, 3);
+}
+
+.contact-method {
+  display: flex;
+  gap: map.get(vars.$spacing, 2);
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba($primary, 0.1), rgba($secondary, 0.05));
+    border-radius: $radius-md;
+    color: $primary;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__title {
+    margin: 0 0 map.get(vars.$spacing, 1) 0;
+    color: $neutral-900;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  &__link {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__text {
+    margin: 0;
+    color: $neutral-600;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+
+    a {
+      color: $primary;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Contact Form
+.contact-form-wrapper {
+  background-color: white;
+  padding: map.get(vars.$spacing, 4);
+  border-radius: $radius-md;
+  border: 1px solid $neutral-200;
+  box-shadow: 0 4px 12px rgba(33, 37, 41, 0.08);
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 3);
+  }
+}
+
+.contact-form {
+  .form-group {
+    margin-bottom: map.get(vars.$spacing, 3);
+
+    &:last-of-type {
+      margin-bottom: map.get(vars.$spacing, 4);
+    }
+  }
+
+  label {
+    display: block;
+    margin-bottom: map.get(vars.$spacing, 1);
+    color: $neutral-700;
+    font-weight: 600;
+    font-size: 0.9375rem;
+
+    .required {
+      color: map.get(vars.$colors, 'status', 'error');
+      margin-left: 2px;
+    }
+  }
+
+  input[type="text"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100%;
+    padding: map.get(vars.$spacing, 2);
+    border: 2px solid $neutral-300;
+    border-radius: $radius-md;
+    font-size: 1rem;
+    color: $neutral-900;
+    background-color: white;
+    transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+
+    &:hover {
+      border-color: $neutral-500;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.1);
+    }
+
+    &::placeholder {
+      color: $neutral-500;
+    }
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23495057' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right map.get(vars.$spacing, 2) center;
+    padding-right: map.get(vars.$spacing, 4);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+  }
+
+  .form-help {
+    display: block;
+    margin-top: map.get(vars.$spacing, 1);
+    color: $neutral-500;
+    font-size: 0.875rem;
+  }
+
+  .form-submit-btn {
+    width: 100%;
+  }
+}
+
+.form-message {
+  display: flex;
+  gap: map.get(vars.$spacing, 2);
+  padding: map.get(vars.$spacing, 3);
+  border-radius: $radius-md;
+  margin-top: map.get(vars.$spacing, 3);
+  border: 1px solid transparent;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: map.get(vars.$spacing, 1);
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  &--success {
+    background-color: rgba(map.get(vars.$colors, 'status', 'success'), 0.1);
+    border-color: map.get(vars.$colors, 'status', 'success');
+    color: color.adjust(map.get(vars.$colors, 'status', 'success'), $lightness: -20%);
+
+    svg {
+      color: map.get(vars.$colors, 'status', 'success');
+    }
+  }
+
+  &--error {
+    background-color: rgba(map.get(vars.$colors, 'status', 'error'), 0.1);
+    border-color: map.get(vars.$colors, 'status', 'error');
+    color: color.adjust(map.get(vars.$colors, 'status', 'error'), $lightness: -15%);
+
+    svg {
+      color: map.get(vars.$colors, 'status', 'error');
+    }
+  }
+}
+
+// Help Section
+.help-section {
+  padding: map.get(vars.$spacing, 4) * 2 0;
+  background-color: $neutral-100;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) 0;
+  }
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: map.get(vars.$spacing, 3);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.help-card {
+  padding: map.get(vars.$spacing, 4);
+  background-color: white;
+  border-radius: $radius-md;
+  border: 1px solid $neutral-200;
+  text-align: center;
+
+  &__title {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    color: $neutral-900;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  &__text {
+    margin: 0 0 map.get(vars.$spacing, 3) 0;
+    color: $neutral-600;
+    line-height: 1.6;
+  }
+}
+
+// ======================
+// PRICING SECTION
+// ======================
+
+.pricing-section {
+  padding: map.get(vars.$spacing, 4) * 2 0;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) 0;
+  }
+}
+
+.pricing-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: map.get(vars.$spacing, 3);
+  margin-bottom: map.get(vars.$spacing, 4);
+
+  @include mix.mq-down('lg') {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.pricing-card {
+  position: relative;
+  background-color: white;
+  border: 2px solid $neutral-200;
+  border-radius: $radius-md;
+  padding: map.get(vars.$spacing, 4);
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(33, 37, 41, 0.15);
+    border-color: rgba($primary, 0.3);
+  }
+
+  &--popular {
+    border-color: $primary;
+    border-width: 3px;
+    box-shadow: 0 8px 24px rgba($primary, 0.15);
+
+    .pricing-card__cta {
+      background-color: $primary;
+      color: white;
+      border-color: $primary;
+
+      &:hover {
+        background-color: color.adjust($primary, $lightness: -8%);
+      }
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, $primary 0%, $secondary 100%);
+    color: white;
+    padding: map.get(vars.$spacing, 1) map.get(vars.$spacing, 3);
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 12px rgba($primary, 0.3);
+  }
+
+  &__header {
+    margin-bottom: map.get(vars.$spacing, 3);
+    padding-top: map.get(vars.$spacing, 2);
+  }
+
+  &__name {
+    margin: 0 0 map.get(vars.$spacing, 1) 0;
+    color: $neutral-900;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  &__description {
+    margin: 0;
+    color: $neutral-600;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: map.get(vars.$spacing, 3);
+    padding-bottom: map.get(vars.$spacing, 3);
+    border-bottom: 1px solid $neutral-200;
+
+    .price-currency {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $primary;
+      margin-right: map.get(vars.$spacing, 1) / 2;
+    }
+
+    .price-amount {
+      font-size: 3rem;
+      font-weight: 700;
+      color: $primary;
+      line-height: 1;
+    }
+
+    .price-period {
+      font-size: 1rem;
+      color: $neutral-600;
+      margin-left: map.get(vars.$spacing, 1);
+    }
+  }
+
+  &__features {
+    @include mix.list-reset;
+    margin: 0 0 map.get(vars.$spacing, 4) 0;
+    flex: 1;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: map.get(vars.$spacing, 2);
+      padding: map.get(vars.$spacing, 2) 0;
+      color: $neutral-700;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+
+      svg {
+        flex-shrink: 0;
+        color: map.get(vars.$colors, 'status', 'success');
+        margin-top: 2px;
+      }
+    }
+  }
+
+  &__cta {
+    width: 100%;
+    padding: map.get(vars.$spacing, 3);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.pricing-trust {
+  display: flex;
+  justify-content: center;
+  gap: map.get(vars.$spacing, 4);
+  flex-wrap: wrap;
+  padding: map.get(vars.$spacing, 4);
+  background-color: $neutral-100;
+  border-radius: $radius-md;
+
+  @include mix.mq-down('md') {
+    flex-direction: column;
+    gap: map.get(vars.$spacing, 2);
+  }
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: map.get(vars.$spacing, 1);
+  color: $neutral-700;
+  font-size: 0.9375rem;
+  font-weight: 500;
+
+  svg {
+    color: map.get(vars.$colors, 'status', 'success');
+    flex-shrink: 0;
+  }
+}
+
+// ======================
+// COMPARISON TABLE
+// ======================
+
+.comparison-section {
+  padding: map.get(vars.$spacing, 4) * 2 0;
+  background-color: $neutral-100;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) 0;
+  }
+}
+
+.comparison-table-wrapper {
+  overflow-x: auto;
+  background-color: white;
+  border-radius: $radius-md;
+  box-shadow: 0 2px 8px rgba(33, 37, 41, 0.08);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+
+  thead {
+    background-color: $neutral-100;
+
+    th {
+      padding: map.get(vars.$spacing, 3);
+      text-align: left;
+      font-weight: 700;
+      color: $neutral-900;
+      border-bottom: 2px solid $neutral-200;
+
+      &.feature-column {
+        width: 40%;
+      }
+
+      &.plan-column {
+        text-align: center;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $neutral-200;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background-color: rgba($primary, 0.02);
+      }
+    }
+
+    td {
+      padding: map.get(vars.$spacing, 3);
+      color: $neutral-700;
+
+      &.feature-name {
+        font-weight: 500;
+        color: $neutral-900;
+      }
+
+      &:not(.feature-name) {
+        text-align: center;
+      }
+
+      .check {
+        color: map.get(vars.$colors, 'status', 'success');
+        font-weight: 700;
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+// ======================
+// PRICING FAQ
+// ======================
+
+.pricing-faq-section {
+  padding: map.get(vars.$spacing, 4) * 2 0;
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) 0;
+  }
+}
+
+.pricing-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: map.get(vars.$spacing, 4);
+  margin-bottom: map.get(vars.$spacing, 3);
+
+  @include mix.mq-down('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.faq-item-simple {
+  h3 {
+    margin: 0 0 map.get(vars.$spacing, 2) 0;
+    color: $neutral-900;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: $neutral-600;
+    line-height: 1.7;
+  }
+}
+
+.faq-cta {
+  text-align: center;
+  padding-top: map.get(vars.$spacing, 3);
+  border-top: 1px solid $neutral-200;
+
+  p {
+    margin: 0;
+    color: $neutral-600;
+    font-size: 0.9375rem;
+  }
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ======================
+// PRICING FINAL CTA
+// ======================
+
+.pricing-final-cta {
+  padding: map.get(vars.$spacing, 4) * 2 0;
+  background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($secondary, 0.03) 100%);
+
+  @include mix.mq-down('md') {
+    padding: map.get(vars.$spacing, 4) 0;
+  }
+}
+
+// ======================
 // ACCESSIBILITY
 // ======================
 
@@ -494,7 +1128,8 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
   .feature-card,
   .value-item,
   .faq-item,
-  .faq-icon {
+  .faq-icon,
+  .pricing-card {
     transition: none;
   }
 }

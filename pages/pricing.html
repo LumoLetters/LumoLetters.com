@@ -1,0 +1,292 @@
+---
+layout: default
+title: Pricing
+description: Choose the perfect plan for your personalized letter experience
+permalink: /pricing/
+---
+
+<!-- Hero Section -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero__content">
+      <h1 class="page-hero__title">Simple, Transparent Pricing</h1>
+      <p class="page-hero__subtitle">
+        Choose the plan that fits your desired connection. Cancel or change anytime—no long-term commitments.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing Plans Section -->
+<section class="pricing-section">
+  <div class="container">
+    
+    <!-- Pricing Toggle (Optional for future monthly/annual) -->
+    <!-- <div class="pricing-toggle">
+      <button class="toggle-btn active">Monthly</button>
+      <button class="toggle-btn">Annual <span class="save-badge">Save 15%</span></button>
+    </div> -->
+
+    <!-- Pricing Cards -->
+    <div class="pricing-cards">
+      {% for plan in site.data.pricing_plans.plans %}
+        <div class="pricing-card {% if plan.popular %}pricing-card--popular{% endif %}">
+          
+          {% if plan.popular %}
+            <div class="pricing-card__badge">Most Popular</div>
+          {% endif %}
+
+          <div class="pricing-card__header">
+            <h3 class="pricing-card__name">{{ plan.name }}</h3>
+            <p class="pricing-card__description">{{ plan.description }}</p>
+          </div>
+
+          <div class="pricing-card__price">
+            <span class="price-currency">$</span>
+            <span class="price-amount">{{ plan.price }}</span>
+            <span class="price-period">/ {{ plan.interval }}</span>
+          </div>
+
+          <ul class="pricing-card__features">
+            {% for feature in plan.features %}
+              <li>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.5 10L9.16667 11.6667L12.5 8.33333M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 10C2.5 5.85786 5.85786 2.5 10 2.5C14.1421 2.5 17.5 5.85786 17.5 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {{ feature }}
+              </li>
+            {% endfor %}
+          </ul>
+
+          <button class="pricing-card__cta btn {% if plan.popular %}btn--primary{% else %}btn--outline{% endif %}" data-plan="{{ plan.id }}">
+            Get Started
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Trust Indicators -->
+    <div class="pricing-trust">
+      <div class="trust-item">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Secure Payment</span>
+      </div>
+      <div class="trust-item">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Cancel Anytime</span>
+      </div>
+      <div class="trust-item">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>30-Day Satisfaction Guarantee</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison Table -->
+<section class="comparison-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Compare Plans</h2>
+      <p class="section-description">See what's included in each subscription tier</p>
+    </div>
+
+    <div class="comparison-table-wrapper">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th class="feature-column">Features</th>
+            {% for plan in site.data.pricing_plans.plans %}
+              <th class="plan-column">{{ plan.name }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feature-name">Letters per month</td>
+            <td>1</td>
+            <td>2</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Return envelopes & stamps</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Personalized content</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Letter history tracking</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Priority queue</td>
+            <td>—</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Higher personalization</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Yearly keepsake book</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="check">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="pricing-faq-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="pricing-faq-grid">
+      <div class="faq-item-simple">
+        <h3>Can I change my plan later?</h3>
+        <p>Yes! You can upgrade, downgrade, or cancel your subscription at any time from your account dashboard. Changes take effect at the start of your next billing cycle.</p>
+      </div>
+
+      <div class="faq-item-simple">
+        <h3>Is there a free trial?</h3>
+        <p>We don't offer a traditional free trial, but we do offer a 30-day satisfaction guarantee. If you're not completely satisfied with your first letter, we'll refund your subscription.</p>
+      </div>
+
+      <div class="faq-item-simple">
+        <h3>When will I receive my first letter?</h3>
+        <p>Your first personalized letter will be mailed within 3-5 business days of completing your profile. Delivery typically takes 3-7 days depending on your location.</p>
+      </div>
+
+      <div class="faq-item-simple">
+        <h3>What payment methods do you accept?</h3>
+        <p>We accept all major credit and debit cards through our secure payment processor, Stripe. Your payment information is encrypted and never stored on our servers.</p>
+      </div>
+
+      <div class="faq-item-simple">
+        <h3>Can I gift a subscription?</h3>
+        <p>Absolutely! LumoLetters makes a wonderful gift. During checkout, you can specify that it's a gift and provide the recipient's address and interests.</p>
+      </div>
+
+      <div class="faq-item-simple">
+        <h3>What's included in the keepsake book?</h3>
+        <p>The yearly keepsake book (included with the Deluxe plan) is a beautifully bound collection of all your letter exchanges from the year, creating a lasting memento of your correspondence.</p>
+      </div>
+    </div>
+
+    <div class="faq-cta">
+      <p>Still have questions? <a href="/pages/faq">View our complete FAQ</a> or <a href="/pages/contact">contact us</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="pricing-final-cta">
+  <div class="container">
+    <div class="cta-box">
+      <h2 class="cta-box__title">Ready to Start Your Journey?</h2>
+      <p class="cta-box__text">
+        Join hundreds of people experiencing the joy of meaningful connection through personalized letters.
+      </p>
+      <button class="btn btn--primary btn--large" id="pricing-cta">
+        Choose Your Plan
+      </button>
+      <p class="cta-box__note">No credit card required to browse. Cancel anytime.</p>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import { login, checkAuthentication } from '/assets/js/authentication.mjs';
+  import { checkOnboardingStatus } from '/assets/js/lib/onboarding.mjs';
+
+  async function handlePricingCTA() {
+    try {
+      // Check if user is already authenticated
+      const isAuthenticated = await checkAuthentication();
+      
+      if (isAuthenticated) {
+        // Already logged in - check onboarding status
+        try {
+          const { needsOnboarding, currentStep } = await checkOnboardingStatus();
+          
+          if (needsOnboarding) {
+            // Continue onboarding from where they left off
+            window.location.href = `/onboarding/${currentStep}`;
+          } else {
+            // Already completed - go to dashboard
+            window.location.href = '/app/dashboard';
+          }
+        } catch (error) {
+          console.error('Error checking onboarding:', error);
+          // If error, just go to dashboard
+          window.location.href = '/app/dashboard';
+        }
+      } else {
+        // Not logged in - trigger Auth0 login
+        // After login, auth-callback.mjs will handle routing
+        login();
+      }
+    } catch (error) {
+      console.error('Error handling pricing CTA:', error);
+      // Fallback: just trigger login
+      login();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Handle all CTA buttons on the pricing page
+    const ctaButtons = document.querySelectorAll('.pricing-card__cta, #pricing-cta');
+    
+    ctaButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        handlePricingCTA();
+      });
+    });
+
+    // For the final CTA, scroll to pricing first if not logged in
+    const finalCTA = document.getElementById('pricing-cta');
+    if (finalCTA) {
+      finalCTA.addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        const isAuthenticated = await checkAuthentication();
+        if (!isAuthenticated) {
+          // Not logged in - scroll to pricing cards first
+          const pricingCards = document.querySelector('.pricing-cards');
+          if (pricingCards) {
+            pricingCards.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Wait a moment for scroll, then trigger login
+            setTimeout(() => handlePricingCTA(), 800);
+          } else {
+            handlePricingCTA();
+          }
+        } else {
+          handlePricingCTA();
+        }
+      });
+    }
+  });
+</script>

@@ -1,273 +1,284 @@
-// assets/js/payment.mjs
+// /assets/js/authentication.mjs
+
+import { getItem, setItem, removeItem, clearAll } from './lib/storage.mjs';
+import { post } from './lib/api-client.mjs';
+import { AUTH, EVENTS } from './lib/constants.mjs';
+import eventBus from './lib/event-bus.mjs';
 import config from './lib/config.mjs';
-import { apiClient } from './lib/api-client.mjs';
-import { eventBus } from './lib/event-bus.mjs';
-import { ENDPOINTS } from './lib/constants.mjs';
-import { loadStripe } from '@stripe/stripe-js';
+import { handleError } from './error-handler.mjs'; 
 
-class PaymentManager {
-  constructor() {
-    this.isProcessing = false;
-    this.selectedPlan = null;
-    this.stripe = null;
-    this.initializeEventListeners();
-    this.initializeStripe();
-  }
+// ---------------------------
+// Auth: Utility Helpers
+// ---------------------------
 
-  async initializeStripe() {
-    try {
-      this.stripe = await loadStripe(config.stripe.publicKey);
-    } catch (error) {
-      console.error('Stripe initialization failed:', error);
-      this.showError('Payment system is unavailable. Please try again later.');
-    }
-  }
+function generateRandomString(length = 32) {
+  const array = new Uint8Array(length);
+  crypto.getRandomValues(array);
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+}
 
-  initializeEventListeners() {
-    document.addEventListener('click', (e) => {
-      if (e.target.matches('[data-plan-select]')) {
-        this.handlePlanSelection(e);
-      }
-      
-      if (e.target.matches('[data-checkout-btn]')) {
-        this.handleCheckout(e);
-      }
-      
-      if (e.target.matches('[data-manage-subscription]')) {
-        this.handleManageSubscription(e);
-      }
-    });
+async function generateCodeChallenge(verifier) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(verifier);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
 
-    eventBus.addEventListener('subscription:updated', (event) => {
-      this.updateUI(event.detail);
-    });
-  }
-
-  handlePlanSelection(event) {
-    event.preventDefault();
-    
-    // Remove previous selections
-    document.querySelectorAll('[data-plan-card]').forEach(card => {
-      card.classList.remove('selected', 'ring-2', 'ring-blue-500');
-    });
-    
-    // Add selection to clicked card
-    const planCard = event.target.closest('[data-plan-card]');
-    planCard.classList.add('selected', 'ring-2', 'ring-blue-500');
-    
-    // Store selected plan data
-    this.selectedPlan = {
-      id: event.target.dataset.planSelect,
-      priceId: event.target.dataset.priceId,
-      name: event.target.dataset.planName,
-      price: event.target.dataset.planPrice
-    };
-    
-    // Enable checkout button
-    const checkoutBtn = document.querySelector('[data-checkout-btn]');
-    if (checkoutBtn) {
-      checkoutBtn.disabled = false;
-      checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-      checkoutBtn.classList.add('hover:bg-blue-700');
-    }
-    
-    // Update checkout button text
-    const btnText = checkoutBtn?.querySelector('[data-checkout-text]');
-    if (btnText) {
-      btnText.textContent = `Subscribe to ${this.selectedPlan.name} - $${this.selectedPlan.price}/month`;
-    }
-  }
-
-  async handleCheckout(event) {
-    event.preventDefault();
-    
-    if (this.isProcessing || !this.selectedPlan || !this.stripe) {
-      return;
-    }
-    
-    this.isProcessing = true;
-    this.updateCheckoutButton(true);
-    
-    try {
-      // Create checkout session
-      const response = await apiClient.post(
-        `/${ENDPOINTS.SUBSCRIPTION}/create-checkout`,
-        {
-          priceId: this.selectedPlan.priceId,
-          successUrl: `${window.location.origin}/onboarding/complete?session_id={CHECKOUT_SESSION_ID}`,
-          cancelUrl: `${window.location.origin}/onboarding/experience`
-        }
-      );
-      
-      // Redirect to Stripe Checkout
-      const { error } = await this.stripe.redirectToCheckout({
-        sessionId: response.sessionId
-      });
-      
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      this.showError(this.getErrorMessage(error));
-    } finally {
-      this.isProcessing = false;
-      this.updateCheckoutButton(false);
-    }
-  }
-
-  async handleManageSubscription(event) {
-    event.preventDefault();
-    
-    if (this.isProcessing) return;
-    this.isProcessing = true;
-    
-    try {
-      const response = await apiClient.get(`/${ENDPOINTS.SUBSCRIPTION}/portal`);
-      
-      if (response.url) {
-        window.location.href = response.url;
-      } else {
-        throw new Error('No portal URL received');
-      }
-    } catch (error) {
-      console.error('Customer portal error:', error);
-      this.showError('Failed to open subscription management. Please try again.');
-    } finally {
-      this.isProcessing = false;
-    }
-  }
-
-  async getSubscriptionStatus() {
-    try {
-      const response = await apiClient.get(`/${ENDPOINTS.SUBSCRIPTION}/status`);
-      return response;
-    } catch (error) {
-      console.error('Failed to get subscription status:', error);
-      return { status: 'error' };
-    }
-  }
-
-  updateCheckoutButton(processing) {
-    const btn = document.querySelector('[data-checkout-btn]');
-    const btnText = btn?.querySelector('[data-checkout-text]');
-    const spinner = btn?.querySelector('[data-checkout-spinner]');
-    
-    if (!btn) return;
-    
-    if (processing) {
-      btn.disabled = true;
-      btn.classList.add('opacity-75');
-      if (btnText) btnText.textContent = 'Processing...';
-      if (spinner) spinner.classList.remove('hidden');
-    } else {
-      btn.disabled = !this.selectedPlan;
-      btn.classList.remove('opacity-75');
-      if (btnText && this.selectedPlan) {
-        btnText.textContent = `Subscribe to ${this.selectedPlan.name} - $${this.selectedPlan.price}/month`;
-      }
-      if (spinner) spinner.classList.add('hidden');
-    }
-  }
-
-  updateUI(subscriptionData) {
-    const statusElements = document.querySelectorAll('[data-subscription-status]');
-    const planElements = document.querySelectorAll('[data-current-plan]');
-    const manageBtn = document.querySelector('[data-manage-subscription]');
-    
-    // Update status display
-    statusElements.forEach(el => {
-      el.textContent = subscriptionData.status.charAt(0).toUpperCase() + subscriptionData.status.slice(1);
-      el.className = subscriptionData.status === 'active' 
-        ? 'text-green-600 font-semibold' 
-        : 'text-gray-500';
-    });
-    
-    // Update plan name
-    if (subscriptionData.subscription) {
-      planElements.forEach(el => {
-        el.textContent = subscriptionData.subscription.plan || 'Unknown Plan';
-      });
-    }
-    
-    // Show/hide management button
-    if (manageBtn) {
-      manageBtn.style.display = subscriptionData.status === 'active' 
-        ? 'inline-block' 
-        : 'none';
-    }
-  }
-
-  async initializeSubscriptionStatus() {
-    try {
-      const status = await this.getSubscriptionStatus();
-      this.updateUI(status);
-      
-      // Emit event for other components
-      eventBus.dispatchEvent('subscription:loaded', status);
-    } catch (error) {
-      console.error('Subscription status init error:', error);
-    }
-  }
-
-  showError(message) {
-    // Create or update error message element
-    let errorEl = document.querySelector('[data-payment-error]');
-    
-    if (!errorEl) {
-      errorEl = document.createElement('div');
-      errorEl.setAttribute('data-payment-error', '');
-      errorEl.className = 'bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 transition-opacity duration-300';
-      errorEl.style.position = 'fixed';
-      errorEl.style.top = '20px';
-      errorEl.style.right = '20px';
-      errorEl.style.zIndex = '1000';
-      
-      document.body.appendChild(errorEl);
-    }
-    
-    errorEl.textContent = message;
-    errorEl.classList.remove('hidden', 'opacity-0');
-    errorEl.classList.add('block', 'opacity-100');
-    
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-      errorEl.classList.add('opacity-0');
-      setTimeout(() => errorEl.classList.add('hidden'), 300);
-    }, 5000);
-  }
-
-  getErrorMessage(error) {
-    const errorMap = {
-      'missing_price': 'Please select a subscription plan',
-      'rate_limit': 'Too many requests, please try again later',
-      'authentication_failed': 'Please login to subscribe',
-      'card_declined': 'Your card was declined. Please try another payment method',
-      'default': 'Failed to start checkout. Please try again.'
-    };
-    
-    // Handle Stripe errors
-    if (error.type === 'StripeCardError') {
-      return error.message || 'Card error occurred';
-    }
-    
-    return errorMap[error.code] || error.message || errorMap.default;
+function parseJwt(token) {
+  if (!token) return null;
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    handleError(error, { type: 'auth', redirect: false });
+    return null;
   }
 }
 
-export const paymentManager = new PaymentManager();
+// ---------------------------
+// Auth: Core Functions
+// ---------------------------
 
-// Auto-initialize on relevant pages
-document.addEventListener('DOMContentLoaded', () => {
-  const isDashboard = document.body.classList.contains('dashboard-page');
-  const isAccount = document.body.classList.contains('account-page');
-  const isPricing = document.body.classList.contains('pricing-page');
-  
-  if (isDashboard || isAccount) {
-    paymentManager.initializeSubscriptionStatus();
+export async function login() {
+  try {
+    const verifier = generateRandomString();
+    const challenge = await generateCodeChallenge(verifier);
+    const state = generateRandomString();
+
+    setItem(AUTH.CODE_VERIFIER, verifier);
+    setItem(AUTH.STATE_KEY, state);
+
+    const authUrl = new URL(`https://${config.auth0.domain}/authorize`);
+    const params = {
+      response_type: 'code',
+      client_id: config.auth0.clientId,
+      redirect_uri: config.auth0.redirectUri,
+      scope: config.auth0.scope,
+      audience: config.auth0.audience,
+      state,
+      code_challenge: challenge,
+      code_challenge_method: 'S256',
+      response_mode: 'query'
+    };
+
+    Object.entries(params).forEach(([key, value]) => {
+      authUrl.searchParams.append(key, value);
+    });
+
+    console.debug('Initiating Auth0 login flow');
+    window.location.href = authUrl.toString();
+  } catch (error) {
+    handleError(error, { 
+      type: 'auth',
+      redirect: false,
+      message: 'Failed to initialize login process'
+    });
+    throw error;
   }
-  
-  if (isPricing && document.querySelector('[data-plan-select]')) {
-    paymentManager.updateCheckoutButton(false);
+}
+
+export async function handleAuthRedirect() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    console.debug('URL params:', params.toString());
+
+    const code = params.get('code');
+    const state = params.get('state');
+    const error = params.get('error');
+    console.debug('code:', code, 'state:', state, 'error:', error);
+
+    if (error) {
+      const errorDesc = params.get('error_description') || 'Authentication failed';
+      console.error('Auth error:', errorDesc);
+      throw new Error(errorDesc);
+    }
+
+    if (!code || !state) {
+      throw new Error('Missing authentication parameters');
+    }
+
+    const savedState = getItem(AUTH.STATE_KEY);
+    console.debug('Saved state from storage:', savedState);
+    if (state !== savedState) {
+      throw new Error('Invalid state parameter');
+    }
+
+    const verifier = getItem(AUTH.CODE_VERIFIER);
+    console.debug('Code verifier from storage:', verifier);
+    if (!verifier) {
+      throw new Error('Missing code verifier');
+    }
+
+    console.debug('Exchanging auth code for tokens...');
+    const response = await fetch(`https://${config.auth0.domain}/oauth/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        grant_type: 'authorization_code',
+        client_id: config.auth0.clientId,
+        code_verifier: verifier,
+        code,
+        redirect_uri: config.auth0.redirectUri
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Token exchange error response:', errorData);
+      throw new Error(errorData.error_description || 'Token exchange failed');
+    }
+
+    const { access_token, id_token } = await response.json();
+    console.debug('Tokens received:', { access_token, id_token });
+
+    setItem(AUTH.TOKEN_KEY, access_token);
+    setItem(AUTH.ID_TOKEN_KEY, id_token);
+
+    removeItem(AUTH.STATE_KEY);
+    removeItem(AUTH.CODE_VERIFIER);
+
+    window.history.replaceState({}, document.title, window.location.pathname);
+
+    console.debug('Authentication flow completed successfully');
+    return { access_token, id_token };
+  } catch (error) {
+    console.error('Authentication redirect failed:', error);
+    handleError(error, { type: 'auth', redirect: false });
+    throw error;
   }
-});
+}
+
+export function logout() {
+  try {
+    clearAll();
+    eventBus.emit(EVENTS.AUTH_LOGOUT);
+
+    const logoutUrl = new URL(`https://${config.auth0.domain}/v2/logout`);
+    logoutUrl.searchParams.append('client_id', config.auth0.clientId);
+    logoutUrl.searchParams.append('returnTo', config.auth0.logoutRedirectUri);
+
+    console.debug('Initiating logout flow');
+    window.location.href = logoutUrl.toString();
+  } catch (error) {
+    handleError(error, {
+      type: 'auth',
+      redirect: false,
+      message: 'Failed to complete logout'
+    });
+  }
+}
+
+export function getToken() {
+  return getItem(AUTH.TOKEN_KEY);
+}
+
+export async function checkAuthentication() {
+  try {
+    const token = getToken();
+    const isAuthenticated = !!token;
+    console.debug('Authentication check:', isAuthenticated);
+    return isAuthenticated;
+  } catch (error) {
+    handleError(error, { 
+      type: 'auth',
+      redirect: false,
+      message: 'Failed to verify authentication status'
+    });
+    return false;
+  }
+}
+
+export async function getOrCreateUserProfile() {
+  try {
+    const token = getToken();
+    if (!token) throw new Error('No access token available');
+
+    const idToken = getItem(AUTH.ID_TOKEN_KEY);
+    console.debug('🆔 ID Token:', idToken ? 'exists' : 'missing');
+    
+    const userInfo = parseJwt(idToken);
+    console.debug('👤 Parsed user info:', userInfo);
+    console.debug('📧 Email from token:', userInfo?.email);
+
+    if (!userInfo?.email) {
+      // Fallback: try to get email from access token
+      console.warn('⚠️ No email in ID token, trying access token...');
+      const accessTokenInfo = parseJwt(token);
+      console.debug('🔑 Access token info:', accessTokenInfo);
+      
+      if (!accessTokenInfo?.email) {
+        throw new Error('User information not available in token');
+      }
+      
+      userInfo.email = accessTokenInfo.email;
+    }
+
+    console.debug('Fetching or creating user profile for:', userInfo.email);
+    
+    // FIXED: Removed third parameter - Authorization header is added automatically
+    const response = await post('auth-user', {
+      email: userInfo.email,
+      name: userInfo.name || userInfo.email.split('@')[0]
+    });
+
+    console.debug('Profile response:', response);
+    return response.user || response;
+  } catch (error) {
+    console.error('Profile handling failed:', error);
+    eventBus.emit(EVENTS.AUTH_ERROR, { 
+      message: error.message,
+      error 
+    });
+    handleError(error, { 
+      type: 'auth',
+      redirect: false
+    });
+    throw error;
+  }
+}
+
+export function updateAuthUI(isAuthenticated) {
+  try {
+    const loginButton = document.getElementById('login-button');
+    const logoutButton = document.getElementById('logout-button');
+    const dashboardLink = document.getElementById('dashboard-link');
+
+    if (isAuthenticated) {
+      if (loginButton) loginButton.style.display = 'none';
+      if (logoutButton) logoutButton.style.display = 'inline-block';
+      if (dashboardLink) dashboardLink.style.display = 'inline-block';
+    } else {
+      if (loginButton) loginButton.style.display = 'inline-block';
+      if (logoutButton) logoutButton.style.display = 'none';
+      if (dashboardLink) dashboardLink.style.display = 'none';
+    }
+  } catch (error) {
+    handleError(error, {
+      type: 'ui',
+      redirect: false,
+      message: 'Failed to update authentication UI'
+    });
+  }
+}
+
+const authentication = {
+  login,
+  logout,
+  checkAuthentication,
+  getOrCreateUserProfile,
+  updateAuthUI,
+  getToken,
+  handleAuthRedirect
+};
+
+export default authentication;
