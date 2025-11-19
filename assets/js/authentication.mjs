@@ -87,9 +87,6 @@ export async function login() {
   }
 }
 
-// Update your handleAuthRedirect function in authentication.mjs
-// Replace the existing function with this version:
-
 export async function handleAuthRedirect() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -176,7 +173,7 @@ export async function handleAuthRedirect() {
   }
 }
 
-// Also update checkAuthentication to check the flag:
+// KEEP THIS ONE - checks both IS_AUTHENTICATED flag and token
 export async function checkAuthentication() {
   try {
     const isAuthenticated = getItem(AUTH.IS_AUTHENTICATED) === 'true';
@@ -220,21 +217,7 @@ export function getToken() {
   return getItem(AUTH.TOKEN_KEY);
 }
 
-export async function checkAuthentication() {
-  try {
-    const token = getToken();
-    const isAuthenticated = !!token;
-    console.debug('Authentication check:', isAuthenticated);
-    return isAuthenticated;
-  } catch (error) {
-    handleError(error, { 
-      type: 'auth',
-      redirect: false,
-      message: 'Failed to verify authentication status'
-    });
-    return false;
-  }
-}
+// REMOVED THE DUPLICATE checkAuthentication FUNCTION THAT WAS HERE
 
 export async function getOrCreateUserProfile() {
   try {
@@ -263,7 +246,6 @@ export async function getOrCreateUserProfile() {
 
     console.debug('Fetching or creating user profile for:', userInfo.email);
     
-    // FIXED: Removed third parameter - Authorization header is added automatically
     const response = await post('auth-user', {
       email: userInfo.email,
       name: userInfo.name || userInfo.email.split('@')[0]
