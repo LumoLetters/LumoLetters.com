@@ -25,14 +25,12 @@ footer:
       url: /testimonials
 
   legal:
-    - title: Terms of Service
-      url: /terms
     - title: Privacy Policy
       url: /privacy
     - title: Cookie Policy
       url: /cookies
-    - title: User Agreement
-      url: /user-agreement
+    - title: Terms of Service
+      url: /terms
 
   support:
     - title: FAQ

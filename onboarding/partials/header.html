@@ -1,13 +1,45 @@
-<!--onboarding/partials/header.html-->
-<!-- Progress Bar -->
+<!-- onboarding/partials/header.html -->
+<!-- Progress Bar with Clickable Steps -->
 <div class="progress-container">
-    <div class="progress-steps">
-      <div class="step ${step === 'welcome' ? 'active' : ''}">1. Welcome</div>
-      <div class="step ${step === 'address' ? 'active' : ''}">2. Address</div>
-      <div class="step ${step === 'interests' ? 'active' : ''}">3. Interests</div>
-      <div class="step ${step === 'complete' ? 'active' : ''}">4. Complete</div>
-    </div>
+  <div class="progress-steps">
+    <!-- Welcome Step -->
+    <button class="step step-button ${step === 'welcome' ? 'active' : ''} 
+                  ${['address', 'interests', 'experience', 'complete'].includes(step) ? 'completed' : ''}"
+            data-target="welcome"
+            ${['address', 'interests', 'experience', 'complete'].includes(step) ? '' : 'disabled'}>
+      <div class="step-number">1</div>
+      <div class="step-label">Welcome</div>
+    </button>
+
+    <!-- Address Step -->
+    <button class="step step-button ${step === 'address' ? 'active' : ''} 
+                  ${['interests', 'experience', 'complete'].includes(step) ? 'completed' : ''}"
+            data-target="address"
+            ${['address', 'interests', 'experience', 'complete'].includes(step) ? '' : 'disabled'}>
+      <div class="step-number">2</div>
+      <div class="step-label">Address</div>
+    </button>
+
+    <!-- Interests Step -->
+    <button class="step step-button ${step === 'interests' ? 'active' : ''} 
+                  ${['experience', 'complete'].includes(step) ? 'completed' : ''}"
+            data-target="interests"
+            ${['interests', 'experience', 'complete'].includes(step) ? '' : 'disabled'}>
+      <div class="step-number">3</div>
+      <div class="step-label">Interests</div>
+    </button>
+
+    <!-- Experience Step -->
+    <button class="step step-button ${step === 'experience' ? 'active' : ''} 
+                  ${step === 'complete' ? 'completed' : ''}"
+            data-target="experience"
+            ${['experience', 'complete'].includes(step) ? '' : 'disabled'}>
+      <div class="step-number">4</div>
+      <div class="step-label">Experience</div>
+    </button>
   </div>
-  
-  <!-- Error Display -->
-  <div id="onboarding-error" class="error-message" style="display: none;"></div>
+</div>
+
+<!-- Error Display -->
+<div id="onboarding-error" class="error-message" style="display: none;"></div>
+

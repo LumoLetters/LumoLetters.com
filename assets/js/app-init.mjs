@@ -8,6 +8,12 @@ import * as ui from './lib/ui-handler.mjs';
 
 export async function initApp() {
   try {
+    // Skip app initialization on onboarding pages - they have their own handlers
+    if (window.location.pathname.startsWith('/onboarding/')) {
+      console.log('Onboarding page detected - skipping app initialization');
+      return;
+    }
+
     if (window.location.pathname === '/callback') {
       console.debug('Handling Auth0 login redirect...');
       const { handleAuthRedirect } = await import('./authentication.mjs');

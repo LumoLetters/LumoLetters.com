@@ -4,6 +4,183 @@ import { loadStripe } from '@stripe/stripe-js';
 import config from './config.mjs';
 import { getOrCreateUserProfile as getUser, getToken } from '../authentication.mjs';
 
+// Load existing onboarding data from backend
+export async function loadOnboardingData() {
+  const token = getToken();
+  if (!token) throw new Error('User is not authenticated');
+
+  const response = await fetch(`${config.api.baseUrl}/onboarding`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    console.warn('Failed to load existing onboarding data:', response.status);
+    return null;
+  }
+
+  return response.json();
+}
+
+// Populate form fields with existing data
+function populateFormFields(step, data) {
+  if (!data || !data.onboarding) return;
+
+  const form = document.getElementById('onboarding-form');
+  if (!form) return;
+
+  try {
+    switch (step) {
+      case 'welcome':
+        if (data.onboarding.welcome) {
+          const nameInput = form.querySelector('#name');
+          const newsletterCheckbox = form.querySelector('#newsletter');
+          
+          if (nameInput && data.onboarding.welcome.name) {
+            nameInput.value = data.onboarding.welcome.name;
+          }
+          if (newsletterCheckbox && data.onboarding.welcome.subscribeNewsletter !== undefined) {
+            newsletterCheckbox.checked = data.onboarding.welcome.subscribeNewsletter;
+          }
+        }
+        break;
+
+      case 'address':
+        const addressData = data.address || data.onboarding.address;
+        if (addressData) {
+          const fields = ['street', 'city', 'state', 'zipCode'];
+          fields.forEach(fieldName => {
+            const input = form.querySelector(`#${fieldName}`);
+            if (input && addressData[fieldName]) {
+              input.value = addressData[fieldName];
+            }
+          });
+        }
+        break;
+
+      case 'interests':
+        if (data.onboarding.interests) {
+          const interests = data.onboarding.interests;
+          const selectedInterests = Array.isArray(interests) 
+            ? interests 
+            : (interests.interests || []);
+          
+          selectedInterests.forEach(interest => {
+            const checkbox = form.querySelector(`input[name="interests"][value="${interest}"]`);
+            if (checkbox) {
+              checkbox.checked = true;
+              
+              // Find the parent card and add selected class
+              const card = checkbox.closest('.topic-selection-card');
+              if (card) {
+                card.classList.add('selected');
+                card.setAttribute('aria-checked', 'true');
+              }
+            }
+          });
+          
+          // Update the counter
+          const countElement = document.getElementById('selected-count');
+          if (countElement) {
+            countElement.textContent = selectedInterests.length;
+          }
+        }
+        break;
+
+      case 'experience':
+        if (data.onboarding.experience?.plan) {
+          const planRadio = form.querySelector(`input[name="plan"][value="${data.onboarding.experience.plan}"]`);
+          if (planRadio) planRadio.checked = true;
+        }
+        break;
+    }
+  } catch (error) {
+    console.error('Error populating form fields:', error);
+  }
+}
+
+// Initialize step button click handlers
+function initializeStepButtonsInline(currentStep) {
+  const stepButtons = document.querySelectorAll('.step-button:not([disabled])');
+  console.log('Initializing', stepButtons.length, 'step buttons');
+  
+  stepButtons.forEach(button => {
+    button.style.cursor = 'pointer';
+    
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const targetStep = this.dataset.target;
+      console.log('Step button clicked:', targetStep);
+      
+      if (!targetStep || targetStep === currentStep) {
+        return;
+      }
+      
+      const stepOrder = ['welcome', 'address', 'interests', 'experience', 'complete'];
+      const currentIndex = stepOrder.indexOf(currentStep);
+      const targetIndex = stepOrder.indexOf(targetStep);
+      
+      // Only allow navigation back, not forward
+      if (targetIndex > currentIndex) {
+        console.log('Cannot skip ahead');
+        const errorDiv = document.getElementById('onboarding-error');
+        if (errorDiv) {
+          errorDiv.textContent = 'Please complete the current step before moving ahead.';
+          errorDiv.style.display = 'block';
+          setTimeout(() => errorDiv.style.display = 'none', 3000);
+        }
+        return;
+      }
+      
+      // Check for unsaved changes
+      const form = document.querySelector('#onboarding-form');
+      if (form) {
+        const fields = form.querySelectorAll('input, select, textarea');
+        let hasChanges = false;
+        
+        fields.forEach(field => {
+          if (field.type === 'checkbox' || field.type === 'radio') {
+            const originalChecked = field.dataset.originalChecked === 'true';
+            if (field.checked !== originalChecked) hasChanges = true;
+          } else {
+            const originalValue = field.dataset.originalValue || '';
+            if ((field.value || '') !== originalValue) hasChanges = true;
+          }
+        });
+        
+        if (hasChanges) {
+          if (!confirm('You have unsaved changes. Are you sure you want to leave this page?')) {
+            return;
+          }
+        }
+      }
+      
+      // Navigate
+      console.log('Navigating to:', `/onboarding/${targetStep}`);
+      window.location.href = `/onboarding/${targetStep}`;
+    });
+  });
+  
+  // Store original form values
+  setTimeout(() => {
+    const form = document.querySelector('#onboarding-form');
+    if (form) {
+      const fields = form.querySelectorAll('input, select, textarea');
+      fields.forEach(field => {
+        if (field.type === 'checkbox' || field.type === 'radio') {
+          field.dataset.originalChecked = field.checked;
+        } else {
+          field.dataset.originalValue = field.value || '';
+        }
+      });
+    }
+  }, 500);
+}
+
 // Save onboarding step data by POSTing to backend Netlify function.
 export async function saveOnboardingStep(step, data) {
   const token = getToken();
@@ -47,11 +224,34 @@ export async function loadHeader(step, containerId = 'onboarding-header') {
     if (!res.ok) throw new Error('Failed to load header partial');
     let html = await res.text();
 
+    // Replace all template expressions
+    // Active class: ${step === 'welcome' ? 'active' : ''}
     html = html.replace(/\$\{step === '(\w+)' \? 'active' : ''\}/g, (_, matchStep) =>
       matchStep === step ? 'active' : ''
     );
 
+    // Completed class: ${['address', 'interests'].includes(step) ? 'completed' : ''}
+    html = html.replace(/\$\{\[([^\]]+)\]\.includes\(step\) \? 'completed' : ''\}/g, (match, stepsStr) => {
+      const steps = stepsStr.split(',').map(s => s.trim().replace(/['"]/g, ''));
+      return steps.includes(step) ? 'completed' : '';
+    });
+
+    // Disabled attribute: ${['address', 'interests'].includes(step) ? '' : 'disabled'}
+    html = html.replace(/\$\{\[([^\]]+)\]\.includes\(step\) \? '' : 'disabled'\}/g, (match, stepsStr) => {
+      const steps = stepsStr.split(',').map(s => s.trim().replace(/['"]/g, ''));
+      return steps.includes(step) ? '' : 'disabled';
+    });
+
+    // Special case for complete step
+    html = html.replace(/\$\{step === 'complete' \? 'completed' : ''\}/g, 
+      step === 'complete' ? 'completed' : ''
+    );
+
     container.innerHTML = html;
+    
+    // Initialize step buttons immediately after header loads
+    initializeStepButtonsInline(step);
+    
   } catch (err) {
     container.innerHTML = `<p>Error loading header.</p>`;
     console.error('loadHeader error:', err);
@@ -121,6 +321,14 @@ export async function runWelcomeStep() {
   
   await loadHeader(step);
 
+  // Load and populate existing data
+  try {
+    const existingData = await loadOnboardingData();
+    populateFormFields(step, existingData);
+  } catch (error) {
+    console.warn('Could not load existing data:', error);
+  }
+
   const form = document.getElementById('onboarding-form');
   if (!form) return;
 
@@ -150,6 +358,14 @@ export async function runAddressStep() {
   }
   
   await loadHeader(step);
+
+  // Load and populate existing data
+  try {
+    const existingData = await loadOnboardingData();
+    populateFormFields(step, existingData);
+  } catch (error) {
+    console.warn('Could not load existing data:', error);
+  }
 
   const form = document.getElementById('onboarding-form');
   if (!form) return;
@@ -187,6 +403,14 @@ export async function runInterestsStep() {
   }
   
   await loadHeader(step);
+
+  // Load and populate existing data
+  try {
+    const existingData = await loadOnboardingData();
+    populateFormFields(step, existingData);
+  } catch (error) {
+    console.warn('Could not load existing data:', error);
+  }
 
   const form = document.getElementById('onboarding-form');
   if (!form) return;
@@ -262,6 +486,14 @@ export async function runExperienceStep() {
   }
   
   await loadHeader(step);
+
+  // Load and populate existing data
+  try {
+    const existingData = await loadOnboardingData();
+    populateFormFields(step, existingData);
+  } catch (error) {
+    console.warn('Could not load existing data:', error);
+  }
 
   const form = document.getElementById('onboarding-form');
   if (!form) return;

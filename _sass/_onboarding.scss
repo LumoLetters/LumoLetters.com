@@ -1184,3 +1184,112 @@ $radius-md: map.get(map.get(vars.$sizes, 'radius'), 'md');
     border-width: 3px;
   }
 }
+
+
+// ======================
+// CLICKABLE PROGRESS STEPS
+// ======================
+
+.progress-steps {
+  .step {
+    // Make steps look like buttons when clickable
+    cursor: default; // Default state
+    
+    // Clickable state (not disabled)
+    &:not(:disabled) {
+      cursor: pointer;
+      
+      &:hover {
+        background-color: rgba($onboarding-primary, 0.05);
+        border-color: rgba($onboarding-primary, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($neutral-900, 0.1);
+        
+        &.active {
+          box-shadow: 0 6px 16px rgba($onboarding-primary, 0.4);
+        }
+        
+        &.completed {
+          background-color: rgba(map.get(vars.$colors, 'status', 'success'), 0.15);
+          border-color: rgba(map.get(vars.$colors, 'status', 'success'), 0.5);
+        }
+      }
+      
+      &:active {
+        transform: translateY(0);
+        transition: transform map.get(vars.$transitions-duration, 'fast') map.get(vars.$transitions-easing, 'in-out');
+      }
+    }
+    
+    // Disabled state (future steps)
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      
+      .step-number {
+        background-color: $neutral-200;
+        color: $neutral-500;
+      }
+      
+      .step-label {
+        color: $neutral-500;
+      }
+    }
+    
+    // Focus styles for accessibility
+    &:focus-visible {
+      outline: 2px solid $onboarding-primary;
+      outline-offset: 2px;
+    }
+  }
+  
+  // Completed steps with checkmark
+  .step.completed {
+    .step-number {
+      position: relative;
+      
+      &::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        font-size: 0.875rem;
+        color: white;
+      }
+    }
+  }
+}
+
+// Mobile adjustments for clickable steps
+@include mix.mq-down('md') {
+  .progress-steps {
+    .step {
+      &:not(:disabled) {
+        &:hover {
+          transform: none; // Disable hover transform on mobile
+        }
+      }
+    }
+  }
+}
+
+// Add to your existing .step styles for better button appearance
+.step {
+  // These properties should already exist in your .step class
+  border: 2px solid $neutral-300;
+  background: white;
+  transition: all map.get(vars.$transitions-duration, 'normal') map.get(vars.$transitions-easing, 'in-out');
+  
+  // Remove default button styles
+  appearance: none;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: center;
+  
+  // Ensure proper button semantics
+  &[role="button"] {
+    user-select: none;
+  }
+}
