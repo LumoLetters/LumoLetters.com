@@ -529,6 +529,11 @@ export async function runExperienceStep() {
         throw new Error('Please select a plan to continue.');
       }
 
+      const agreeTerms = document.getElementById('agree-terms');
+      if (!agreeTerms?.checked) {
+        throw new Error('Please agree to the Terms of Service, Privacy Policy, and User Agreement to continue.');
+      }
+
       const priceId = selectedPlan.value;
       const token = getToken();
       if (!token) throw new Error('User is not authenticated');
@@ -584,5 +589,7 @@ async function runCurrentStep() {
   }
   await onboardingSteps[step]();
 }
+
+
 
 document.addEventListener('DOMContentLoaded', runCurrentStep);
